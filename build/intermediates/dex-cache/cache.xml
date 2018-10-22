@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\libs\jsoup-1.10.3.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="5df02f295714ac1b907d507dfea29a5a9f8f69ca">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\transforms\dex\debug\folders\1000\2\jsoup-1.10.3_efc230aa8be52d85c563a291e1950bcf8ddc72eb\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\libs\jsoup-1.10.3.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="5df02f295714ac1b907d507dfea29a5a9f8f69ca">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\pre-dexed\debug\jsoup-1.10.3_efc230aa8be52d85c563a291e1950bcf8ddc72eb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Saea\.android\build-cache\844960988eb6b120025e2a6ad350d3a46384aae1\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\pre-dexed\debug\classes_ae57b41f92fc0c117c6063a1c911ff84d7f0dc57.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\libs\gson-2.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\pre-dexed\debug\gson-2.4_e1e04f731e06849c11b86250cf3b2b379ef46510.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Saea\.android\build-cache\ad5c7f008732592fa8ba310766e56e7e41f48246\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="e40b9a81989bd4a846018551c280f8c4d837bf2e">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\pre-dexed\debug\classes_54df3bf24f5680f5a92c007913134d9190a0c130.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\libs\gson-2.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\pre-dexed\debug\gson-2.4_e1e04f731e06849c11b86250cf3b2b379ef46510.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="39f13815072f34e6ba54d5fe25ed83677da7d52d">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_7795703dcb8632aa492bf0d7bec3c43e99fb0454\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_577fadc112b3b81dccd564eb74f7c95498a233ee\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\libs\jsoup-1.10.3.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="5df02f295714ac1b907d507dfea29a5a9f8f69ca">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\pre-dexed\debug\jsoup-1.10.3_efc230aa8be52d85c563a291e1950bcf8ddc72eb.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\libs\gson-2.4.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="C:\Users\Saea\Desktop\OneDrive\StudioProjects\gospel\app\build\intermediates\transforms\dex\debug\folders\1000\2\gson-2.4_e1e04f731e06849c11b86250cf3b2b379ef46510\classes.dex" />
+    </item>
+
+</items>

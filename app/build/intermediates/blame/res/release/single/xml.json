@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\xml\\bottombar_tabs.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\xml\\bottombar_tabs.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\xml\\pref_notification.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\xml\\pref_notification.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\xml\\pref_general.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\xml\\pref_general.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\xml\\pref_data_sync.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\xml\\pref_data_sync.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\xml\\pref_headers.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\xml\\pref_headers.xml"
+    }
+]

@@ -1,0 +1,19 @@
+<tabs>
+    <tab
+        id="@+id/tab1"
+        icon="@drawable/today"
+        title="오늘의복음"
+        textColor="#000000"/>
+    <tab
+        id="@+id/tab2"
+        icon="@drawable/days"
+        title="매일의복음"/>
+    <tab
+        id="@+id/tab3"
+        icon="@drawable/lectio"
+        title="렉시오디비나"/>
+    <tab
+        id="@+id/tab4"
+        icon="@drawable/memo"
+        title="나의기록"/>
+</tabs>

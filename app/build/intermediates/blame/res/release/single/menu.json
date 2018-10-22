@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\menu\\main.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\menu\\main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\menu\\third.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\menu\\third.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\menu\\fourth.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\menu\\fourth.xml"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\menu\\second.xml",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\menu\\second.xml"
+    }
+]

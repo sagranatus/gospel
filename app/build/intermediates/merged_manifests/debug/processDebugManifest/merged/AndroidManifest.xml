@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yellowpg.gaspel"
+    android:versionCode="66"
+    android:versionName="1.7.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="26" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
+    <meta-data
+        android:name="android.support.VERSION"
+        android:value="25.3.0" />
+
+    <application
+        android:name="com.yellowpg.gaspel.AppController"
+        android:allowBackup="true"
+        android:debuggable="true"
+        android:icon="@drawable/gaspel"
+        android:label="오늘의 복음"
+        android:testOnly="true"
+        android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustPan" >
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name="com.yellowpg.gaspel.MainActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:screenOrientation="sensor" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+s
+        </activity>
+        <activity
+            android:name="com.yellowpg.gaspel.SecondActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name="com.yellowpg.gaspel.ThirdActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name="com.yellowpg.gaspel.FourthActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name="com.yellowpg.gaspel.LectioActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name="com.yellowpg.gaspel.StatusActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name="com.yellowpg.gaspel.ExplainActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--
+Service handling Google Sign-In user revocation. For apps that do not integrate with
+            Google Sign-In, this service will never be started.
+        -->
+        <service
+            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" />
+
+        <activity
+            android:name="pub.devrel.easypermissions.AppSettingsDialogHolderActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/EasyPermissions.Transparent" />
+        <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    </application>
+
+</manifest>

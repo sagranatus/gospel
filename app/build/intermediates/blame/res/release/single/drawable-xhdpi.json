@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi\\ic_info_black_24dp.png",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\generated\\res\\pngs\\release\\drawable-xhdpi\\ic_info_black_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi\\ic_notifications_black_24dp.png",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\generated\\res\\pngs\\release\\drawable-xhdpi\\ic_notifications_black_24dp.png"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi\\ic_launcher.png",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi\\ic_sync_black_24dp.png",
+        "source": "C:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\generated\\res\\pngs\\release\\drawable-xhdpi\\ic_sync_black_24dp.png"
+    }
+]

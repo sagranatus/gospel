@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.androidex4.MainActivity" >
+    <item
+        android:id="@+id/action_menu_01"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="사용설명서"
+        icon="@drawable/setting"/>
+    <item
+        android:id="@+id/action_menu_02"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="설정"
+        icon="@drawable/setting"/>
+
+    <item
+        android:id="@+id/action_menu_03"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="나의상태"
+        icon="@drawable/setting"/>
+
+</menu>

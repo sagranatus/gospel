@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:typeface="sans"
+    android:background="#ffffff"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.yellowpg.gaspel.ThirdActivity" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+   		android:layout_height="match_parent"
+        android:divider="#000000"
+        android:dividerPadding="22dip"
+   		android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/bt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
+            android:paddingTop="20px"
+            android:paddingBottom="20px"
+            android:background="#ffffff"
+            android:text="오늘의복음 설정하기" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:orientation="horizontal" >
+            <Button
+                android:id="@+id/bt_step2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:background="#000000"
+                android:textColor="#ffffff"
+                android:textSize="17dp"
+                android:layout_margin="5dp"
+                android:text="알람 설정" />
+
+            <Button
+                android:id="@+id/bt_step3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:background="#000000"
+                android:textColor="#ffffff"
+                android:textSize="17dp"
+                android:layout_margin="5dp"
+                android:text="글씨 크기 설정" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/bt_step1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"
+                    android:layout_margin="5dp"
+                    android:background="#000000"
+                    android:textColor="#ffffff"
+                    android:text="구글캘린더 연동" />
+            <Button
+                android:id="@+id/bt_step4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:background="#000000"
+                android:textColor="#ffffff"
+                android:textSize="17dp"
+                android:layout_margin="5dp"
+                android:text="상태 성별 선택" />
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step0"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:paddingTop="100px"
+            android:layout_gravity="center"
+            android:background="#ffffff"
+            android:textColor="#B40404"
+            android:gravity="center"
+            android:text="위의 버튼을 클릭하여 설정해 주세요!" />
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step1"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+        <Button
+            android:id="@+id/bt_cal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textSize="20dp"
+            android:paddingTop="30px"
+            android:background="#ffffff"
+            android:textColor="#2156a5"
+            android:text="구글 캘린더 연동하기" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/bt_googleon"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:layout_margin="5dp"
+                android:background="#050000ff"
+                android:text="연동하기" />
+            <Button
+                android:id="@+id/bt_googleoff"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:layout_margin="5dp"
+                android:background="#050000ff"
+                android:text="연동해제" />
+            <TextView
+                android:id="@+id/tv_googletext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:paddingTop="10px"
+                android:layout_gravity="center"
+                android:background="#ffffff"
+                android:textColor="#000000"
+                android:text="연동상태" />
+
+        </LinearLayout>
+
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step2"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+	<Button
+        android:id="@+id/bt_time"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:paddingTop="10px"
+        android:textColor="#2156a5"
+        android:background="#ffffff"
+        android:text="알람 설정하기" />
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:layout_centerHorizontal="true"
+        android:timePickerMode="spinner" />
+    <EditText
+        android:id="@+id/et_timeset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:textColor="#2156a5"
+        android:hint="시계 시간을 선택하여 알람을 설정해보세요" />
+
+
+
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:orientation="horizontal" >
+    <Button
+        android:id="@+id/bt_timeset"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:layout_margin="5dp"
+        android:background="#050000ff"
+        android:text="시간설정" />
+
+     <Button
+        android:id="@+id/bt_stop"
+         android:layout_width="0dp"
+         android:layout_weight="1"
+         android:layout_height="wrap_content"
+         android:textSize="17dp"
+         android:layout_margin="5dp"
+         android:background="#050000ff"
+        android:text="시간설정해제" />
+</LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step3"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+     <Button
+        android:id="@+id/bt_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textSize="20dp"
+        android:paddingTop="30px"
+        android:background="#ffffff"
+         android:visibility="gone"
+         android:textColor="#2156a5"
+        android:text="글씨크기 설정하기" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+    <Button
+        android:id="@+id/bt_small"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:layout_margin="5dp"
+        android:background="#050000ff"
+        android:text="작게" />
+	<Button
+        android:id="@+id/bt_normal"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:layout_margin="5dp"
+        android:background="#050000ff"
+        android:text="보통" />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+	    <Button
+        android:id="@+id/bt_big"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="5dp"
+            android:background="#050000ff"
+        android:text="크게" />
+        <Button
+        android:id="@+id/bt_toobig"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="5dp"
+            android:background="#050000ff"
+        android:text="매우크게" />
+	</LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step4"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+    <Button
+        android:id="@+id/bt_sx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textSize="20dp"
+        android:paddingTop="30px"
+        android:background="#ffffff"
+        android:textColor="#2156a5"
+        android:text="성별 선택하기" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bt_man"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="5dp"
+            android:background="#050000ff"
+            android:text="남자" />
+        <Button
+            android:id="@+id/bt_woman"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="5dp"
+            android:background="#050000ff"
+            android:text="여자" />
+         </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>
+
+    </RelativeLayout>

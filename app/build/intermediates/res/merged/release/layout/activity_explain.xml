@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:typeface="sans"
+      android:background="#ffffff"
+      android:paddingBottom="@dimen/activity_vertical_margin"
+      android:paddingLeft="25px"
+      android:paddingRight="25px"
+      android:paddingTop="@dimen/activity_vertical_margin"
+      tools:context="com.yellowpg.gaspel.ExplainActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#000000"
+        android:dividerPadding="22dip"
+        android:orientation="vertical" >
+
+  <Button
+      android:id="@+id/bt_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="22dp"
+      android:paddingTop="20px"
+      android:paddingBottom="20px"
+      android:background="#ffffff"
+      android:text="오늘의복음 사용설명서" />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="0dp"
+          android:layout_marginBottom="0dp"
+          android:orientation="horizontal" >
+        <Button
+            android:id="@+id/bt_step1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="5dp"
+            android:background="#000000"
+            android:textColor="#ffffff"
+            android:text="오늘의복음" />
+
+        <Button
+            android:id="@+id/bt_step2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:background="#000000"
+            android:textColor="#ffffff"
+            android:textSize="17dp"
+            android:layout_margin="5dp"
+            android:text="시작단계" />
+        <Button
+            android:id="@+id/bt_step3"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:background="#000000"
+            android:textColor="#ffffff"
+            android:textSize="17dp"
+            android:layout_margin="5dp"
+            android:text="사용단계" />
+      </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step1"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+    <Button
+        android:id="@+id/bt_con11"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="21dp"
+        android:paddingTop="30px"
+        android:paddingBottom="30px"
+        android:background="#ffffff"
+        android:textColor="#2156a5"
+        android:text="오늘의 복음이란?" />
+    <TextView
+        android:id="@+id/tv_explain11"
+        android:paddingTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:paddingBottom="10px"
+        android:lineSpacingExtra="5dip"
+        android:gravity="center"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:text="복음이란 넓은 의미로 '복된 소식'으로 \n예수 그리스도를 통해 하느님께서 내리신 계시의 말씀입니다. \n\n우리는 오늘의복음을 매일 묵상함으로써,\n 주님께서 내게 해주시는 말씀을 들을 수 있습니다.\n\n또한 이를 기억하여 어떻게 살아가야 하는지 방향을 찾을 수 있습니다.\n\n*시작단계와 사용단계를 잘 읽어본 후에\n 어플을 사용하세요*" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step2"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+      <Button
+        android:id="@+id/bt_con22"
+          android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="21dp"
+        android:paddingTop="30px"
+        android:paddingBottom="30px"
+        android:background="#ffffff"
+        android:textColor="#2156a5"
+        android:text="시작단계" />
+    <TextView
+        android:id="@+id/tv_explain22"
+        android:paddingTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="5dip"
+        android:textSize="17dp"
+        android:paddingBottom="10px"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:text="1.[설정] 하기 \n- 구글캘린더 연동하기 : 모든 기록을 구글캘린더와 연동하여 자신이 했던 묵상들을 간직한다.\n- 알람설정 하기 : 매일 같은 시간에 알람을 설정하여 오늘의 복음을 묵상한다.\n- 글씨크기 설정하기 : 알맞은 글씨크기를 설정한다. \n- 성별 선택하기 : 나의 상태 level이 변화할때 자신의 성별과 같은 캐릭터를 선택한다.\n\n2. [매일의 복음] 에 들어가서 한달치를 미리 다운 받으면 간편하게 매일의 복음 주제성구를 본다." />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_step3"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+      <Button
+          android:id="@+id/bt_con33"
+          android:visibility="gone"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="21dp"
+          android:paddingTop="30px"
+          android:paddingBottom="30px"
+          android:background="#ffffff"
+          android:textColor="#2156a5"
+          android:text="사용단계" />
+      <TextView
+          android:id="@+id/tv_explain33"
+          android:paddingTop="20dp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:lineSpacingExtra="5dip"
+          android:textSize="17dp"
+          android:paddingBottom="10px"
+          android:background="#ffffff"
+          android:textColor="#000000"
+          android:text="1.[오늘의복음]에서 복음묵상 시작하기를 클릭하여 잠시 침묵한 후에 복음을 묵상한다.\n\n2. 말씀새기기에서 주님께서 자신에게 하고자 하시는 말씀을 생각해보고 기록한다.\n\n3. 총 10개의 코멘트를 달면 [렉시오 디비나]를 통해 거룩한 독서를 할 수 있다.\n\n4. [나의 기록]을 보며 자신이 기록한 내용을 다시금 읽으며 주님의 뜻과 주님의 사랑을 되새긴다.\n\n*주의점* 최근 4일동안 말씀새기기 코멘트가 없으면 레벨이 다시 내려가 렉시오디비나를 할 수 없으니 복음을 늘 가까이 하도록 노력하자." />
+    </LinearLayout>
+    </LinearLayout>
+
+
+  </ScrollView>
+
+</RelativeLayout>
+
