@@ -24,8 +24,9 @@
         android:allowBackup="true"
         android:icon="@drawable/gaspel"
         android:label="오늘의 복음"
-        android:theme="@style/AppTheme"
-        android:windowSoftInputMode="adjustPan">
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -33,7 +34,7 @@
         <activity android:name=".MainActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

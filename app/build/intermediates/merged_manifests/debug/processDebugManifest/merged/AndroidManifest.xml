@@ -30,9 +30,10 @@
         android:debuggable="true"
         android:icon="@drawable/gaspel"
         android:label="오늘의 복음"
+        android:largeHeap="true"
+        android:supportsRtl="true"
         android:testOnly="true"
-        android:theme="@style/AppTheme"
-        android:windowSoftInputMode="adjustPan" >
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -41,7 +42,7 @@
             android:name="com.yellowpg.gaspel.MainActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -481,6 +481,7 @@ color abc_tint_spinner
 color abc_tint_switch_track
 color accent_material_dark
 color accent_material_light
+color actionbar
 color background_floating_material_dark
 color background_floating_material_light
 color background_material_dark
@@ -862,6 +863,7 @@ drawable baby
 drawable bb_bottom_bar_top_shadow
 drawable bottom_section_color
 drawable boy
+drawable button_bg
 drawable calendar_next_arrow
 drawable calendar_prev_arrow
 drawable cell_bg
@@ -904,12 +906,14 @@ drawable ic_launcher
 drawable ic_notifications_black_24dp
 drawable ic_sync_black_24dp
 drawable lectio
+drawable left
 drawable left_arrow
 drawable line
 drawable list
 drawable man
 drawable memo
 drawable navigation_empty_icon
+drawable notification
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -925,6 +929,7 @@ drawable notify_panel_notification_icon_bg
 drawable red_border
 drawable red_border_dark
 drawable red_border_gray_bg
+drawable right
 drawable right_arrow
 drawable setting
 drawable smallstar
@@ -933,6 +938,12 @@ drawable today_big
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 drawable woman
+font hansans_bold
+font hansans_heavy
+font hansans_light
+font hansans_medium
+font hansans_normal
+font hansans_regular
 id ALT
 id CTRL
 id FUNCTION
@@ -967,6 +978,7 @@ id action_settings
 id action_text
 id action_three
 id action_two
+id action_zero
 id actions
 id activity_chooser_view_content
 id add
@@ -1004,7 +1016,6 @@ id bt_con33
 id bt_daily
 id bt_date
 id bt_dateinfo
-id bt_end
 id bt_googleoff
 id bt_googleon
 id bt_man
@@ -1016,7 +1027,6 @@ id bt_onesentence
 id bt_save
 id bt_showgaspel
 id bt_small
-id bt_start
 id bt_step1
 id bt_step2
 id bt_step3
@@ -1363,6 +1373,7 @@ menu main
 menu menu
 menu second
 menu third
+menu topmenu_main
 raw calm
 string abc_action_bar_home_description
 string abc_action_bar_up_description
@@ -1641,6 +1652,7 @@ style CaldroidDefaultSquareCell
 style CaldroidDefaultWeekday
 style EasyPermissions
 style EasyPermissions_Transparent
+style MyActionBar
 style Platform_AppCompat
 style Platform_AppCompat_Light
 style Platform_ThemeOverlay_AppCompat

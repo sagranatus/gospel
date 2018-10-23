@@ -28,7 +28,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -73,7 +75,7 @@ import java.util.List;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
-public class MainActivity extends BaseActivity
+public class MainActivity extends AppCompatActivity
 		implements EasyPermissions.PermissionCallbacks {
 	final static String TAG = "MainActivity";
 	Button btnNetCon;
@@ -81,7 +83,7 @@ public class MainActivity extends BaseActivity
 	Button comment_save;
 	TextView tv;
 	TextView tv2;
-	Button date, start, end;
+	Button date;
 	ImageButton before, after;
 	static String day;
 	String textsize;
@@ -165,9 +167,8 @@ public class MainActivity extends BaseActivity
 		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		actionbar.setCustomView(R.layout.actionbar);
 		TextView mytext = (TextView) findViewById(R.id.mytext);
-		Fonttype.setFont( "Billabong",MainActivity.this, mytext);
-		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
-
+		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+		actionbar.setElevation(0);
 		// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
 		actionbar.setDisplayHomeAsUpEnabled(true);
 		actionbar.setHomeAsUpIndicator(R.drawable.list);
@@ -179,11 +180,6 @@ public class MainActivity extends BaseActivity
 		before = (ImageButton) findViewById(R.id.bt_beforedate);
 		after = (ImageButton) findViewById(R.id.bt_afterdate);
 
-		// 복음 묵상하기
-		start = (Button) findViewById(R.id.bt_start);
-		end = (Button) findViewById(R.id.bt_end);
-		start.setVisibility(start.GONE);
-		end.setVisibility(end.GONE);
 
 		// 복음 제목, 내용
 		tv = (TextView) findViewById(R.id.tv_01);
@@ -247,13 +243,13 @@ public class MainActivity extends BaseActivity
 		});
 
 		// exp : 키보드를 보여주고 가리는데 사용하는 객체
-		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	//	imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		// exp : 아래는 edittext 시에 다른 부분을 누르면 키보드가 사라지게 하는 부분이다.
 		ll.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				hideKeyboard();
+				//hideKeyboard();
 				switch(v.getId()){
 					case R.id.ll :
 						break;
@@ -261,6 +257,16 @@ public class MainActivity extends BaseActivity
 			}
 		});
 
+
+		// 새로 추가한 부분
+		findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
+				@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				return true;
+			}
+		});
 		// exp : textsize 설정
 		SharedPreferences sp = getSharedPreferences("setting",0);
 		textsize = sp.getString("textsize", "");
@@ -272,8 +278,8 @@ public class MainActivity extends BaseActivity
 			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 			comment_save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+           // start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+			//end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 		}else if(textsize.equals("big")){
 			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
 			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
@@ -282,8 +288,8 @@ public class MainActivity extends BaseActivity
 			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			comment_save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+           // start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			//end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 		}else if(textsize.equals("toobig")){
 			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
 			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 26);
@@ -292,8 +298,8 @@ public class MainActivity extends BaseActivity
 			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
 			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
 			comment_save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
+			//start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
+		//	end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
 		}else{
 
 		}
@@ -305,9 +311,9 @@ public class MainActivity extends BaseActivity
 		// exp : 인터넷연결된 상태에서만 데이터 가져오기
 		if ((wifi.isConnected() || mobile.isConnected())) {
 			// exp : 이는 비동기적 방식으로 데이터를 가져오는 부분이다.
-			start.setVisibility(start.VISIBLE);
-			start.setOnClickListener(startlistener);
-			end.setOnClickListener(startlistener);
+		//	start.setVisibility(start.VISIBLE);
+		//	start.setOnClickListener(startlistener);
+		//	end.setOnClickListener(startlistener);
 			if(daydate != null){ // daydate가 null이 아니면 그때의 값을 가져온다
 				comment.setText("");
 				String timeStr = daydate;
@@ -336,6 +342,7 @@ public class MainActivity extends BaseActivity
 
 		// exp : 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
 		comment_save.setOnClickListener(listener);
+		comment_save.setBackgroundResource(R.drawable.button_bg);
 
 		/// exp : 코멘트 데이터베이스를 생성 및 초기화
 		memberInfoHelper = new MemberInfoHelper(this);
@@ -353,7 +360,7 @@ public class MainActivity extends BaseActivity
 	}
 
 		// exp : 이는 baseActivity에 있는 함수로서 키보드가 보이고 보이지 않을때 이벤트를 주기 위해 불러오는 함수이다.
-		attachKeyboardListeners();
+	//	attachKeyboardListeners();
 
 		// exp : 이는 현재날짜의 경우와 오늘의 복음을 클릭할때만 복음묵상 시작하기 버튼이 보이고 이벤트를 주기 위한 부분
 		Calendar c2 = Calendar.getInstance();
@@ -637,7 +644,7 @@ public class MainActivity extends BaseActivity
 		}
 	}
 
-
+/*
 	OnClickListener startlistener = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -671,8 +678,8 @@ public class MainActivity extends BaseActivity
 					//unlockMessage.show();
 					break;
 				case R.id.bt_end:
-					end.setVisibility(end.GONE);
-					start.setVisibility(start.VISIBLE);
+				//	end.setVisibility(end.GONE);
+				//	start.setVisibility(start.VISIBLE);
 					onDestroy();
 					break;
 			}
@@ -751,8 +758,8 @@ public class MainActivity extends BaseActivity
 				last.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 				last.show();
 
-				start.setVisibility(start.VISIBLE);
-				end.setVisibility(end.GONE);
+			//	start.setVisibility(start.VISIBLE);
+			//	end.setVisibility(end.GONE);
 			}
 		};
 	}
@@ -771,7 +778,7 @@ public class MainActivity extends BaseActivity
 		countDownTimer2=null;
 		mediaPlayer.stop();
 	}
-
+*/
 	// exp : 요일 얻어오기
 	public static String getDay(){
 		int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
@@ -811,7 +818,7 @@ public class MainActivity extends BaseActivity
 
 		public void onClick(View v) {
 
-			hideKeyboard();
+			//hideKeyboard();
 			SQLiteDatabase db;
 			ContentValues values;
 			// TODO Auto-generated method stub
@@ -912,23 +919,24 @@ public class MainActivity extends BaseActivity
 
 
 	// exp : 키보드가 보일때, 보이지 않을때 이벤트 주는 부분 (BaseActivity의 메소드)
-	@Override
+	//@Override
 	protected void onShowKeyboard(int keyboardHeight) {
 		// do things when keyboard is shown
-		bottomNavigationView.setVisibility(View.VISIBLE);
+		//bottomNavigationView.setVisibility(View.VISIBLE);
 	}
 
-	@Override
+//	@Override
 	protected void onHideKeyboard() {
 		// do things when keyboard is hidden
-		bottomNavigationView.setVisibility(View.GONE);
+		//bottomNavigationView.setVisibility(View.GONE);
 	}
 
+	/*
 	// exp : 다른 부분을 클릭하면 키보드가 사라지도록 하기 위해 만든 메소드 // cf : 결국 키보드 보이고 안보이는 데는 imm과 baseActivity 두개가 사용됨
 	private void hideKeyboard(){
 		imm.hideSoftInputFromWindow(comment.getWindowToken(), 0);
 	}
-
+		*/
 
 
 	@Override
@@ -945,6 +953,16 @@ public class MainActivity extends BaseActivity
 	public void onBackPressed() {
 		//Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
 
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.topmenu_main, menu);
+		//   DBManager dbMgr2 = new DBManager(this);
+		//   dbMgr2.dbOpen();
+
+		return true;
 	}
 
 
