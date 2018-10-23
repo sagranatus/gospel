@@ -4,23 +4,6 @@
             "outputFile": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-land\\values-land.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.0.aar\\0f08a3ac81152311d8ede62fd59e8738\\res\\values-land\\values-land.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,125,189,260",
-                        "endColumns": "69,63,70,67",
-                        "endOffsets": "120,184,255,323"
-                    },
-                    "to": {
-                        "startLines": "3,4,5,6",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "116,186,250,321",
-                        "endColumns": "69,63,70,67",
-                        "endOffsets": "181,245,316,384"
-                    }
-                },
-                {
                     "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\bottom-bar-2.3.1.aar\\3b07c2cc8155b76e29731d78fad6ac66\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2",
@@ -31,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\design-25.3.0.aar\\a8ffe056bef16229cd01b6342a6b793e\\res\\values-land\\values-land.xml",
+                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\f93f4d51a9b0e35e2525c67a7c267b89\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -47,6 +30,23 @@
                         "endLines": "10",
                         "endColumns": "12",
                         "endOffsets": "566"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\values-land\\values-land.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,125,189,260",
+                        "endColumns": "69,63,70,67",
+                        "endOffsets": "120,184,255,323"
+                    },
+                    "to": {
+                        "startLines": "3,4,5,6",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "116,186,250,321",
+                        "endColumns": "69,63,70,67",
+                        "endOffsets": "181,245,316,384"
                     }
                 }
             ]

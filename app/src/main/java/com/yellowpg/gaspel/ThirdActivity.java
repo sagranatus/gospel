@@ -48,6 +48,9 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
+import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.MemberInfoHelper;
+import com.yellowpg.gaspel.googlesync.MakeInsertTask;
 
 import java.io.IOException;
 import java.text.ParseException;

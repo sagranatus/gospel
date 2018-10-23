@@ -11,22 +11,26 @@ MERGED from [com.roomorama:caldroid:2.0.1] C:\Users\sagra\.gradle\caches\transfo
 MERGED from [com.mcxiaoke.volley:library-aar:1.0.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\library-aar-1.0.0.aar\16bb812181e7e378ba86f150b558755f\AndroidManifest.xml:1:70-7:12
 MERGED from [com.google.android.gms:play-services-auth:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.0.4.aar\adcc95531b9fcad31c66977762f5e136\AndroidManifest.xml:16:1-26:12
 MERGED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\easypermissions-0.3.0.aar\fc93e771331090b40615a9fccefba423\AndroidManifest.xml:2:1-19:12
-MERGED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.0.aar\0f08a3ac81152311d8ede62fd59e8738\AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:design:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-27.1.0.aar\f93f4d51a9b0e35e2525c67a7c267b89\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:appcompat-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.0.aar\34e1367d857044d0fc1139f19607cfbf\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.gms:play-services-auth-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-11.0.4.aar\58529e09418052892c745264580cfbd6\AndroidManifest.xml:2:1-5:12
 MERGED from [com.google.android.gms:play-services-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-base-11.0.4.aar\7a6e72cc84a4910c98212ccdf9aa6dfd\AndroidManifest.xml:16:1-21:12
 MERGED from [com.google.android.gms:play-services-tasks:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.0.4.aar\2ad59b5d342e31f9ec59eb80bd5a4c29\AndroidManifest.xml:2:1-5:12
 MERGED from [com.google.android.gms:play-services-basement:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.0.4.aar\638fa38e596b9ffb5741ac7dcf16dc3e\AndroidManifest.xml:16:1-23:12
-MERGED from [com.android.support:transition:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-25.3.0.aar\fc36685d8ab9c391f051121a568b9471\AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:support-v4:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.0.aar\0e2f9433127f800af2223e630c7e368a\AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-25.3.0.aar\78c575042aa7b60b52ff3bd6074eb7b6\AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-25.3.0.aar\a9235c90677cc511392ddca195761c4e\AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:recyclerview-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-25.3.0.aar\dbe38b353d524efab6b3a390abf26fbc\AndroidManifest.xml:17:1-26:12
-MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-25.3.0.aar\28ee839e3d575c7430d755a3c16a256c\AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.0.aar\447a3c15619afab518856b9eb8244905\AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-25.3.0.aar\d44054406774424469704cdc1685fbbe\AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.0.aar\7589cfdf4662a2dd5d2d8a22a0d246a6\AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:support-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.0.aar\ec65d799728a330fccdd28501de4a07c\AndroidManifest.xml:17:1-31:12
+MERGED from [com.android.support:support-v4:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.0.aar\a7cea680c14e77c7c165047530b44c69\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.0.aar\da51d1ef8f2176d66245c5f6414b41ea\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.0.aar\9b7fe7bcd7d072984ff0524acd8e6e13\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:recyclerview-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.1.0.aar\c23d2d5134ac9afba16c8c88eae28a58\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.0.aar\3139cac48ec00200717da2fad09120a5\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.0.aar\310e701336dfd3c5d6cf1e6434fe1a80\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.0.aar\061fe22cbcd78e27816f040c52aa68d0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-27.1.0.aar\b4d248413cae9964e1dc18895bd50756\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.0.aar\6d820f3f49f0274aec25470dac5385d6\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.0.aar\b2c1625ac056332e33774bdc0135e7f3\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\74194596e75a48be1a9411b277437ba4\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\c51799a98b62d2b3f1745f6903159c8c\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\37568f7cc0724f439d322550efaf4a7f\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\3f9c69ee509adba559fae66f1fc11be2\AndroidManifest.xml:17:1-22:12
 INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
 INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
 INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
@@ -62,10 +66,10 @@ MERGED from [com.google.android.gms:play-services-auth:11.0.4] C:\Users\sagra\.g
 MERGED from [com.google.android.gms:play-services-auth:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.0.4.aar\adcc95531b9fcad31c66977762f5e136\AndroidManifest.xml:17:5-43
 MERGED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\easypermissions-0.3.0.aar\fc93e771331090b40615a9fccefba423\AndroidManifest.xml:7:5-9:41
 MERGED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\easypermissions-0.3.0.aar\fc93e771331090b40615a9fccefba423\AndroidManifest.xml:7:5-9:41
-MERGED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:21:5-23:62
-MERGED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:21:5-23:62
-MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.0.aar\0f08a3ac81152311d8ede62fd59e8738\AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.0.aar\0f08a3ac81152311d8ede62fd59e8738\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:design:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-27.1.0.aar\f93f4d51a9b0e35e2525c67a7c267b89\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-27.1.0.aar\f93f4d51a9b0e35e2525c67a7c267b89\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.0.aar\34e1367d857044d0fc1139f19607cfbf\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.0.aar\34e1367d857044d0fc1139f19607cfbf\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-auth-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-11.0.4.aar\58529e09418052892c745264580cfbd6\AndroidManifest.xml:4:5-43
 MERGED from [com.google.android.gms:play-services-auth-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-11.0.4.aar\58529e09418052892c745264580cfbd6\AndroidManifest.xml:4:5-43
 MERGED from [com.google.android.gms:play-services-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-base-11.0.4.aar\7a6e72cc84a4910c98212ccdf9aa6dfd\AndroidManifest.xml:17:5-43
@@ -74,30 +78,36 @@ MERGED from [com.google.android.gms:play-services-tasks:11.0.4] C:\Users\sagra\.
 MERGED from [com.google.android.gms:play-services-tasks:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.0.4.aar\2ad59b5d342e31f9ec59eb80bd5a4c29\AndroidManifest.xml:3:5-43
 MERGED from [com.google.android.gms:play-services-basement:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.0.4.aar\638fa38e596b9ffb5741ac7dcf16dc3e\AndroidManifest.xml:17:5-43
 MERGED from [com.google.android.gms:play-services-basement:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.0.4.aar\638fa38e596b9ffb5741ac7dcf16dc3e\AndroidManifest.xml:17:5-43
-MERGED from [com.android.support:transition:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-25.3.0.aar\fc36685d8ab9c391f051121a568b9471\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-25.3.0.aar\fc36685d8ab9c391f051121a568b9471\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.0.aar\0e2f9433127f800af2223e630c7e368a\AndroidManifest.xml:21:5-23:54
-MERGED from [com.android.support:support-v4:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.0.aar\0e2f9433127f800af2223e630c7e368a\AndroidManifest.xml:21:5-23:54
-MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-25.3.0.aar\78c575042aa7b60b52ff3bd6074eb7b6\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-25.3.0.aar\78c575042aa7b60b52ff3bd6074eb7b6\AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-25.3.0.aar\a9235c90677cc511392ddca195761c4e\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-25.3.0.aar\a9235c90677cc511392ddca195761c4e\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:recyclerview-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-25.3.0.aar\dbe38b353d524efab6b3a390abf26fbc\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:recyclerview-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-25.3.0.aar\dbe38b353d524efab6b3a390abf26fbc\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-25.3.0.aar\28ee839e3d575c7430d755a3c16a256c\AndroidManifest.xml:21:5-23:60
-MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-25.3.0.aar\28ee839e3d575c7430d755a3c16a256c\AndroidManifest.xml:21:5-23:60
-MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.0.aar\447a3c15619afab518856b9eb8244905\AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.0.aar\447a3c15619afab518856b9eb8244905\AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-25.3.0.aar\d44054406774424469704cdc1685fbbe\AndroidManifest.xml:21:5-23:63
-MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-25.3.0.aar\d44054406774424469704cdc1685fbbe\AndroidManifest.xml:21:5-23:63
-MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.0.aar\7589cfdf4662a2dd5d2d8a22a0d246a6\AndroidManifest.xml:21:5-23:61
-MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.0.aar\7589cfdf4662a2dd5d2d8a22a0d246a6\AndroidManifest.xml:21:5-23:61
-MERGED from [com.android.support:support-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.0.aar\ec65d799728a330fccdd28501de4a07c\AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.0.aar\ec65d799728a330fccdd28501de4a07c\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-v4:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.0.aar\a7cea680c14e77c7c165047530b44c69\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.0.aar\a7cea680c14e77c7c165047530b44c69\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.0.aar\da51d1ef8f2176d66245c5f6414b41ea\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.0.aar\da51d1ef8f2176d66245c5f6414b41ea\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.0.aar\9b7fe7bcd7d072984ff0524acd8e6e13\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.0.aar\9b7fe7bcd7d072984ff0524acd8e6e13\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.1.0.aar\c23d2d5134ac9afba16c8c88eae28a58\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-27.1.0.aar\c23d2d5134ac9afba16c8c88eae28a58\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.0.aar\3139cac48ec00200717da2fad09120a5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.0.aar\3139cac48ec00200717da2fad09120a5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.0.aar\310e701336dfd3c5d6cf1e6434fe1a80\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.0.aar\310e701336dfd3c5d6cf1e6434fe1a80\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.0.aar\061fe22cbcd78e27816f040c52aa68d0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.0.aar\061fe22cbcd78e27816f040c52aa68d0\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-27.1.0.aar\b4d248413cae9964e1dc18895bd50756\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-27.1.0.aar\b4d248413cae9964e1dc18895bd50756\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.0.aar\6d820f3f49f0274aec25470dac5385d6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.0.aar\6d820f3f49f0274aec25470dac5385d6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.0.aar\b2c1625ac056332e33774bdc0135e7f3\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.0.aar\b2c1625ac056332e33774bdc0135e7f3\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\74194596e75a48be1a9411b277437ba4\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\74194596e75a48be1a9411b277437ba4\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\c51799a98b62d2b3f1745f6903159c8c\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\c51799a98b62d2b3f1745f6903159c8c\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\37568f7cc0724f439d322550efaf4a7f\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\37568f7cc0724f439d322550efaf4a7f\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\3f9c69ee509adba559fae66f1fc11be2\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\3f9c69ee509adba559fae66f1fc11be2\AndroidManifest.xml:20:5-44
 INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:7:5-47
 INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:7:5-47
-	tools:overrideLibrary
-		ADDED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:23:9-59
 	android:targetSdkVersion
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:7:15-44
 		INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml
@@ -107,51 +117,51 @@ INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.x
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:7:5-47
 		INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml
 uses-permission#android.permission.INTERNET
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:9:5-67
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:8:5-67
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:9:22-64
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:8:22-64
 uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:10:5-79
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:9:5-79
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:10:22-76
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:9:22-76
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:11:5-81
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:10:5-81
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:11:22-78
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:10:22-78
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:12:5-79
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:11:5-79
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:12:22-76
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:11:22-76
 uses-permission#android.permission.WAKE_LOCK
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:15:5-68
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:14:5-68
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:15:22-65
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:14:22-65
 uses-permission#android.permission.GET_ACCOUNTS
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:16:5-71
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:15:5-71
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:16:22-68
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:15:22-68
 uses-permission#android.permission.READ_PHONE_STATE
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:17:5-75
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:16:5-75
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:17:22-72
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:16:22-72
 uses-permission#android.permission.ACCESS_WIFI_STATE
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:18:5-76
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:17:5-76
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:18:22-73
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:17:22-73
 uses-permission#android.permission.CHANGE_NETWORK_STATE
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:19:5-79
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:18:5-79
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:19:22-76
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:18:22-76
 uses-permission#android.permission.WRITE_CALENDAR
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:20:5-73
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:19:5-73
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:20:22-70
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:19:22-70
 uses-permission#android.permission.READ_CALENDAR
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:21:5-72
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:20:5-72
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:21:22-69
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:20:22-69
 application
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:23:5-72:19
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:22:5-72:19
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.2.aar\ba35265b7f995360168153f4d723e04f\AndroidManifest.xml:9:5-20
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.2.aar\ba35265b7f995360168153f4d723e04f\AndroidManifest.xml:9:5-20
 MERGED from [com.mcxiaoke.volley:library-aar:1.0.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\library-aar-1.0.0.aar\16bb812181e7e378ba86f150b558755f\AndroidManifest.xml:5:5-19
@@ -160,62 +170,42 @@ MERGED from [com.google.android.gms:play-services-auth:11.0.4] C:\Users\sagra\.g
 MERGED from [com.google.android.gms:play-services-auth:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-auth-11.0.4.aar\adcc95531b9fcad31c66977762f5e136\AndroidManifest.xml:19:5-25:19
 MERGED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\easypermissions-0.3.0.aar\fc93e771331090b40615a9fccefba423\AndroidManifest.xml:11:5-17:19
 MERGED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\easypermissions-0.3.0.aar\fc93e771331090b40615a9fccefba423\AndroidManifest.xml:11:5-17:19
-MERGED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.0.aar\0f08a3ac81152311d8ede62fd59e8738\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.0.aar\0f08a3ac81152311d8ede62fd59e8738\AndroidManifest.xml:29:5-20
 MERGED from [com.google.android.gms:play-services-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-base-11.0.4.aar\7a6e72cc84a4910c98212ccdf9aa6dfd\AndroidManifest.xml:18:5-20:19
 MERGED from [com.google.android.gms:play-services-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-base-11.0.4.aar\7a6e72cc84a4910c98212ccdf9aa6dfd\AndroidManifest.xml:18:5-20:19
 MERGED from [com.google.android.gms:play-services-tasks:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.0.4.aar\2ad59b5d342e31f9ec59eb80bd5a4c29\AndroidManifest.xml:4:5-19
 MERGED from [com.google.android.gms:play-services-tasks:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-tasks-11.0.4.aar\2ad59b5d342e31f9ec59eb80bd5a4c29\AndroidManifest.xml:4:5-19
 MERGED from [com.google.android.gms:play-services-basement:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.0.4.aar\638fa38e596b9ffb5741ac7dcf16dc3e\AndroidManifest.xml:19:5-21:19
 MERGED from [com.google.android.gms:play-services-basement:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.0.4.aar\638fa38e596b9ffb5741ac7dcf16dc3e\AndroidManifest.xml:19:5-21:19
-MERGED from [com.android.support:transition:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-25.3.0.aar\fc36685d8ab9c391f051121a568b9471\AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:transition:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-25.3.0.aar\fc36685d8ab9c391f051121a568b9471\AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:support-v4:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.0.aar\0e2f9433127f800af2223e630c7e368a\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-v4:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.0.aar\0e2f9433127f800af2223e630c7e368a\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-25.3.0.aar\78c575042aa7b60b52ff3bd6074eb7b6\AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-25.3.0.aar\78c575042aa7b60b52ff3bd6074eb7b6\AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-25.3.0.aar\a9235c90677cc511392ddca195761c4e\AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-25.3.0.aar\a9235c90677cc511392ddca195761c4e\AndroidManifest.xml:26:5-20
-MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-25.3.0.aar\28ee839e3d575c7430d755a3c16a256c\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-25.3.0.aar\28ee839e3d575c7430d755a3c16a256c\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.0.aar\447a3c15619afab518856b9eb8244905\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.0.aar\447a3c15619afab518856b9eb8244905\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-25.3.0.aar\d44054406774424469704cdc1685fbbe\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-25.3.0.aar\d44054406774424469704cdc1685fbbe\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.0.aar\7589cfdf4662a2dd5d2d8a22a0d246a6\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.0.aar\7589cfdf4662a2dd5d2d8a22a0d246a6\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.0.aar\ec65d799728a330fccdd28501de4a07c\AndroidManifest.xml:29:5-20
-MERGED from [com.android.support:support-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.0.aar\ec65d799728a330fccdd28501de4a07c\AndroidManifest.xml:29:5-20
 	android:label
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:27:9-31
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:26:9-31
 	android:windowSoftInputMode
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:29:9-48
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:28:9-48
 	android:icon
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:26:9-40
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:25:9-40
 	android:allowBackup
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:25:9-35
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:24:9-35
 	android:theme
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:28:9-40
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:27:9-40
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:24:9-57
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:23:9-61
 meta-data#com.google.android.gms.version
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:30:9-32:69
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:29:9-31:69
 MERGED from [com.google.android.gms:play-services-basement:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.0.4.aar\638fa38e596b9ffb5741ac7dcf16dc3e\AndroidManifest.xml:20:9-121
 MERGED from [com.google.android.gms:play-services-basement:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-basement-11.0.4.aar\638fa38e596b9ffb5741ac7dcf16dc3e\AndroidManifest.xml:20:9-121
 	android:value
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:32:13-66
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:31:13-66
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:31:13-58
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:30:13-58
 activity#com.yellowpg.gaspel.MainActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:34:9-41:20
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:33:9-41:20
 	android:screenOrientation
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:36:13-47
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:35:13-47
+	android:windowSoftInputMode
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:36:13-55
 	android:configChanges
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:35:13-75
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:34:13-75
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:34:19-47
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:33:19-47
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:37:13-40:29
 action#android.intent.action.MAIN
@@ -314,34 +304,6 @@ ADDED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\tran
 		ADDED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\easypermissions-0.3.0.aar\fc93e771331090b40615a9fccefba423\AndroidManifest.xml:16:13-63
 	android:name
 		ADDED from [pub.devrel:easypermissions:0.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\easypermissions-0.3.0.aar\fc93e771331090b40615a9fccefba423\AndroidManifest.xml:13:13-86
-meta-data#android.support.VERSION
-ADDED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.0.aar\0f08a3ac81152311d8ede62fd59e8738\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:appcompat-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-25.3.0.aar\0f08a3ac81152311d8ede62fd59e8738\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:transition:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-25.3.0.aar\fc36685d8ab9c391f051121a568b9471\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:transition:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\transition-25.3.0.aar\fc36685d8ab9c391f051121a568b9471\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:support-v4:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.0.aar\0e2f9433127f800af2223e630c7e368a\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-v4:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-25.3.0.aar\0e2f9433127f800af2223e630c7e368a\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-25.3.0.aar\78c575042aa7b60b52ff3bd6074eb7b6\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:animated-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-25.3.0.aar\78c575042aa7b60b52ff3bd6074eb7b6\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-25.3.0.aar\a9235c90677cc511392ddca195761c4e\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:support-vector-drawable:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-25.3.0.aar\a9235c90677cc511392ddca195761c4e\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:recyclerview-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-25.3.0.aar\dbe38b353d524efab6b3a390abf26fbc\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:recyclerview-v7:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-25.3.0.aar\dbe38b353d524efab6b3a390abf26fbc\AndroidManifest.xml:22:5-24:34
-MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-25.3.0.aar\28ee839e3d575c7430d755a3c16a256c\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-fragment:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-25.3.0.aar\28ee839e3d575c7430d755a3c16a256c\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.0.aar\447a3c15619afab518856b9eb8244905\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-core-ui:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-ui-25.3.0.aar\447a3c15619afab518856b9eb8244905\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-25.3.0.aar\d44054406774424469704cdc1685fbbe\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-media-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-media-compat-25.3.0.aar\d44054406774424469704cdc1685fbbe\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.0.aar\7589cfdf4662a2dd5d2d8a22a0d246a6\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-core-utils:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-core-utils-25.3.0.aar\7589cfdf4662a2dd5d2d8a22a0d246a6\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.0.aar\ec65d799728a330fccdd28501de4a07c\AndroidManifest.xml:25:5-27:34
-MERGED from [com.android.support:support-compat:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-compat-25.3.0.aar\ec65d799728a330fccdd28501de4a07c\AndroidManifest.xml:25:5-27:34
-	android:value
-		ADDED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:27:9-31
-	android:name
-		ADDED from [com.android.support:design:25.3.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-25.3.0.aar\a8ffe056bef16229cd01b6342a6b793e\AndroidManifest.xml:26:9-47
 activity#com.google.android.gms.common.api.GoogleApiActivity
 ADDED from [com.google.android.gms:play-services-base:11.0.4] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\play-services-base-11.0.4.aar\7a6e72cc84a4910c98212ccdf9aa6dfd\AndroidManifest.xml:19:9-172
 	android:exported

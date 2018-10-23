@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v22\\values-v22.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.0.aar\\0f08a3ac81152311d8ede62fd59e8738\\res\\values-v22\\values-v22.xml",
+                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\values-v22\\values-v22.xml",
                     "from": {
                         "startLines": "2,3,4,9",
                         "startColumns": "4,4,4,4",

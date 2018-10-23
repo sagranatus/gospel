@@ -10,6 +10,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -32,6 +35,14 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.MemberInfoHelper;
+import com.yellowpg.gaspel.etc.AppConfig;
+import com.yellowpg.gaspel.etc.AppController;
+import com.yellowpg.gaspel.etc.BaseActivity;
+import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
+import com.yellowpg.gaspel.googlesync.MakeInsertTask;
+import com.yellowpg.gaspel.googlesync.MakeUpdateTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +56,7 @@ import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class LectioActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks{
+public class LectioActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
 LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     Button bt_notyet;
     EditText bg1, bg2, bg3;
@@ -59,6 +70,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     TextView contents;
     TextView q1, q2, q3;
     Button onesentence;
+    BottomNavigationView bottomNavigationView;
     String day;
     Calendar c1 = Calendar.getInstance();
     //현재 해 + 달 구하기
@@ -249,29 +261,47 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         // exp : 맨처음에는 복음 내용이 보이지 않는다
         ll_upper.setVisibility(ll_upper.GONE);
 
-        // exp : bottombar 삽입 및 설정
-        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.setDefaultTab(R.id.tab3);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
+        // bottomnavigation 뷰 등록
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
 
-            public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab1) {
-                    Intent i = new Intent(LectioActivity.this, MainActivity.class);
-                    Calendar c1 = Calendar.getInstance();
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                    String date_val2 = sdf2.format(c1.getTime());
-                    i.putExtra("date",date_val2);
-                    startActivity(i);
-                }else if(tabId == R.id.tab2){
-                    Intent i = new Intent(LectioActivity.this, SecondActivity.class);
-                    startActivity(i);
-                }else if(tabId == R.id.tab3){
-                }else if(tabId == R.id.tab4){
-                    Intent i = new Intent(LectioActivity.this, FourthActivity.class);
-                    startActivity(i);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem_1 = menu.getItem(0);
+        MenuItem menuItem_2 = menu.getItem(1);
+        MenuItem menuItem_3 = menu.getItem(2);
+        MenuItem menuItem_4 = menu.getItem(3);
+        menuItem_1.setChecked(false);
+        menuItem_2.setChecked(false);
+        menuItem_3.setChecked(false);
+        menuItem_4.setChecked(false);
+
+        MenuItem menuItem = menu.getItem(2);
+        menuItem.setChecked(true);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_one:
+                        Intent i = new Intent(LectioActivity.this, MainActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.id.action_two:
+                        Intent i2 = new Intent(LectioActivity.this, SecondActivity.class);
+                        startActivity(i2);
+                        break;
+                    case R.id.action_three:
+                        Intent i3 = new Intent(LectioActivity.this, LectioActivity.class);
+                        startActivity(i3);
+                        break;
+                    case R.id.action_four:
+                        Intent i4 = new Intent(LectioActivity.this, FourthActivity.class);
+                        startActivity(i4);
+                        break;
                 }
+                return false;
             }
+
         });
 
         // exp : 텍스트사이즈 설정
@@ -332,7 +362,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
         // exp : 키보드 관련 부분
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        attachKeyboardListeners();
+       // attachKeyboardListeners();
 
         // exp : 다른 부분 터치시 키보드 사라지게 하기 이벤트
         ll_first.setOnClickListener(listener);
@@ -664,16 +694,16 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         imm.hideSoftInputFromWindow(js2.getWindowToken(), 0);
     }
     // exp : 키보드 보일때는 안보일때 bottombar 조정하기
-    @Override
+    //@Override
     protected void onShowKeyboard(int keyboardHeight) {
         // do things when keyboard is shown
-        bottomBar.setVisibility(View.GONE);
+        bottomNavigationView.setVisibility(View.GONE);
     }
 
-    @Override
+    //@Override
     protected void onHideKeyboard() {
         // do things when keyboard is hidden
-        bottomBar.setVisibility(View.VISIBLE);
+        bottomNavigationView.setVisibility(View.VISIBLE);
     }
 
     // exp : 요일 가져오기

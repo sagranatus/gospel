@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.MemberInfoHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 

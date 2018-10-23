@@ -4,7 +4,7 @@
             "outputFile": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-xlarge-v4\\values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.3.0.aar\\0f08a3ac81152311d8ede62fd59e8738\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+                    "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7",
                         "startColumns": "4,4,4,4,4,4",

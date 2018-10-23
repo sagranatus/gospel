@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.yellowpg.gaspel.adapter.DailyAdapter;
+import com.yellowpg.gaspel.data.Daily;
+import com.yellowpg.gaspel.etc.AppConfig;
+import com.yellowpg.gaspel.etc.AppController;
+import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +41,8 @@ public class SecondActivity extends Activity {
 	private ListView lv = null;
 	Button daily;
 	Calendar c1 = Calendar.getInstance();
+	BottomNavigationView bottomNavigationView;
+
 	//현재 해 + 달 구하기
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 	SimpleDateFormat sdf_y = new SimpleDateFormat("yyyy");
@@ -52,29 +61,47 @@ public class SecondActivity extends Activity {
 		daily = (Button) findViewById(R.id.bt_daily);
 		getGaspel();
 		// exp : bottombar 설정
-		BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-		bottomBar.setDefaultTab(R.id.tab2);
-		bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-			@Override
+		// bottomnavigation 뷰 등록
+		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+		BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+		BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
 
-			public void onTabSelected(@IdRes int tabId) {
-				if (tabId == R.id.tab1) {
-					//아래에는 다른날짜 복음을 보는 상태에서 오늘의 복음을 누르면 그것에 대한 내용이 나오게끔 하는 부분이다.
-					Intent i = new Intent(SecondActivity.this, MainActivity.class);
-					Calendar c1 = Calendar.getInstance();
-					SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-					String date_val2 = sdf2.format(c1.getTime());
-					i.putExtra("date",date_val2);
-					startActivity(i);
-				}else if(tabId == R.id.tab2){
-				}else if(tabId == R.id.tab3){
-					Intent i = new Intent(SecondActivity.this, LectioActivity.class);
-					startActivity(i);
-				}else if(tabId == R.id.tab4){
-					Intent i = new Intent(SecondActivity.this, FourthActivity.class);
-					startActivity(i);
+		Menu menu = bottomNavigationView.getMenu();
+		MenuItem menuItem_1 = menu.getItem(0);
+		MenuItem menuItem_2 = menu.getItem(1);
+		MenuItem menuItem_3 = menu.getItem(2);
+		MenuItem menuItem_4 = menu.getItem(3);
+		menuItem_1.setChecked(false);
+		menuItem_2.setChecked(false);
+		menuItem_3.setChecked(false);
+		menuItem_4.setChecked(false);
+
+		MenuItem menuItem = menu.getItem(1);
+		menuItem.setChecked(true);
+		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+				switch (item.getItemId()) {
+					case R.id.action_one:
+						Intent i = new Intent(SecondActivity.this, MainActivity.class);
+						startActivity(i);
+						break;
+					case R.id.action_two:
+						Intent i2 = new Intent(SecondActivity.this, SecondActivity.class);
+						startActivity(i2);
+						break;
+					case R.id.action_three:
+						Intent i3 = new Intent(SecondActivity.this, LectioActivity.class);
+						startActivity(i3);
+						break;
+					case R.id.action_four:
+						Intent i4 = new Intent(SecondActivity.this, FourthActivity.class);
+						startActivity(i4);
+						break;
 				}
+				return false;
 			}
+
 		});
 
 		//daily

@@ -1,5 +1,7 @@
 package com.yellowpg.gaspel;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,8 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.RingtoneManager;
@@ -17,6 +21,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -42,6 +49,15 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.yellowpg.gaspel.DB.MemberInfoHelper;
+import com.yellowpg.gaspel.etc.AppConfig;
+import com.yellowpg.gaspel.etc.AppController;
+import com.yellowpg.gaspel.etc.BaseActivity;
+import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
+import com.yellowpg.gaspel.etc.Fonttype;
+import com.yellowpg.gaspel.etc.ListSelectorDialog;
+import com.yellowpg.gaspel.googlesync.MakeInsertTask;
+import com.yellowpg.gaspel.googlesync.MakeUpdateTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,7 +87,9 @@ public class MainActivity extends BaseActivity
 	String textsize;
 	EditText comment;
 
-	BottomBar bottomBar;
+	BottomNavigationView bottomNavigationView;
+	ListSelectorDialog dlg_left;
+	String[] listk_left, listv_left;
 
 	int already = 0;
 	private MediaPlayer mMediaPlayer;
@@ -122,7 +140,9 @@ public class MainActivity extends BaseActivity
 	//	private static final String PREF_ACCOUNT_NAME = "accountName";
 		private static final String[] SCOPES = { CalendarScopes.CALENDAR }; // exp : 읽기만 허용하는 부분 CalendarScopes.CALENDAR_READONLY
 
+	@SuppressLint("InvalidWakeLockTag")
 	protected void onCreate(Bundle savedInstanceState){
+
 		// exp : 인터넷연결 확인
 		ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -139,7 +159,18 @@ public class MainActivity extends BaseActivity
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 
+//actionbar setting
+		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		actionbar.setCustomView(R.layout.actionbar);
+		TextView mytext = (TextView) findViewById(R.id.mytext);
+		Fonttype.setFont( "Billabong",MainActivity.this, mytext);
+		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
+
+		// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+		actionbar.setDisplayHomeAsUpEnabled(true);
+		actionbar.setHomeAsUpIndicator(R.drawable.list);
 		ll = (LinearLayout) findViewById(R.id.ll);
 		ll_date = (LinearLayout) findViewById(R.id.ll_date);
 
@@ -172,25 +203,47 @@ public class MainActivity extends BaseActivity
 		before.setOnClickListener(listener_date);
 		after.setOnClickListener(listener_date);
 
-		//exp : bottombar 설치하는 부분
-		bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-		//bottomBar.setActiveTabColor(Color.parseColor("#000000"));
-		bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+		// bottomnavigation 뷰 등록
+		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+		BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+		BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
 
-			public void onTabSelected(@IdRes int tabId) {
-				if (tabId == R.id.tab1) {
+		Menu menu = bottomNavigationView.getMenu();
+		MenuItem menuItem_1 = menu.getItem(0);
+		MenuItem menuItem_2 = menu.getItem(1);
+		MenuItem menuItem_3 = menu.getItem(2);
+		MenuItem menuItem_4 = menu.getItem(3);
+		menuItem_1.setChecked(false);
+		menuItem_2.setChecked(false);
+		menuItem_3.setChecked(false);
+		menuItem_4.setChecked(false);
 
-				}else if(tabId == R.id.tab2){
-					Intent i = new Intent(MainActivity.this, SecondActivity.class);
-					startActivity(i);
-				}else if(tabId == R.id.tab3){
-					Intent i = new Intent(MainActivity.this, LectioActivity.class);
-					startActivity(i);
-				}else if(tabId == R.id.tab4){
-					Intent i = new Intent(MainActivity.this, FourthActivity.class);
-					startActivity(i);
+		MenuItem menuItem = menu.getItem(0);
+		menuItem.setChecked(true);
+		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+				switch (item.getItemId()) {
+					case R.id.action_one:
+						Intent i = new Intent(MainActivity.this, MainActivity.class);
+						startActivity(i);
+						break;
+					case R.id.action_two:
+						Intent i2 = new Intent(MainActivity.this, SecondActivity.class);
+						startActivity(i2);
+						break;
+					case R.id.action_three:
+						Intent i3 = new Intent(MainActivity.this, LectioActivity.class);
+						startActivity(i3);
+						break;
+					case R.id.action_four:
+						Intent i4 = new Intent(MainActivity.this, FourthActivity.class);
+						startActivity(i4);
+						break;
 				}
+				return false;
 			}
+
 		});
 
 		// exp : 키보드를 보여주고 가리는데 사용하는 객체
@@ -310,10 +363,45 @@ public class MainActivity extends BaseActivity
 	//	}
 
 
+		// custom dialog setting
+		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
+
+		// custom dialog key, value 설정
+		listk_left = new String[] {"a", "b", "c"};
+		listv_left = new String[] {"사용 설명서", "설정", "나의 상태"};
+
+
 
 	} //onCreate 메소드 마침
 
+	// 커스텀 다이얼로그 선택시
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			default:
+				// show the list dialog.
+				dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
 
+					// procedure if user cancels the dialog.
+					public void selectorCanceled() {
+					}
+					// procedure for when a user selects an item in the dialog.
+					public void selectedItem(String key, String item) {
+						if(item.equals("사용 설명서")){
+							Intent i = new Intent(MainActivity.this, ExplainActivity.class);
+							startActivity(i);
+						}else if(item.equals("설정")){
+							Intent i = new Intent(MainActivity.this, ThirdActivity.class);
+							startActivity(i);
+						}else if(item.equals("나의 상태")){
+							Intent i = new Intent(MainActivity.this, StatusActivity.class);
+							startActivity(i);
+						}
+					}
+				});
+				return true;
+		}
+	}
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -827,13 +915,13 @@ public class MainActivity extends BaseActivity
 	@Override
 	protected void onShowKeyboard(int keyboardHeight) {
 		// do things when keyboard is shown
-		bottomBar.setVisibility(View.GONE);
+		bottomNavigationView.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	protected void onHideKeyboard() {
 		// do things when keyboard is hidden
-		bottomBar.setVisibility(View.VISIBLE);
+		bottomNavigationView.setVisibility(View.GONE);
 	}
 
 	// exp : 다른 부분을 클릭하면 키보드가 사라지도록 하기 위해 만든 메소드 // cf : 결국 키보드 보이고 안보이는 데는 imm과 baseActivity 두개가 사용됨
@@ -842,35 +930,6 @@ public class MainActivity extends BaseActivity
 	}
 
 
-	//exp : 이 아래는 상단 메뉴에 설정과 상태를 넣는 부분이다
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.third, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch(item.getItemId()){
-			case R.id.action_menu_01:
-				Intent i = new Intent(MainActivity.this, ExplainActivity.class);
-				startActivity(i);
-				break;
-			case R.id.action_menu_02:
-				Intent i2 = new Intent(MainActivity.this, ThirdActivity.class);
-				startActivity(i2);
-				break;
-			case R.id.action_menu_03:
-				Intent i3 = new Intent(MainActivity.this, StatusActivity.class);
-				startActivity(i3);
-				break;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
 
 	@Override
 	public void onPermissionsGranted(int requestCode, List<String> perms) {
