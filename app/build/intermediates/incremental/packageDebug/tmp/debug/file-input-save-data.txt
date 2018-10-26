@@ -1,23 +1,27 @@
 #Internal package file, do not edit.
-#Mon Oct 22 15:37:54 KST 2018
+#Fri Oct 26 16:58:55 KST 2018
 2.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
+5.set=ASSET
 0.path=Billabong/Billabong.ttf
 2.baseType=DIRECTORY
-3.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+3.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
 2.set=ASSET
-1.path=Billabong/instagram-logo.jpg
-4.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
-count=5
-2.path=calm.mp3
-4.set=ASSET
-3.path=classes.dex
+1.path=pray.mp3
+4.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+count=6
+5.baseType=DIRECTORY
+2.path=Billabong/instagram-logo.jpg
+5.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
+4.set=DEX
+3.path=calm.mp3
 3.baseType=DIRECTORY
 1.set=ASSET
-4.path=bell.mp3
+4.path=classes.dex
 1.baseType=DIRECTORY
+5.path=bell.mp3
 0.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
 0.baseType=DIRECTORY
-3.set=DEX
+3.set=ASSET
 1.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
 4.baseType=DIRECTORY
 0.set=ASSET

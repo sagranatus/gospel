@@ -38,7 +38,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>s
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".SecondActivity"
@@ -54,12 +59,14 @@
             android:name=".FourthActivity"
             android:label="오늘의복음"
             android:configChanges="screenSize|orientation|layoutDirection"
-            android:screenOrientation="sensor" />
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".LectioActivity"
             android:label="오늘의복음"
             android:configChanges="screenSize|orientation|layoutDirection"
-            android:screenOrientation="sensor" />
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".StatusActivity"
             android:label="오늘의복음"

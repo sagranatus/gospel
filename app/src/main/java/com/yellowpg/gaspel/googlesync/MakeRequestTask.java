@@ -25,7 +25,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.MemberInfoHelper;
+import com.yellowpg.gaspel.DB.CommentInfoHelper;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -49,7 +49,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
     private Exception mLastError = null;
     GoogleAccountCredential mCredential;
     Context context;
-    MemberInfoHelper dailyInfoHelper;
+    CommentInfoHelper dailyInfoHelper;
     LectioInfoHelper lectioInfoHelper;
     Calendar c1;
     ProgressDialog mProgress;
@@ -60,7 +60,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
         this.context = c;
         this.mCredential = credential;
         this.mProgress = p;
-        dailyInfoHelper = new MemberInfoHelper(context);
+        dailyInfoHelper = new CommentInfoHelper(context);
         lectioInfoHelper = new LectioInfoHelper(context);
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();

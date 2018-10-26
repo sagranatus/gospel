@@ -15,14 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.MemberInfoHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class StatusActivity extends Activity {
-    MemberInfoHelper memberInfoHelper;
+    CommentInfoHelper commentInfoHelper;
     LectioInfoHelper lectioInfoHelper;
 
     Calendar c1 = Calendar.getInstance();
@@ -99,14 +99,14 @@ public class StatusActivity extends Activity {
      //  MonthStatusShow();
 
         // exp : 이 부분은 코멘트 데이터를 가져와서 레벨 업 시켜주는 부분
-        memberInfoHelper = new MemberInfoHelper(this);
+        commentInfoHelper = new CommentInfoHelper(this);
         SQLiteDatabase db;
         ContentValues values;
             try{
                // String comment_str = null;
                 String date_str = null;
               //  String sentence_str = null;
-                db = memberInfoHelper.getReadableDatabase();
+                db = commentInfoHelper.getReadableDatabase();
                 String[] columns = {"comment_con", "date", "sentence"};
                 String query = "SELECT comment_con, date, sentence FROM comment";
                 Cursor cursor = db.rawQuery(query, null);
@@ -154,14 +154,14 @@ public class StatusActivity extends Activity {
 
 
         //만약 오늘로 부터 3일 연속 안쓰면 다시 떨어짐
-        memberInfoHelper = new MemberInfoHelper(this);
+        commentInfoHelper = new CommentInfoHelper(this);
 
         try{
 
             // String comment_str = null;
             String date_str = null;
             //  String sentence_str = null;
-            db = memberInfoHelper.getReadableDatabase();
+            db = commentInfoHelper.getReadableDatabase();
             String[] columns = {"comment_con", "date", "sentence"};
             String query = "SELECT comment_con, date, sentence FROM comment";
             Cursor cursor = db.rawQuery(query, null);

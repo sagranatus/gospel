@@ -1,28 +1,31 @@
 package com.yellowpg.gaspel;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidFragment;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.CaldroidSampleCustomFragment;
+import com.yellowpg.gaspel.etc.ListSelectorDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-public class FourthActivity extends FragmentActivity{
+ // calendar
+public class FourthActivity extends AppCompatActivity {
 
 	final static String TAG = "FOURTHActivity";
 	String textsize;
@@ -30,6 +33,9 @@ public class FourthActivity extends FragmentActivity{
 	TextView date2, sentence2, bg1, bg2, bg3, sum1, sum2, js1, js2;
 	TextView today;
 	BottomNavigationView bottomNavigationView;
+	 ListSelectorDialog dlg_left;
+	 String[] listk_left, listv_left;
+
 	/**
 	 * Create the main activity.
 	 * @param savedInstanceState previously saved instance data.
@@ -38,6 +44,18 @@ public class FourthActivity extends FragmentActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fourth);
+
+		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+
+//actionbar setting
+		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		actionbar.setCustomView(R.layout.actionbar_record);
+		TextView mytext = (TextView) findViewById(R.id.mytext);
+		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+		actionbar.setElevation(0);
+		// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+		actionbar.setDisplayHomeAsUpEnabled(true);
+		actionbar.setHomeAsUpIndicator(R.drawable.list);
 
 		date = (TextView) findViewById(R.id.tv_date);
 		comment= (TextView) findViewById(R.id.tv_comment);
@@ -81,11 +99,11 @@ public class FourthActivity extends FragmentActivity{
 						startActivity(i);
 						break;
 					case R.id.action_two:
-						Intent i2 = new Intent(FourthActivity.this, SecondActivity.class);
+						Intent i2 = new Intent(FourthActivity.this, LectioActivity.class);
 						startActivity(i2);
 						break;
 					case R.id.action_three:
-						Intent i3 = new Intent(FourthActivity.this, LectioActivity.class);
+						Intent i3 = new Intent(FourthActivity.this, SecondActivity.class);
 						startActivity(i3);
 						break;
 					case R.id.action_four:
@@ -152,9 +170,16 @@ public class FourthActivity extends FragmentActivity{
 		// cf : 이에 대해 설정하는 부분
 		Bundle args = new Bundle();
 		Calendar cal = Calendar.getInstance();
-		args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
 		args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+		args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
 		caldroidFragment.setArguments(args);
+
+		TextView textView = caldroidFragment.getMonthTitleTextView();
+
+		int sizeInDP = 15;
+		int marginInDp = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
+						.getDisplayMetrics());
 
 		// cf : 이 fragment를 커스터마이즈한다
 		caldroidFragment = new CaldroidSampleCustomFragment(); //changed 없었던 것임.
@@ -166,40 +191,47 @@ public class FourthActivity extends FragmentActivity{
 		t.replace(R.id.calendar1, caldroidFragment);
 		t.commit();
 
+		// custom dialog setting
+		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
+		// custom dialog key, value 설정
+		listk_left = new String[] {"a", "b", "c"};
+		listv_left = new String[] {"사용 설명서", "설정", "나의 상태"};
 
 
 	}
 
 
+	 // 커스텀 다이얼로그 선택시
+	 @Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+		 switch (item.getItemId()) {
+			 default:
+				 // show the list dialog.
+				 dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
 
-	@Override
-public boolean onCreateOptionsMenu(Menu menu) {
-	// Inflate the menu; this adds items to the action bar if it is present.
-	getMenuInflater().inflate(R.menu.third, menu);
-	return true;
-}
+					 // procedure if user cancels the dialog.
+					 public void selectorCanceled() {
+					 }
+					 // procedure for when a user selects an item in the dialog.
+					 public void selectedItem(String key, String item) {
+						 if(item.equals("사용 설명서")){
+							 Intent i = new Intent(FourthActivity.this, ExplainActivity.class);
+							 startActivity(i);
+						 }else if(item.equals("설정")){
+							 Intent i = new Intent(FourthActivity.this, ThirdActivity.class);
+							 startActivity(i);
+						 }else if(item.equals("나의 상태")){
+							 Intent i = new Intent(FourthActivity.this, StatusActivity.class);
+							 startActivity(i);
+						 }
+					 }
+				 });
+				 return true;
+		 }
+	 }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
 
-		switch(item.getItemId()){
-            case R.id.action_menu_01:
-                Intent i = new Intent(FourthActivity.this, ExplainActivity.class);
-                startActivity(i);
-                break;
-            case R.id.action_menu_02:
-                Intent i2 = new Intent(FourthActivity.this, ThirdActivity.class);
-                startActivity(i2);
-                break;
-            case R.id.action_menu_03:
-                Intent i3 = new Intent(FourthActivity.this, StatusActivity.class);
-                startActivity(i3);
-                break;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
 	@Override
 	protected void onResume() {
 		super.onResume();

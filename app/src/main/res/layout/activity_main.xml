@@ -82,7 +82,9 @@
         android:fontFamily="@font/hansans_normal"
         android:lineSpacingExtra="10dp"
         android:paddingBottom="5dp"
-        android:textColor="#5e5e5e" />
+        android:textColor="#5e5e5e"
+        android:bufferType="spannable"
+        android:textIsSelectable="true"/>
     
      <Button
         android:id="@+id/bt_network_con2"

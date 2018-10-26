@@ -49,7 +49,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.MemberInfoHelper;
+import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.googlesync.MakeInsertTask;
 
 import java.io.IOException;
@@ -65,7 +65,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class ThirdActivity extends Activity implements EasyPermissions.PermissionCallbacks {
-	MemberInfoHelper memberInfoHelper;
+	CommentInfoHelper memberInfoHelper;
 	LectioInfoHelper lectioInfoHelper;
 	Button step1, step2, step3, step4;
 	LinearLayout ll_step0, ll_step1, ll_step2, ll_step3, ll_step4;
@@ -869,7 +869,7 @@ public class ThirdActivity extends Activity implements EasyPermissions.Permissio
 		private Exception mLastError = null;
 		GoogleAccountCredential mCredential;
 		Context context = ThirdActivity.this;
-		MemberInfoHelper dailyInfoHelper;
+		CommentInfoHelper dailyInfoHelper;
 		LectioInfoHelper lectioInfoHelper;
 		Calendar c1;
 		ProgressDialog mProgress;
@@ -881,7 +881,7 @@ public class ThirdActivity extends Activity implements EasyPermissions.Permissio
 			//this.context = c;
 			this.mCredential = credential;
 			this.mProgress = p;
-			dailyInfoHelper = new MemberInfoHelper(context);
+			dailyInfoHelper = new CommentInfoHelper(context);
 			lectioInfoHelper = new LectioInfoHelper(context);
 			HttpTransport transport = AndroidHttp.newCompatibleTransport();
 			JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();

@@ -1,23 +1,36 @@
 package com.yellowpg.gaspel;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,14 +46,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
+import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.MemberInfoHelper;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
-import com.yellowpg.gaspel.etc.BaseActivity;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
+import com.yellowpg.gaspel.etc.ListSelectorDialog;
+import com.yellowpg.gaspel.etc.OnKeyboardVisibilityListener;
 import com.yellowpg.gaspel.googlesync.MakeInsertTask;
 import com.yellowpg.gaspel.googlesync.MakeUpdateTask;
 
@@ -53,22 +65,26 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class LectioActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
+public class LectioActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, OnKeyboardVisibilityListener {
+    final static String TAG = "lectioActivity";
 LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     Button bt_notyet;
     EditText bg1, bg2, bg3;
     EditText sum1, sum2;
     EditText js1, js2;
-    Button save,showgaspel, stopgaspel;
+    Button save,start, showgaspel, stopgaspel;
+    Button prev, next;
     Button date;
     ImageButton before, after;
     InputMethodManager imm;
     String urlAddr = "http://i.catholic.or.kr/missa/";
-    TextView contents;
-    TextView q1, q2, q3;
+    TextView contentsGaspel;
+    TextView q1, firstSentence;
     Button onesentence;
     BottomNavigationView bottomNavigationView;
     String day;
@@ -80,11 +96,13 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
     String date_val2 = sdf2.format(c1.getTime());
 
-
-    BottomBar bottomBar;
-
     LectioInfoHelper lectioInfoHelper;
     int already;
+
+    ListSelectorDialog dlg_left;
+    String[] listk_left, listv_left;
+
+    int lectio_order;
 
     // exp : 이 아래는 구글 캘린더 연동 부분이다.
     GoogleAccountCredential mCredential;
@@ -111,12 +129,12 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         // exp : 이 부분은 코멘트 데이터를 가져와서 레벨 업 시켜주는 부분
 
         int i = 0;
-        MemberInfoHelper memberInfoHelper;
-        memberInfoHelper = new MemberInfoHelper(this);
+        CommentInfoHelper commentInfoHelper;
+        commentInfoHelper = new CommentInfoHelper(this);
         SQLiteDatabase db;
         try {
             String date_str = null;
-            db = memberInfoHelper.getReadableDatabase();
+            db = commentInfoHelper.getReadableDatabase();
             String[] columns = {"comment_con", "date", "sentence"};
             String query = "SELECT comment_con, date, sentence FROM comment";
             Cursor cursor = db.rawQuery(query, null);
@@ -144,12 +162,12 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         try{
 
             //만약 오늘로 부터 3일 연속 안쓰면 다시 떨어짐
-            memberInfoHelper = new MemberInfoHelper(this);
+            commentInfoHelper = new CommentInfoHelper(this);
 
             // String comment_str = null;
             String date_str = null;
             //  String sentence_str = null;
-            db = memberInfoHelper.getReadableDatabase();
+            db = commentInfoHelper.getReadableDatabase();
             String[] columns = {"comment_con", "date", "sentence"};
             String query = "SELECT comment_con, date, sentence FROM comment";
             Cursor cursor = db.rawQuery(query, null);
@@ -193,16 +211,29 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lectio);
-        bt_notyet = (Button)findViewById(R.id.bt_notyet);
-        ll_notyet = (LinearLayout) findViewById(R.id.ll_notyet);
+
+        android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+
+//actionbar setting
+        actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionbar.setCustomView(R.layout.actionbar_lectio);
+        TextView mytext = (TextView) findViewById(R.id.mytext);
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+        actionbar.setElevation(0);
+        // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.list);
+
+       // bt_notyet = (Button)findViewById(R.id.bt_notyet);
+       // ll_notyet = (LinearLayout) findViewById(R.id.ll_notyet);
         ll_first = (LinearLayout) findViewById(R.id.ll_first);
         ll1 = (LinearLayout) findViewById(R.id.ll1);
-        ll2 = (LinearLayout) findViewById(R.id.ll2);
-        ll3 = (LinearLayout) findViewById(R.id.ll3);
+       // ll2 = (LinearLayout) findViewById(R.id.ll2);
+       // ll3 = (LinearLayout) findViewById(R.id.ll3);
         ll_date = (LinearLayout) findViewById(R.id.ll_date);
         ll_upper = (LinearLayout) findViewById(R.id.ll_upper);
-        showgaspel = (Button) findViewById(R.id.bt_showgaspel);
-        stopgaspel = (Button) findViewById(R.id.bt_stopgaspel);
+      //  showgaspel = (Button) findViewById(R.id.bt_showgaspel);
+      //  stopgaspel = (Button) findViewById(R.id.bt_stopgaspel);
         save = (Button) findViewById(R.id.bt_save);
         bg1 = (EditText) findViewById(R.id.et_background1);
         bg2 = (EditText) findViewById(R.id.et_background2);
@@ -217,16 +248,44 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         after = (ImageButton) findViewById(R.id.bt_after);
 
         q1 = (TextView) findViewById(R.id.question1);
-        q2 = (TextView) findViewById(R.id.question2);
-        q3 = (TextView) findViewById(R.id.question3);
+       // q2 = (TextView) findViewById(R.id.question2);
+        //q3 = (TextView) findViewById(R.id.question3);
 
         onesentence = (Button) findViewById(R.id.bt_onesentence);
-        contents = (TextView) findViewById(R.id.tv_contents);
+        start = (Button) findViewById(R.id.bt_start);
+        firstSentence = (TextView) findViewById(R.id.tv_first);
 
+        contentsGaspel = (TextView) findViewById(R.id.tv_contents);
+
+      //  ll2.setVisibility(View.GONE);
+        //ll3.setVisibility(View.GONE);
+        q1.setVisibility(View.GONE);
+        bg1.setVisibility(View.GONE);
+        bg2.setVisibility(View.GONE);
+        bg3.setVisibility(View.GONE);
+        bg3.setVisibility(View.GONE);
+        sum1.setVisibility(View.GONE);
+        sum2.setVisibility(View.GONE);
+        js1.setVisibility(View.GONE);
+        js2.setVisibility(View.GONE);
+        save.setVisibility(View.GONE);
+
+
+        prev = (Button) findViewById(R.id.bt_prev);
+        next = (Button) findViewById(R.id.bt_next);
+        prev.setBackgroundResource(R.drawable.button_bg_grey);
+        next.setBackgroundResource(R.drawable.button_bg_grey);
+
+        prev.setVisibility(View.GONE);
+        next.setVisibility(View.GONE);
+        prev.setOnClickListener(listener);
+        next.setOnClickListener(listener);
+        start.setOnClickListener(listener);
         SharedPreferences sp_level = getSharedPreferences("setting",0);
         String level = sp_level.getString("level", "");
+        lectio_order = 0;
 
-       if(level.equals("2") || level.equals("3")){
+     /*  if(level.equals("2") || level.equals("3")){
             ll_upper.setVisibility(ll_upper.VISIBLE);
             ll1.setVisibility(ll1.VISIBLE);
             ll2.setVisibility(ll2.VISIBLE);
@@ -247,11 +306,11 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             save.setVisibility(save.GONE);
             showgaspel.setVisibility(showgaspel.GONE);
         }
-
+        */
         // exp : onesentence는 안보이게 설정했다
-        onesentence.setVisibility(onesentence.GONE);
+      //  onesentence.setVisibility(onesentence.GONE);
         // exp : date에 오늘 날짜를 넣었다
-        date.setText(date_val+getDay()+"요일");
+        date.setText(date_val+MainActivity.getDay()+"요일");
 
         // exp : 렉시오디비나 작성내용 가져오기
         lectioInfoHelper = new LectioInfoHelper(this);
@@ -259,7 +318,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         getDataBase();
 
         // exp : 맨처음에는 복음 내용이 보이지 않는다
-        ll_upper.setVisibility(ll_upper.GONE);
+      //  ll_upper.setVisibility(ll_upper.GONE);
 
         // bottomnavigation 뷰 등록
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -276,7 +335,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         menuItem_3.setChecked(false);
         menuItem_4.setChecked(false);
 
-        MenuItem menuItem = menu.getItem(2);
+        MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -287,11 +346,11 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                         startActivity(i);
                         break;
                     case R.id.action_two:
-                        Intent i2 = new Intent(LectioActivity.this, SecondActivity.class);
+                        Intent i2 = new Intent(LectioActivity.this, LectioActivity.class);
                         startActivity(i2);
                         break;
                     case R.id.action_three:
-                        Intent i3 = new Intent(LectioActivity.this, LectioActivity.class);
+                        Intent i3 = new Intent(LectioActivity.this, SecondActivity.class);
                         startActivity(i3);
                         break;
                     case R.id.action_four:
@@ -304,6 +363,13 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
         });
 
+        // custom dialog setting
+        dlg_left  = new ListSelectorDialog(this, "Select an Operator");
+
+        // custom dialog key, value 설정
+        listk_left = new String[] {"a", "b", "c"};
+        listv_left = new String[] {"사용 설명서", "설정", "나의 상태"};
+
         // exp : 텍스트사이즈 설정
         SharedPreferences sp = getSharedPreferences("setting",0);
         String textsize = sp.getString("textsize", "");
@@ -311,10 +377,8 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
             showgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             stopgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            contents.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            q2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            q3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
             bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -323,14 +387,12 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+         //   bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
         }else if(textsize.equals("big")){
             showgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
             stopgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            contents.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
             q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            q2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            q3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
             bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
             bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
@@ -339,14 +401,12 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
             js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
             save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
+        //    bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
         }else if(textsize.equals("toobig")){
             showgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             stopgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            contents.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
+            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-            q2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-            q3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
             bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
@@ -355,25 +415,53 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
+        //    bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         }else{
 
         }
 
-        // exp : 키보드 관련 부분
-        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-       // attachKeyboardListeners();
+        // 키보드 없애기 - 새로 추가한 부분
+        findViewById(R.id.ll_first).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
+        findViewById(R.id.ll1).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
+        findViewById(R.id.ll_upper).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
+        findViewById(R.id.tv_contents).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
+
+        setKeyboardVisibilityListener(this);
 
         // exp : 다른 부분 터치시 키보드 사라지게 하기 이벤트
-        ll_first.setOnClickListener(listener);
-        ll1.setOnClickListener(listener);
-        ll2.setOnClickListener(listener);
-        ll3.setOnClickListener(listener);
 
         // exp : 복음 보이기, 복음 가리기 이벤트
-        stopgaspel.setVisibility(stopgaspel.GONE);
-        showgaspel.setOnClickListener(showlistener);
-        stopgaspel.setOnClickListener(showlistener);
+//        stopgaspel.setVisibility(stopgaspel.GONE);
+   //     showgaspel.setOnClickListener(showlistener);
+    //    stopgaspel.setOnClickListener(showlistener);
 
         // exp : 날짜 앞뒤로 이동 이벤트
         before.setOnClickListener(listener);
@@ -388,10 +476,42 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                 getGaspel(date_val2);
 
         } else {
-            contents.setText("인터넷을 연결해주세요");
-            contents.setGravity(Gravity.CENTER);
+            contentsGaspel.setText("인터넷을 연결해주세요");
+            contentsGaspel.setGravity(Gravity.CENTER);
         }
 
+    }
+
+    // 커스텀 다이얼로그 선택시
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.pray:
+                showPraying(item);
+                return true;
+            default:
+                // show the list dialog.
+                dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
+
+                    // procedure if user cancels the dialog.
+                    public void selectorCanceled() {
+                    }
+                    // procedure for when a user selects an item in the dialog.
+                    public void selectedItem(String key, String item) {
+                        if(item.equals("사용 설명서")){
+                            Intent i = new Intent(LectioActivity.this, ExplainActivity.class);
+                            startActivity(i);
+                        }else if(item.equals("설정")){
+                            Intent i = new Intent(LectioActivity.this, ThirdActivity.class);
+                            startActivity(i);
+                        }else if(item.equals("나의 상태")){
+                            Intent i = new Intent(LectioActivity.this, StatusActivity.class);
+                            startActivity(i);
+                        }
+                    }
+                });
+                return true;
+        }
     }
 
     // exp : 데이터가 있는 경우에는 edittext에 출력하기
@@ -446,10 +566,9 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
     // exp : 저장시 내용 입력 및 수정
     View.OnClickListener listener_save = new View.OnClickListener() {
-
         @Override
         public void onClick(View v) {
-            hideKeyboard();
+         //   hideKeyboard();
             //코멘트저장을 누르면 데이터를 삽입해준다.
             SQLiteDatabase db;
             ContentValues values;
@@ -605,6 +724,9 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     String gaspel_contents;
     public void getGaspel(final String date) {
         // Tag used to cancel the request
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
         String tag_string_req = "req_getgaspel";
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_TODAY, new Response.Listener<String>() { // URL_LOGIN : "http://192.168.116.1/android_login_api/login.php";
@@ -616,28 +738,43 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                     error = jObj.getBoolean("error");
 
                     // Check for error node in json
-                    if (!error) { // error가 false인 경우에 데이터 가져오기
-                        // user successfully logged in
-                        // Create login session
-
+                    if (!error) { // error가 false인 경우에 데이터가져오기 성공
                         // Now store the user in SQLite
                         gaspel_date = jObj.getString("created_at");
-                    //    Log.d(TAG,gaspel_date);
+
                         gaspel_sentence = jObj.getString("sentence");
                         gaspel_contents = jObj.getString("contents");
-                        String contents_ = gaspel_contents;
-                        contents_ = contents_.replaceAll("&gt;", ">");
-                        contents_ = contents_.replaceAll("&lt;", "<");
-                        contents_ = contents_.replaceAll("&ldquo;", "\"");
-                        contents_ = contents_.replaceAll("&rdquo;", "\"");
-                        contents_ = contents_.replaceAll("&lsquo;", "\'");
-                        contents_ = contents_.replaceAll("&rsquo;", "\'");
-                        int idx = contents_.indexOf("✠");
-                        int idx2 = contents_.indexOf("주님의 말씀입니다.");
-                        contents_ = contents_.substring(idx+1, idx2);
-                        contents.setText(contents_);
-                        onesentence.setText(gaspel_sentence);
+                        String contents = gaspel_contents;
+                        contents = contents.replaceAll("&gt;", ">");
+                        contents = contents.replaceAll("&lt;", "<");
+                        contents = contents.replaceAll("&ldquo;", "");
+                        contents = contents.replaceAll("&rdquo;", "");
+                        contents = contents.replaceAll("&lsquo;", "");
+                        contents = contents.replaceAll("&rsquo;", "");
+                        contents = contents.replaceAll("&prime;", "'");
+                        contents = contents.replaceAll("\n", " ");
+                        contents = contents.replaceAll("주님의 말씀입니다.", "\n"+"주님의 말씀입니다.");
 
+                        //contents = contents.replaceAll("거룩한 복음입니다.", "거룩한 복음입니다."+"\n");
+
+                        int idx = contents.indexOf("✠");
+                        int idx2 = contents.indexOf("◎ 그리스도님 찬미합니다");
+                        contents = contents.substring(idx, idx2);
+
+                        int idx3 = contents.indexOf("거룩한 복음입니다.");
+                        int length = "거룩한 복음입니다.".length();
+                        final String after = contents.substring(idx3+length+11);
+                        //Log.d("s", after);
+
+                        Pattern p = Pattern.compile(".\\d+");
+                        Matcher m = p.matcher(after);
+                        while (m.find()) {
+                            Log.d("s", after);
+                            contents = contents.replaceAll(m.group(), "\n"+m.group());
+                            //	Log.d("s", contents);
+                        }
+                        contentsGaspel.setText(contents);
+                        onesentence.setText(gaspel_sentence);
 
                     } else {
                         // Error in login. Get the error message
@@ -678,11 +815,13 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
        // Log.d(TAG,gaspel_date);
         //	gaspel_sentence = "sentence";
         //	gaspel_contents = "contents";
-
+            }
+        });
+        t.start();
 
     }
 
-    // exp : 키보드 가려지는 이벤트
+  /*  // exp : 키보드 가려지는 이벤트
     private void hideKeyboard()
     {
         imm.hideSoftInputFromWindow(bg1.getWindowToken(), 0);
@@ -693,76 +832,134 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         imm.hideSoftInputFromWindow(js1.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(js2.getWindowToken(), 0);
     }
-    // exp : 키보드 보일때는 안보일때 bottombar 조정하기
-    //@Override
-    protected void onShowKeyboard(int keyboardHeight) {
-        // do things when keyboard is shown
-        bottomNavigationView.setVisibility(View.GONE);
-    }
 
-    //@Override
-    protected void onHideKeyboard() {
-        // do things when keyboard is hidden
-        bottomNavigationView.setVisibility(View.VISIBLE);
-    }
+    */
 
-    // exp : 요일 가져오기
-    public String getDay(){
-        int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
 
-        switch(dayNum){
-            case 1:
-                day = "일";
-                break ;
-            case 2:
-                day = "월";
-                break ;
-            case 3:
-                day = "화";
-                break ;
-            case 4:
-                day = "수";
-                break ;
-            case 5:
-                day = "목";
-                break ;
-            case 6:
-                day = "금";
-                break ;
-            case 7:
-                day = "토";
-                break ;
 
-        }
-        return day;
-    }
 
     // exp : 다른 곳 터치시 키보드 안보이게 하기 및 날짜 이전 이후 선택시 값 변경 이벤트
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            hideKeyboard();
+        //    hideKeyboard();
             switch (v.getId()) {
-                case R.id.ll_first:
+                case R.id.bt_prev:
+                    if(lectio_order == 1){
+                        onesentence.setVisibility(View.VISIBLE);
+                        firstSentence.setVisibility(View.VISIBLE);
+                        start.setVisibility(View.VISIBLE);
+                        prev.setVisibility(View.GONE);
+                        next.setVisibility(View.GONE);
+                        q1.setVisibility(View.GONE);
+                        lectio_order = 0;
+                        bg1.setVisibility(View.GONE);
+                    }else if(lectio_order == 2){
+                        lectio_order = 1;
+                        bg1.setVisibility(View.VISIBLE);
+                        bg2.setVisibility(View.GONE);
+                    }else if(lectio_order == 3) {
+                        lectio_order = 2;
+                        bg2.setVisibility(View.VISIBLE);
+                        bg3.setVisibility(View.GONE);
+                    }else if(lectio_order == 4) {
+                        q1.setText("복음의 배경은 무엇인가요?");
+                        lectio_order = 3;
+                        bg3.setVisibility(View.VISIBLE);
+                        sum1.setVisibility(View.GONE);
+                    }else if(lectio_order == 5) {
+                        lectio_order = 4;
+                        sum1.setVisibility(View.VISIBLE);
+                        sum2.setVisibility(View.GONE);
+                    }else if(lectio_order == 6) {
+                        q1.setText("복음 전체 내용을 \n사건 중심으로 요약해 봅시다");
+                        lectio_order = 5;
+                        sum2.setVisibility(View.VISIBLE);
+                        js1.setVisibility(View.GONE);
+                    }else if(lectio_order == 7) {
+                        lectio_order = 6;
+                        js1.setVisibility(View.VISIBLE);
+                        js2.setVisibility(View.GONE);
+                        next.setVisibility(View.VISIBLE);
+                        save.setVisibility(View.GONE);
+
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        int sizeInDP2 = 280;
+                        int marginInDp2 = (int) TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
+                                        .getDisplayMetrics());
+                        params.setMargins(10,10,10, marginInDp2);
+                        contentsGaspel.setLayoutParams(params);
+                    }
                     break;
-                case R.id.ll1:
+                case R.id.bt_next:
+                    if(lectio_order == 1){
+                        lectio_order = 2;
+                        prev.setVisibility(View.VISIBLE);
+                        bg1.setVisibility(View.GONE);
+                        bg2.setVisibility(View.VISIBLE);
+                    }else if(lectio_order == 2) {
+                        lectio_order = 3;
+                        bg2.setVisibility(View.GONE);
+                        bg3.setVisibility(View.VISIBLE);
+                    }else if(lectio_order == 3) {
+                        q1.setText("복음 전체 내용을 \n사건 중심으로 요약해 봅시다");
+                        lectio_order = 4;
+                        bg3.setVisibility(View.GONE);
+                        sum1.setVisibility(View.VISIBLE);
+                    }else if(lectio_order == 4) {
+                        lectio_order = 5;
+                        sum1.setVisibility(View.GONE);
+                        sum2.setVisibility(View.VISIBLE);
+                    }else if(lectio_order == 5) {
+                        q1.setText("복음에서 보여지는 예수님의 \n모습을 보고 생각해봅시다");
+                        lectio_order = 6;
+                        sum2.setVisibility(View.GONE);
+                        js1.setVisibility(View.VISIBLE);
+                    }else if(lectio_order == 6) {
+                        lectio_order = 7;
+                        js1.setVisibility(View.GONE);
+                        js2.setVisibility(View.VISIBLE);
+                        next.setVisibility(View.INVISIBLE);
+                        save.setVisibility(View.VISIBLE);
+
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        int sizeInDP2 = 320;
+                        int marginInDp2 = (int) TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
+                                        .getDisplayMetrics());
+                        params.setMargins(10,10,10, marginInDp2);
+                        contentsGaspel.setLayoutParams(params);
+                    }
+
+
                     break;
-                case R.id.ll2:
+
+                case R.id.bt_start:
+                    lectio_order = 1;
+                    prev.setVisibility(View.VISIBLE);
+                    next.setVisibility(View.VISIBLE);
+                    q1.setVisibility(View.VISIBLE);
+                    bg1.setVisibility(View.VISIBLE);
+
+                    onesentence.setVisibility(View.GONE);
+                    firstSentence.setVisibility(View.GONE);
+                    start.setVisibility(View.GONE);
                     break;
-                case R.id.ll3:
-                    break;
+
                 case R.id.bt_before:
                     c1.add( Calendar.DATE, -1 );
                     date_val = sdf.format(c1.getTime());
-                    date.setText(date_val+getDay()+"요일");
+                    date.setText(date_val+MainActivity.getDay()+"요일");
                     date_val2 = sdf2.format(c1.getTime());
+
                     getGaspel(date_val2);
                     getDataBase();
                     break;
                 case R.id.bt_after:
                     c1.add( Calendar.DATE, 1 );
                     date_val = sdf.format(c1.getTime());
-                    date.setText(date_val+getDay()+"요일");
+                    date.setText(date_val+MainActivity.getDay()+"요일");
                     date_val2 = sdf2.format(c1.getTime());
                     getGaspel(date_val2);
                     getDataBase();
@@ -771,11 +968,12 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         }
     };
 
+    /*
    // exp : 복음 보이기, 가리기 이벤트
     View.OnClickListener showlistener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            hideKeyboard();
+          //  hideKeyboard();
             switch (v.getId()) {
                 case R.id.bt_showgaspel:
                     ll_upper.setVisibility(ll_upper.VISIBLE);
@@ -791,33 +989,79 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             }
         }
     };
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.third, menu);
-        return true;
 
+    */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.topmenu_main, menu);
+        //   DBManager dbMgr2 = new DBManager(this);
+        //   dbMgr2.dbOpen();
+
+        return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void showPraying(final MenuItem item)
+    {
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                PowerManager.ON_AFTER_RELEASE, TAG);
+        myWakeLock.acquire(); //실행후 리소스 반환 필수
+        MainActivity.releaseCpuLock();
+        MainActivity.playSound(LectioActivity.this, "pray"); //
 
-        switch(item.getItemId()){
-            case R.id.action_menu_01:
-                Intent i = new Intent(LectioActivity.this, ExplainActivity.class);
-                startActivity(i);
-                break;
-            case R.id.action_menu_02:
-                Intent i2 = new Intent(LectioActivity.this, ThirdActivity.class);
-                startActivity(i2);
-                break;
-            case R.id.action_menu_03:
-                Intent i3 = new Intent(LectioActivity.this, StatusActivity.class);
-                startActivity(i3);
-                break;
-        }
+        item.setIcon(getResources().getDrawable(R.drawable.notification));
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(LectioActivity.this);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog);
+        // Set dialog title
+        dialog.setTitle("Custom Dialog");
 
-        return super.onOptionsItemSelected(item);
+        TextView text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
+        text_ttl.setText("성령 청원 기도");
+
+        // set values for custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.textDialog);
+        text.setText("오소서, 성령님\n" +
+                "당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
+                "가난한 이 아버지, 은총 주님\n" +
+                "오소서 마음에 빛을 주소서.\n" +
+                "가장 좋은 위로자, 영혼의 기쁜 손님,\n" +
+                "생기 돋워 주소서.\n" +
+                "일할 때에 휴식을, 무더울 때 바람을,\n" +
+                "슬플 때에 위로를, 지복의 빛이시여,\n" +
+                "저희 맘 깊은 곳을 가득히 채우소서.\n" +
+                "주님 도움 없으면 저희 삶 그 모든 것\n" +
+                "이로운 것 없으리.\n" +
+                "허물은 씻어 주고 마른 땅 물 주시고\n" +
+                "병든 것 고치소서.\n" +
+                "굳은 맘 풀어 주고 찬 마음 데우시고\n" +
+                "바른길 이끄소서.\n" +
+                "성령님을 믿으며 의지하는 이에게\n" +
+                "칠은을 베푸소서.\n" +
+                "공덕을 쌓게  하고 구원의 문을 넘어\n" +
+                "영복을 얻게 하소서.아멘"); //saea
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                item.setIcon(getResources().getDrawable(R.drawable.notification_base));
+            }
+        });
+
+        Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
+        // if decline button is clicked, close the custom dialog
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                item.setIcon(getResources().getDrawable(R.drawable.notification_base));
+                dialog.dismiss();
+
+            }
+        });
     }
 
     @Override
@@ -829,4 +1073,57 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     public void onPermissionsDenied(int requestCode, List<String> perms) {
 
     }
+
+
+    // softkeyboard show/hide catch event
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        int sizeInDP = 400;
+        int marginInDp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
+                        .getDisplayMetrics());
+
+        int sizeInDP2 = 280;
+        int marginInDp2 = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
+                        .getDisplayMetrics());
+        if(visible == true){
+         //   params.setMargins(10,10,10, marginInDp);
+         //   contentsGaspel.setLayoutParams(params);
+        }else{
+          //  params.setMargins(10,10,10,marginInDp2);
+          //  contentsGaspel.setLayoutParams(params);
+        }
+      //  Toast.makeText(LectioActivity.this, visible ? "Keyboard is active" : "Keyboard is Inactive", Toast.LENGTH_SHORT).show();
+    }
+
 }

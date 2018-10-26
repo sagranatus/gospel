@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/titleDialog"
+        android:fontFamily="@font/hansans_regular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:textColor="@color/actionbar" />
+
+    <TextView
+        android:id="@+id/textDialog"
+        android:fontFamily="@font/hansans_normal"
+        android:textSize="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="5dp"
+        android:gravity="center"
+        android:textColor="#5e5e5e"
+        android:background="@drawable/textlines"
+        android:text="xaea"/>
+
+    <Button
+        android:id="@+id/declineButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="[기도 마침]"
+        android:textSize="12dp"
+        android:textColor="#5e5e5e"
+        style="?android:attr/borderlessButtonStyle" />
+
+</LinearLayout>

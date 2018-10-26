@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_zero"
+        android:id="@+id/pray"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/notification"
+        android:icon="@drawable/notification_base"
         android:title="" />
 
 </menu>

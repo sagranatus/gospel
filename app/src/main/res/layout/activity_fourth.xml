@@ -11,8 +11,6 @@
 		android:background="#ffffff"
 		android:layout_height="wrap_content"
 		>
-
-
 		<LinearLayout
 			android:id="@+id/ll_first"
 			android:layout_width="match_parent"
@@ -24,7 +22,7 @@
 			<LinearLayout
 				android:id="@+id/calendar1"
 				android:layout_width="match_parent"
-				android:layout_height="340dp"
+				android:layout_height="265dp"
 				android:orientation="vertical" >
 			</LinearLayout>
 
@@ -33,123 +31,127 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_margin="5dp"
-				android:textSize="19dp"
-				android:text="오늘의 복음말씀을 묵상해 볼까요?"
+				android:fontFamily="@font/hansans_normal"
+				android:textSize="15dp"
+				android:lineSpacingExtra="7dp"
+				android:text="별이 있는 날짜는 복음을 묵상한 멋진 날입니다. \n각 별을 클릭하면 자신의 묵상을 다시 볼 수 있습니다. \n특별히 내게 와닿는 말씀이 있다면
+									\n내용을 복사해서 말씀새기기에 남겨보고 \n계속 되새기도록 노력해 봅시다."
 				android:gravity="center" />
 			<TextView
 				android:id="@+id/tv_date"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-				android:textSize="17dp"
+				android:textSize="13dp"
+				android:fontFamily="@font/hansans_normal"
 				android:gravity="center" />
 			<TextView
 				android:id="@+id/tv_comment"
+				android:fontFamily="@font/hansans_medium"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="5dp"
-				android:textSize="19dp"
-				android:textStyle="bold|italic"
+				android:lineSpacingExtra="7dp"
+				android:textSize="17dp"
 				android:gravity="center"
-				android:textColor="#2156a5"
-				android:maxLines="4"
-				android:inputType="textMultiLine" />
+				android:textColor="@color/actionbar" />
 
 			<TextView
 				android:id="@+id/tv_oneSentence"
+				android:fontFamily="@font/hansans_normal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="5dp"
-				android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
-				android:gravity="center"
-				android:maxLines="4"
-				android:inputType="textMultiLine"/>
+				android:textColor="#16a085"
+				android:lineSpacingExtra="7dp"
+				android:textSize="15dp"
+				android:gravity="center"/>
 
 			<TextView
 				android:id="@+id/tv_date2"
+				android:fontFamily="@font/hansans_normal"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-				android:textSize="17dp"
+				android:textSize="13dp"
 				android:gravity="center" />
 			<TextView
 				android:id="@+id/tv_oneSentence2"
+				android:fontFamily="@font/hansans_medium"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-				android:textSize="19dp"
-				android:textStyle="bold|italic"
+				android:textSize="17dp"
 				android:gravity="center"
-				android:textColor="#2156a5"
+				android:textColor="@color/actionbar"
 				android:maxLines="4"
 				android:inputType="textMultiLine" />
 
 			<TextView
 				android:id="@+id/tv_bg1"
+				android:fontFamily="@font/hansans_normal"
+				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-                android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
+                android:lineSpacingExtra="5dp"
+				android:textSize="15dp"
 				android:gravity="center"
 				android:inputType="textMultiLine"/>
 			<TextView
 				android:id="@+id/tv_bg2"
+				android:fontFamily="@font/hansans_normal"
+				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-                android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
+                android:lineSpacingExtra="5dp"
+				android:textSize="15dp"
 				android:gravity="center"
 				android:inputType="textMultiLine"/>
 			<TextView
 				android:id="@+id/tv_bg3"
+				android:fontFamily="@font/hansans_normal"
+				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-                android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
+                android:lineSpacingExtra="5dp"
+				android:textSize="15dp"
 				android:gravity="center"
 				android:inputType="textMultiLine"/>
 			<TextView
 				android:id="@+id/tv_sum1"
+				android:fontFamily="@font/hansans_normal"
+				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-                android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
+                android:lineSpacingExtra="5dp"
+				android:textSize="15dp"
 				android:gravity="center"
 				android:inputType="textMultiLine"/>
 			<TextView
 				android:id="@+id/tv_sum2"
+				android:fontFamily="@font/hansans_normal"
+				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-                android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
+                android:lineSpacingExtra="5dp"
+				android:textSize="15dp"
 				android:gravity="center"
 				android:inputType="textMultiLine"/>
 			<TextView
 				android:id="@+id/tv_js1"
+				android:fontFamily="@font/hansans_normal"
+				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-                android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
+                android:lineSpacingExtra="5dp"
+				android:textSize="15dp"
 				android:gravity="center"
 				android:inputType="textMultiLine"/>
 			<TextView
 				android:id="@+id/tv_js2"
+				android:fontFamily="@font/hansans_normal"
+				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-                android:lineSpacingExtra="5dip"
-				android:textSize="17dp"
+                android:lineSpacingExtra="5dp"
+				android:textSize="15dp"
 				android:gravity="center"
 				android:inputType="textMultiLine"/>
-
-
 
 			<Button
 				android:id="@+id/bt"
@@ -159,7 +161,8 @@
 				android:text=""
 				android:paddingLeft="50px"
 				android:paddingRight="50px"
-				android:textSize="17dp" />
+				android:textSize="17dp"
+				style="?android:attr/borderlessButtonStyle" />
 
 
 		</LinearLayout>

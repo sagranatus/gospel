@@ -1,49 +1,21 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#ffffff"
-    android:layout_height="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:typeface="sans"
-        android:background="#ffffff"
-        android:layout_height="wrap_content"
-        >
+    android:id="@+id/root"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <LinearLayout
             android:id="@+id/ll_first"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#ffffff"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingLeft="25px"
-            android:paddingRight="25px"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:orientation="vertical" >
-
-            <LinearLayout
-                android:id="@+id/ll_notyet"
-                android:background="#ffffff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:layout_marginTop="150dp"
-                android:focusableInTouchMode="true"
-                android:paddingLeft="25px"
-                android:paddingRight="25px"
-                android:orientation="vertical" >
-                <Button
-                    android:id="@+id/bt_notyet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="19dp"
-                    android:paddingTop="100px"
-                    android:layout_gravity="center"
-                    android:lineSpacingExtra="2dp"
-                    android:background="#ffffff"
-                    android:text="아직 열리지 않았습니다. \n레벨을 업해주세요~!"
-                    android:textColor="#000000" />
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_date"
@@ -54,155 +26,174 @@
 
                 <ImageButton
                     android:id="@+id/bt_before"
-                    android:src="@drawable/calendar_prev_arrow"
-                    android:layout_width="50dp"
-                    android:layout_height="44dp"
-                    android:paddingTop="10px"
+                    android:src="@drawable/left"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="15dp"
                     android:layout_alignParentLeft="true"
                     android:background="#ffffff"
                     android:textColor="#000000" />
                 <Button
                     android:id="@+id/bt_date"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:textSize="19dp"
-                    android:paddingTop="10px"
+                    android:textSize="13dp"
+                    android:paddingTop="0px"
+                    android:fontFamily="@font/hansans_normal"
                     android:layout_toLeftOf="@+id/bt_before"
                     android:layout_toRightOf="@+id/bt_after"
                     android:layout_gravity="center"
                     android:background="#ffffff"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    style="?android:attr/borderlessButtonStyle" />
                 <ImageButton
                     android:id="@+id/bt_after"
-                    android:src="@drawable/calendar_next_arrow"
-                    android:layout_width="50dp"
-                    android:layout_height="44dp"
-                    android:paddingTop="10px"
+                    android:src="@drawable/right"
+                    android:scaleType="fitXY"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="15dp"
                     android:layout_alignParentRight="true"
                     android:background="#ffffff"
                     android:textColor="#000000" />
             </LinearLayout>
-            <Button
-                android:id="@+id/bt_showgaspel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#050000ff"
-                android:text="복음내용보기"
-                android:paddingLeft="50px"
-                android:paddingRight="50px"
-                android:textSize="17dp" />
 
-            <Button
-                android:id="@+id/bt_stopgaspel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#050000ff"
-                android:text="가리기"
-                android:paddingLeft="50px"
-                android:paddingRight="50px"
-                android:textSize="17dp" />
 
-            <LinearLayout
-                android:id="@+id/ll_upper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="25px"
-                android:paddingRight="25px"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/bt_onesentence"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="22dp"
-                    android:paddingTop="60px"
-                    android:paddingBottom="60px"
-                    android:background="#ffffff" />
-
-                <TextView
-                    android:id="@+id/tv_contents"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17dp"
-                    android:lineSpacingExtra="7dip"
-                    android:paddingBottom="20px"
-                    android:textColor="#000000" />
-
-            </LinearLayout>
             <LinearLayout
                 android:id="@+id/ll1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="25px"
-                android:paddingRight="25px"
+                android:layout_marginTop="-5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:orientation="vertical" >
-            <TextView
-                android:id="@+id/question1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="19dp"
-                android:lineSpacingExtra="10dip"
-                android:paddingTop="30px"
-                android:paddingBottom="0px"
-                android:textColor="#000000"
-                android:text="복음의 배경은 무엇인가요? (등장인물, 장소, 시간을 찾아 적어 봅시다)" />
+                <Button
+                    android:id="@+id/bt_onesentence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/actionbar"
+                    android:fontFamily="@font/hansans_medium"
+                    android:textSize="17dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:lineSpacingExtra="7dp"
+                    android:background="#ffffff"
+                    style="?android:attr/borderlessButtonStyle" />
+                <TextView
+                    android:id="@+id/tv_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/hansans_normal"
+                    android:lineSpacingExtra="10dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#5e5e5e"
+                    android:text="당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 \n거룩한 독서를 시작해볼까요?"
+                    android:bufferType="spannable"
+                    android:textIsSelectable="true"
+                    android:layout_marginBottom="10dp"/>
+                <Button
+                    android:id="@+id/bt_start"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@color/actionbar"
+                    android:fontFamily="@font/hansans_bold"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="START"
+                    android:textColor="#ffffff"
+                    android:textSize="11dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-10dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal" >
+                    <Button
+                        android:id="@+id/bt_prev"
+                        android:background="#e6e6e6"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="55dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginRight="10dp"
+                        android:textSize="11dp"
+                        android:text="prev"
+                        android:fontFamily="@font/hansans_normal"
+                        android:textColor="#838383"
+                        android:textAllCaps="false"
+                        style="?android:attr/borderlessButtonStyle" />
+                    <TextView
+                        android:id="@+id/question1"
+                        android:layout_width="200dp"
+                        android:layout_height="90dp"
+                        android:gravity="center"
+                        android:textSize="16dp"
+                        android:textColor="#16a085"
+                        android:fontFamily="@font/hansans_medium"
+                        android:lineSpacingExtra="5dp"
+                        android:text="복음의 배경은 무엇인가요?" />
+                    <Button
+                        android:id="@+id/bt_next"
+                        android:background="#e6e6e6"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="55dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="11dp"
+                        android:text="next"
+                        android:fontFamily="@font/hansans_normal"
+                        android:textColor="#838383"
+                        android:textAllCaps="false"
+                        style="?android:attr/borderlessButtonStyle" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/et_background1"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dip"
-                    android:textStyle="italic"
-                    android:textSize="17dp"
+                    android:lineSpacingExtra="5dp"
+                    android:fontFamily="@font/hansans_normal"
+                    android:textSize="14dp"
                     android:hint="등장인물은.."
-                    android:textColor="#2156a5" />
+                    android:textColor="#16a085" />
                 <EditText
                     android:id="@+id/et_background2"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dip"
-                    android:textStyle="italic"
-                    android:textSize="17dp"
+                    android:lineSpacingExtra="5dp"
+                    android:fontFamily="@font/hansans_normal"
+                    android:textSize="14dp"
                     android:hint="배경 장소는.."
-                    android:textColor="#2156a5" />
+                    android:textColor="#16a085" />
                 <EditText
                     android:id="@+id/et_background3"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dip"
-                    android:textStyle="italic"
-                    android:textSize="17dp"
+                    android:lineSpacingExtra="5dp"
+                    android:fontFamily="@font/hansans_normal"
+                    android:textSize="14dp"
                     android:hint="배경시간 혹은 상황은.."
-                    android:textColor="#2156a5" />
-        </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/ll2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="25px"
-                android:paddingRight="25px"
-                android:orientation="vertical" >
-                <TextView
-                    android:id="@+id/question2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="19dp"
-                    android:lineSpacingExtra="10dip"
-                    android:paddingTop="30px"
-                    android:paddingBottom="0px"
-                    android:textColor="#000000"
-                    android:text="복음 전체 내용을 사건 중심으로 요약해 봅시다" />
+                    android:textColor="#16a085" />
 
                 <EditText
                     android:id="@+id/et_summary1"
@@ -212,10 +203,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
-                    android:textStyle="italic"
-                    android:textSize="17dp"
+                    android:fontFamily="@font/hansans_normal"
+                    android:textSize="14dp"
                     android:hint="복음의 내용을 간추리면.."
-                    android:textColor="#2156a5" />
+                    android:textColor="#16a085" />
                 <EditText
                     android:id="@+id/et_summary2"
                     android:paddingLeft="5px"
@@ -223,30 +214,11 @@
                     android:paddingTop="50px"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/hansans_normal"
                     android:lineSpacingExtra="5dip"
-                    android:textStyle="italic"
-                    android:textSize="17dp"
+                    android:textSize="14dp"
                     android:hint="특별히 눈에 띄는 부분은.."
-                    android:textColor="#2156a5" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="25px"
-                android:paddingRight="25px"
-                android:orientation="vertical" >
-                <TextView
-                    android:id="@+id/question3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="19dp"
-                    android:lineSpacingExtra="10dip"
-                    android:paddingTop="30px"
-                    android:paddingBottom="0px"
-                    android:textColor="#000000"
-                    android:text="복음에서 보여지는 예수님의 모습을 보고 생각해봅시다." />
+                    android:textColor="#16a085" />
 
                 <EditText
                     android:id="@+id/et_jesus1"
@@ -256,10 +228,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
-                    android:textStyle="italic"
-                    android:textSize="17dp"
+                    android:fontFamily="@font/hansans_normal"
+                    android:textSize="14dp"
                     android:hint="복음에서 보여지는 예수님의 모습은.."
-                    android:textColor="#2156a5" />
+                    android:textColor="#16a085" />
                 <EditText
                     android:id="@+id/et_jesus2"
                     android:paddingLeft="5px"
@@ -268,40 +240,61 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
-                    android:textStyle="italic"
-                    android:textSize="17dp"
+                    android:fontFamily="@font/hansans_normal"
+                    android:textSize="14dp"
                     android:hint="복음을 통해 예수님께서 내게 해주시는 말씀은.."
-                    android:textColor="#2156a5" />
-            </LinearLayout>
+                    android:textColor="#16a085" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/bt_save"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#050000ff"
-                    android:text="저장"
-                    android:paddingLeft="50px"
-                    android:paddingRight="50px"
-                    android:textSize="17dp" />
-                <Button
-                    android:id="@+id/bt"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="#ffffff"
-                    android:text=""
-                    android:paddingLeft="50px"
-                    android:paddingRight="50px"
-                    android:textSize="17dp" />
-
-
-
+            <Button
+                android:id="@+id/bt_save"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="#16a085"
+                android:fontFamily="@font/hansans_bold"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="SAVE"
+                android:textColor="#ffffff"
+                android:textSize="11dp" />
 
             <!-- This could be your fragment container, or something -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:typeface="sans"
+                android:background="#ffffff"
+                android:layout_height="500dp"
+                >
+                <LinearLayout
+                    android:id="@+id/ll_upper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
+
+                    <TextView
+                        android:id="@+id/tv_contents"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:fontFamily="@font/hansans_normal"
+                        android:lineSpacingExtra="10dp"
+                        android:paddingBottom="5dp"
+                        android:textColor="#5e5e5e"
+                        android:bufferType="spannable"
+                        android:textIsSelectable="true"
+                        android:layout_marginBottom="280dp"/>
+
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
 
 
-    </ScrollView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -319,4 +312,4 @@
     </RelativeLayout>
 
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

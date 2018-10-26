@@ -17,8 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 import com.yellowpg.gaspel.adapter.DailyAdapter;
 import com.yellowpg.gaspel.data.Daily;
 import com.yellowpg.gaspel.etc.AppConfig;
@@ -76,7 +74,7 @@ public class SecondActivity extends Activity {
 		menuItem_3.setChecked(false);
 		menuItem_4.setChecked(false);
 
-		MenuItem menuItem = menu.getItem(1);
+		MenuItem menuItem = menu.getItem(2);
 		menuItem.setChecked(true);
 		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 			@Override
@@ -87,11 +85,11 @@ public class SecondActivity extends Activity {
 						startActivity(i);
 						break;
 					case R.id.action_two:
-						Intent i2 = new Intent(SecondActivity.this, SecondActivity.class);
+						Intent i2 = new Intent(SecondActivity.this, LectioActivity.class);
 						startActivity(i2);
 						break;
 					case R.id.action_three:
-						Intent i3 = new Intent(SecondActivity.this, LectioActivity.class);
+						Intent i3 = new Intent(SecondActivity.this, SecondActivity.class);
 						startActivity(i3);
 						break;
 					case R.id.action_four:

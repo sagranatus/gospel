@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 //이 파일은 안드로이드 안에 탑재되어 있는 데이터베이스를 사용하는 방식이다. 
-public class MemberInfoHelper extends SQLiteOpenHelper{
+public class CommentInfoHelper extends SQLiteOpenHelper{
 
-	public MemberInfoHelper(Context c) {
+	public CommentInfoHelper(Context c) {
 		super(c, "CommentInfo.db", null, 1); //데이터베이스 이름.
 		
 		// TODO Auto-generated constructor stub

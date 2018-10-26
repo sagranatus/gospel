@@ -3,12 +3,19 @@ package com.yellowpg.gaspel.etc;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
+import com.roomorama.caldroid.WeekdayArrayAdapter;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.MemberInfoHelper;
+import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.R;
 import com.yellowpg.gaspel.adapter.CaldroidSampleCustomAdapter;
 import com.yellowpg.gaspel.data.Comment;
@@ -19,13 +26,14 @@ import java.util.HashMap;
 import hirondelle.date4j.DateTime;
 
 public class CaldroidSampleCustomFragment extends CaldroidFragment {
-    MemberInfoHelper dailyInfoHelper;
+    CommentInfoHelper dailyInfoHelper;
     LectioInfoHelper lectioInfoHelper;
     protected HashMap<DateTime, Comment> events = new HashMap<DateTime, Comment>();
     protected HashMap<DateTime, Lectio> events2 = new HashMap<DateTime, Lectio>();
     TextView text;
     TextView today, date, oneSentence, comment;
     TextView date2, sentence2, bg1, bg2, bg3, sum1, sum2, js1, js2;
+
 
     // exp : gridadapter를 새로 불러와서 생성
     public CaldroidGridAdapter getNewDatesGridAdapter(int month, int year) {
@@ -54,11 +62,14 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
 
 
     public void refreshView() {
+
+
         // If month and year is not yet initialized, refreshView doesn't do
         // anything
         if (month == -1 || year == -1) {
             return;
         }
+
 
         refreshMonthTitleTextView();
 
@@ -70,7 +81,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
 
          // exp : 여기서 데이터를 가져온다
             // cf : 코멘트 부분
-            dailyInfoHelper = new MemberInfoHelper(getActivity());
+            dailyInfoHelper = new CommentInfoHelper(getActivity());
             SQLiteDatabase db;
             ContentValues values;
 

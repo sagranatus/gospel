@@ -1,9 +1,11 @@
 package com.yellowpg.gaspel.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +72,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         this.events2 = events2;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
@@ -89,10 +92,23 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         // exp : 배경 하얀색 / 글씨 검정색으로 세팅 및 날짜 삽입
         cellView.setBackgroundColor(resources
                 .getColor(com.caldroid.R.color.caldroid_white));
-        tv1.setTextColor(Color.BLACK);
+        tv1.setTextColor(Color.parseColor("#999999"));
         tv1.setText("" + dateTime.getDay());
+
+        date.setVisibility(View.GONE);
+        oneSentence.setVisibility(View.GONE);
+        comment.setVisibility(View.GONE);
+        date2.setVisibility(View.GONE);
+        sentence2.setVisibility(View.GONE);
+        bg1.setVisibility(View.GONE);
+        bg2.setVisibility(View.GONE);
+        bg3.setVisibility(View.GONE);
+        sum1.setVisibility(View.GONE);
+        sum2.setVisibility(View.GONE);
+        js1.setVisibility(View.GONE);;
+        js2.setVisibility(View.GONE);
     // exp : 이는 오늘의 경우에 가져오는 것
-        if(dateTime.equals(getToday())) {
+       /* if(dateTime.equals(getToday())) {
                 if(events2.get(dateTime)!=null) {
                 today.setVisibility(today.GONE);
                 date2.setVisibility(date2.VISIBLE);
@@ -133,11 +149,11 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
             if(events.get(dateTime)!=null) {
                 today.setVisibility(today.GONE);
-                date.setVisibility(date.VISIBLE);
-                oneSentence.setVisibility(oneSentence.VISIBLE);
-                comment.setVisibility(comment.VISIBLE);
+              //  date.setVisibility(date.VISIBLE);
+              //  oneSentence.setVisibility(oneSentence.VISIBLE);
+              //  comment.setVisibility(comment.VISIBLE);
                 date.setText(events.get(dateTime).getDate());
-                oneSentence.setText(events.get(dateTime).getOneSentence());
+                oneSentence.setText(events.get(dateTime).getOneSentence()); //here
                 comment.setText(events.get(dateTime).getComment());
             }else{
                 date.setVisibility(date.GONE);
@@ -161,7 +177,8 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 });
             }
             }
-
+            */
+        today.setVisibility(today.VISIBLE);
         // exp :  데이터값이 있는 경우 별이 보이게 하는 부분 - 렉시오 디비나 부분
         if(events2.get(dateTime)!=null && events2.get(dateTime).getOneSentence()!=null) {
             img.setVisibility(View.VISIBLE);
@@ -171,6 +188,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
             {
                 @Override
                 public void onClick(View v) {
+
                     // TODO Auto-generated method stub
                     Intent intent = new Intent(mContext, MainActivity.class);
                     String _date = date2.getText().toString();
@@ -311,13 +329,13 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                             sentence2.setText(events2.get(dateTime).getOneSentence());
                         }
 
-                        bg1.setText("이 복음의 등장인물은 " + events2.get(dateTime).getBg1());
-                        bg2.setText("장소는 " + events2.get(dateTime).getBg2());
-                        bg3.setText("시간은 " + events2.get(dateTime).getBg3());
-                        sum1.setText("이 복음의 내용을 간추리면 " + events2.get(dateTime).getSum1());
-                        sum2.setText("특별히 눈에 띄는 부분은 " + events2.get(dateTime).getSum2());
-                        js1.setText("이 복음에서 보여지는 예수님은 " + events2.get(dateTime).getJs1());
-                        js2.setText("결과적으로 이 복음을 통해 예수님께서 내게 해주시는 말씀은 \"" + events2.get(dateTime).getJs2()+"\"");
+                        bg1.setText("이 복음의 등장인물은\n" + events2.get(dateTime).getBg1());
+                        bg2.setText("장소는\n" + events2.get(dateTime).getBg2());
+                        bg3.setText("시간은\n" + events2.get(dateTime).getBg3());
+                        sum1.setText("이 복음의 내용을 간추리면\n" + events2.get(dateTime).getSum1());
+                        sum2.setText("특별히 눈에 띄는 부분은\n" + events2.get(dateTime).getSum2());
+                        js1.setText("이 복음에서 보여지는 예수님은\n" + events2.get(dateTime).getJs1());
+                        js2.setText("결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은 \n\"" + events2.get(dateTime).getJs2()+"\"");
                     }else{
                         date2.setVisibility(date2.GONE);
                         sentence2.setVisibility(sentence2.GONE);

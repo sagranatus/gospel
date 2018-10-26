@@ -4,23 +4,23 @@
     <item
         android:id="@+id/action_one"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/today"
+        android:icon="@drawable/bottom1"
         android:title="오늘의복음" />
     <item
         android:id="@+id/action_two"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/days"
-        android:title="매일의복음"/>
+        android:icon="@drawable/bottom2"
+        android:title="렉시오디비나"/>
     <item
         android:id="@+id/action_three"
         app:showAsAction="ifRoom"
         android:enabled="true"
-        android:icon="@drawable/lectio"
-        android:title="렉시오디비나"/>
+        android:icon="@drawable/bottom3"
+        android:title="말씀새기기"/>
     <item
         android:id="@+id/action_four"
         app:showAsAction="ifRoom"
         android:enabled="true"
-        android:icon="@drawable/memo"
+        android:icon="@drawable/bottom4"
         android:title="나의기록"/>
 </menu>

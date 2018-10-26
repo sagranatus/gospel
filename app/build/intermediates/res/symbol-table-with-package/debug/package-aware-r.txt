@@ -78,19 +78,6 @@ attr backgroundStacked
 attr backgroundTint
 attr backgroundTintMode
 attr barLength
-attr bb_activeTabAlpha
-attr bb_activeTabColor
-attr bb_badgeBackgroundColor
-attr bb_badgesHideWhenActive
-attr bb_behavior
-attr bb_inActiveTabAlpha
-attr bb_inActiveTabColor
-attr bb_longPressHintsEnabled
-attr bb_showShadow
-attr bb_tabXmlResource
-attr bb_tabletMode
-attr bb_titleTextAppearance
-attr bb_titleTypeFace
 attr behavior_autoHide
 attr behavior_hideable
 attr behavior_overlapTop
@@ -452,8 +439,6 @@ bool abc_action_bar_embed_tabs
 bool abc_allow_stacked_button_bar
 bool abc_config_actionMenuItemAllCaps
 bool abc_config_showMenuShortcutsWhenKeyboardPresent
-bool bb_bottom_bar_is_portrait_mode
-bool bb_bottom_bar_is_tablet_mode
 color BLUEA
 color abc_background_cache_hint_selector_material_dark
 color abc_background_cache_hint_selector_material_light
@@ -486,9 +471,6 @@ color background_floating_material_dark
 color background_floating_material_light
 color background_material_dark
 color background_material_light
-color bb_darkBackgroundColor
-color bb_inActiveBottomBarItemColor
-color bb_tabletRightBorderDark
 color bg_login
 color bg_main
 color bg_register
@@ -690,9 +672,6 @@ dimen abc_text_size_title_material
 dimen abc_text_size_title_material_toolbar
 dimen activity_horizontal_margin
 dimen activity_vertical_margin
-dimen bb_default_elevation
-dimen bb_fake_shadow_height
-dimen bb_height
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
 dimen compat_button_padding_horizontal_material
@@ -860,10 +839,15 @@ drawable abc_vector_test
 drawable avd_hide_password
 drawable avd_show_password
 drawable baby
-drawable bb_bottom_bar_top_shadow
+drawable bottom1
+drawable bottom2
+drawable bottom3
+drawable bottom4
 drawable bottom_section_color
 drawable boy
+drawable button_back
 drawable button_bg
+drawable button_bg_grey
 drawable calendar_next_arrow
 drawable calendar_prev_arrow
 drawable cell_bg
@@ -915,6 +899,7 @@ drawable memo
 drawable navigation_empty_icon
 drawable notification
 drawable notification_action_background
+drawable notification_base
 drawable notification_bg
 drawable notification_bg_low
 drawable notification_bg_low_normal
@@ -933,6 +918,7 @@ drawable right
 drawable right_arrow
 drawable setting
 drawable smallstar
+drawable textlines
 drawable today
 drawable today_big
 drawable tooltip_frame_dark
@@ -978,7 +964,6 @@ id action_settings
 id action_text
 id action_three
 id action_two
-id action_zero
 id actions
 id activity_chooser_view_content
 id add
@@ -990,14 +975,6 @@ id always
 id async
 id auto
 id basic
-id bb_bottom_bar_appearance_id
-id bb_bottom_bar_background_overlay
-id bb_bottom_bar_color_id
-id bb_bottom_bar_icon
-id bb_bottom_bar_item_container
-id bb_bottom_bar_outer_container
-id bb_bottom_bar_shadow
-id bb_bottom_bar_title
 id beginning
 id blocking
 id bottom
@@ -1021,18 +998,18 @@ id bt_googleon
 id bt_man
 id bt_network_con
 id bt_network_con2
+id bt_next
 id bt_normal
-id bt_notyet
 id bt_onesentence
+id bt_prev
 id bt_save
-id bt_showgaspel
 id bt_small
+id bt_start
 id bt_step1
 id bt_step2
 id bt_step3
 id bt_step4
 id bt_stop
-id bt_stopgaspel
 id bt_sx
 id bt_text
 id bt_time
@@ -1065,6 +1042,7 @@ id custom
 id customPanel
 id custom_cell
 id dark
+id declineButton
 id decor_content_parent
 id default_activity_button
 id design_bottom_sheet
@@ -1101,7 +1079,6 @@ id homeAsUp
 id icon
 id icon_group
 id icon_only
-id iconsOnly
 id ifRoom
 id image
 id img
@@ -1118,11 +1095,8 @@ id listMode
 id list_item
 id ll
 id ll1
-id ll2
-id ll3
 id ll_date
 id ll_first
-id ll_notyet
 id ll_second
 id ll_step0
 id ll_step1
@@ -1153,11 +1127,10 @@ id parent
 id parentPanel
 id parent_matrix
 id pin
+id pray
 id progress_circular
 id progress_horizontal
 id question1
-id question2
-id question3
 id radio
 id right
 id right_icon
@@ -1195,12 +1168,10 @@ id search_plate
 id search_src_text
 id search_voice_btn
 id select_dialog_listview
-id shifting
 id shortcut
 id showCustom
 id showHome
 id showTitle
-id shy
 id smallLabel
 id snackbar_action
 id snackbar_text
@@ -1221,6 +1192,7 @@ id tabMode
 id tag_transition_group
 id text
 id text2
+id textDialog
 id textSpacerNoButtons
 id textSpacerNoTitle
 id text_input_password_toggle
@@ -1229,6 +1201,7 @@ id textinput_error
 id time
 id timePicker
 id title
+id titleDialog
 id titleDividerNoCustom
 id title_template
 id top
@@ -1254,6 +1227,7 @@ id tv_exp
 id tv_explain11
 id tv_explain22
 id tv_explain33
+id tv_first
 id tv_googletext
 id tv_js1
 id tv_js2
@@ -1264,7 +1238,6 @@ id tv_status
 id tv_sum1
 id tv_sum2
 id tv_today
-id underNavbar
 id uniform
 id up
 id useLogo
@@ -1314,6 +1287,8 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout actionbar
+layout actionbar_lectio
+layout actionbar_record
 layout activity_explain
 layout activity_fourth
 layout activity_lectio
@@ -1321,12 +1296,6 @@ layout activity_main
 layout activity_second
 layout activity_status
 layout activity_third
-layout bb_bottom_bar_item_container
-layout bb_bottom_bar_item_container_tablet
-layout bb_bottom_bar_item_fixed
-layout bb_bottom_bar_item_fixed_tablet
-layout bb_bottom_bar_item_shifting
-layout bb_bottom_bar_item_titleless
 layout calendar_view
 layout custom_cell
 layout custom_comment
@@ -1346,6 +1315,7 @@ layout design_navigation_item_subheader
 layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_password_icon
+layout dialog
 layout normal_date_cell
 layout notification_action
 layout notification_action_tombstone
@@ -1467,12 +1437,6 @@ style Animation_AppCompat_Tooltip
 style Animation_Design_BottomSheetDialog
 style AppBaseTheme
 style AppTheme
-style BB_BottomBarBadge_Text
-style BB_BottomBarItem
-style BB_BottomBarItem_Fixed_TitleAppearance
-style BB_BottomBarItem_Shifting_TitleAppearance
-style BB_BottomBarItem_Tablet
-style BB_BottomBarItem_TitleStyle
 style Base_AlertDialog_AppCompat
 style Base_AlertDialog_AppCompat_Light
 style Base_Animation_AppCompat_Dialog
@@ -1880,7 +1844,6 @@ styleable AppCompatSeekBar android_thumb tickMark tickMarkTint tickMarkTintMode
 styleable AppCompatTextHelper android_textAppearance android_drawableTop android_drawableBottom android_drawableLeft android_drawableRight android_drawableStart android_drawableEnd
 styleable AppCompatTextView android_textAppearance autoSizeMaxTextSize autoSizeMinTextSize autoSizePresetSizes autoSizeStepGranularity autoSizeTextType fontFamily textAllCaps
 styleable AppCompatTheme android_windowIsFloating android_windowAnimationStyle actionBarDivider actionBarItemBackground actionBarPopupTheme actionBarSize actionBarSplitStyle actionBarStyle actionBarTabBarStyle actionBarTabStyle actionBarTabTextStyle actionBarTheme actionBarWidgetTheme actionButtonStyle actionDropDownStyle actionMenuTextAppearance actionMenuTextColor actionModeBackground actionModeCloseButtonStyle actionModeCloseDrawable actionModeCopyDrawable actionModeCutDrawable actionModeFindDrawable actionModePasteDrawable actionModePopupWindowStyle actionModeSelectAllDrawable actionModeShareDrawable actionModeSplitBackground actionModeStyle actionModeWebSearchDrawable actionOverflowButtonStyle actionOverflowMenuStyle activityChooserViewStyle alertDialogButtonGroupStyle alertDialogCenterButtons alertDialogStyle alertDialogTheme autoCompleteTextViewStyle borderlessButtonStyle buttonBarButtonStyle buttonBarNegativeButtonStyle buttonBarNeutralButtonStyle buttonBarPositiveButtonStyle buttonBarStyle buttonStyle buttonStyleSmall checkboxStyle checkedTextViewStyle colorAccent colorBackgroundFloating colorButtonNormal colorControlActivated colorControlHighlight colorControlNormal colorError colorPrimary colorPrimaryDark colorSwitchThumbNormal controlBackground dialogPreferredPadding dialogTheme dividerHorizontal dividerVertical dropDownListViewStyle dropdownListPreferredItemHeight editTextBackground editTextColor editTextStyle homeAsUpIndicator imageButtonStyle listChoiceBackgroundIndicator listDividerAlertDialog listMenuViewStyle listPopupWindowStyle listPreferredItemHeight listPreferredItemHeightLarge listPreferredItemHeightSmall listPreferredItemPaddingLeft listPreferredItemPaddingRight panelBackground panelMenuListTheme panelMenuListWidth popupMenuStyle popupWindowStyle radioButtonStyle ratingBarStyle ratingBarStyleIndicator ratingBarStyleSmall searchViewStyle seekBarStyle selectableItemBackground selectableItemBackgroundBorderless spinnerDropDownItemStyle spinnerStyle switchStyle textAppearanceLargePopupMenu textAppearanceListItem textAppearanceListItemSecondary textAppearanceListItemSmall textAppearancePopupMenuHeader textAppearanceSearchResultSubtitle textAppearanceSearchResultTitle textAppearanceSmallPopupMenu textColorAlertDialogListItem textColorSearchUrl toolbarNavigationButtonStyle toolbarStyle tooltipForegroundColor tooltipFrameBackground viewInflaterClass windowActionBar windowActionBarOverlay windowActionModeOverlay windowFixedHeightMajor windowFixedHeightMinor windowFixedWidthMajor windowFixedWidthMinor windowMinWidthMajor windowMinWidthMinor windowNoTitle
-styleable BottomBar bb_activeTabAlpha bb_activeTabColor bb_badgeBackgroundColor bb_badgesHideWhenActive bb_behavior bb_inActiveTabAlpha bb_inActiveTabColor bb_longPressHintsEnabled bb_showShadow bb_tabXmlResource bb_tabletMode bb_titleTextAppearance bb_titleTypeFace
 styleable BottomNavigationView elevation itemBackground itemIconTint itemTextColor menu
 styleable BottomSheetBehavior_Layout behavior_hideable behavior_peekHeight behavior_skipCollapsed
 styleable ButtonBarLayout allowStacking

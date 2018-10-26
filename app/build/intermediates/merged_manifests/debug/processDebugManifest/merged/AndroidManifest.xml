@@ -48,7 +48,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-s
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.yellowpg.gaspel.SecondActivity"
@@ -64,12 +70,14 @@ s
             android:name="com.yellowpg.gaspel.FourthActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.yellowpg.gaspel.LectioActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.yellowpg.gaspel.StatusActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
