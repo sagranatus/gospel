@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
-        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_switch_track_mtrl_alpha.9.png"
-    },
-    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-mdpi-v4\\abc_ic_menu_cut_mtrl_alpha.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
+        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_switch_track_mtrl_alpha.9.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_pressed_holo_light.9.png.flat",
@@ -56,12 +56,12 @@
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
-        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-mdpi-v4\\abc_switch_track_mtrl_alpha.9.png"
-    },
-    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_search_url_text.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\color\\abc_search_url_text.xml"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",
+        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-mdpi-v4\\abc_switch_track_mtrl_alpha.9.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_text_light_normal_background.9.png.flat",
@@ -72,24 +72,24 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxhdpi-v4\\abc_btn_check_to_on_mtrl_015.png"
     },
     {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_vector_test.xml.flat",
-        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable\\abc_vector_test.xml"
-    },
-    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_textfield_search_default_mtrl_alpha.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_textfield_search_default_mtrl_alpha.9.png"
     },
     {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\anim_design_snackbar_in.xml.flat",
-        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\f93f4d51a9b0e35e2525c67a7c267b89\\res\\anim\\design_snackbar_in.xml"
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_vector_test.xml.flat",
+        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable\\abc_vector_test.xml"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_ic_menu_paste_mtrl_am_alpha.png.flat",
+        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_ic_menu_paste_mtrl_am_alpha.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_pressed_holo_dark.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxhdpi-v4\\abc_list_pressed_holo_dark.9.png"
     },
     {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_ic_menu_paste_mtrl_am_alpha.png.flat",
-        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_ic_menu_paste_mtrl_am_alpha.png"
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\anim_design_snackbar_in.xml.flat",
+        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\f93f4d51a9b0e35e2525c67a7c267b89\\res\\anim\\design_snackbar_in.xml"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_textfield_activated_mtrl_alpha.9.png.flat",
@@ -140,12 +140,12 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xhdpi-v4\\abc_btn_radio_to_on_mtrl_015.png"
     },
     {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\anim_abc_slide_in_top.xml.flat",
-        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\anim\\abc_slide_in_top.xml"
-    },
-    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-11.0.4.aar\\7a6e72cc84a4910c98212ccdf9aa6dfd\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_dark_normal_background.9.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\anim_abc_slide_in_top.xml.flat",
+        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\anim\\abc_slide_in_top.xml"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_activity_chooser_view.xml.flat",
@@ -176,12 +176,12 @@
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\right.png"
     },
     {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_text_select_handle_right_mtrl_light.png.flat",
-        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-mdpi-v4\\abc_text_select_handle_right_mtrl_light.png"
-    },
-    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_design_ic_visibility_off.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\f93f4d51a9b0e35e2525c67a7c267b89\\res\\drawable-xhdpi-v4\\design_ic_visibility_off.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_text_select_handle_right_mtrl_light.png.flat",
+        "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-mdpi-v4\\abc_text_select_handle_right_mtrl_light.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\color_abc_hint_foreground_material_dark.xml.flat",
@@ -214,6 +214,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_longpressed_holo.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxhdpi-v4\\abc_list_longpressed_holo.9.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_bottom3.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\bottom3.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_cab_background_internal_bg.xml.flat",
@@ -492,6 +496,10 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_menu_hardkey_panel_mtrl_mult.9.png"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_arrive.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\arrive.png"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_media_cancel_action.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-27.1.0.aar\\6d820f3f49f0274aec25470dac5385d6\\res\\layout\\notification_media_cancel_action.xml"
     },
@@ -526,6 +534,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_spinner_mtrl_am_alpha.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxxhdpi-v4\\abc_spinner_mtrl_am_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_record2.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\record2.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_common_google_signin_btn_text_dark_normal.xml.flat",
@@ -566,6 +578,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_item_background_holo_light.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_back.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\back.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
@@ -648,6 +664,10 @@
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-hdpi\\setting.png"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_bottom3_ori.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-mdpi\\bottom3_ori.png"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_full_open_on_phone.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-11.0.4.aar\\7a6e72cc84a4910c98212ccdf9aa6dfd\\res\\drawable-xhdpi-v4\\common_full_open_on_phone.png"
     },
@@ -708,6 +728,10 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\b2c1625ac056332e33774bdc0135e7f3\\res\\layout-v16\\notification_template_custom_big.xml"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_bottom3_2.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\bottom3_2.png"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
     },
@@ -738,6 +762,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_cab_background_top_mtrl_alpha.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_cab_background_top_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_button_bg2.xml.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-xxhdpi\\button_bg2.xml"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_abc_list_selector_disabled_holo_dark.9.png.flat",
@@ -1292,6 +1320,10 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\caldroid-2.0.1.aar\\e5a4d5b029a34c5ae3ece10f8b5feb5b\\res\\drawable\\disable_cell.xml"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_actionbar_second.xml.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\layout\\actionbar_second.xml"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_ic_star_half_black_36dp.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxhdpi-v4\\abc_ic_star_half_black_36dp.png"
     },
@@ -1310,6 +1342,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_boy.png.flat",
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-hdpi\\boy.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_button_bg_white.xml.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-xxhdpi\\button_bg_white.xml"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldrtl-mdpi-v17_abc_ic_menu_copy_mtrl_am_alpha.png.flat",
@@ -1380,12 +1416,20 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxhdpi-v4\\abc_btn_radio_to_on_mtrl_000.png"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_actionbar_back_weekend.xml.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\layout\\actionbar_back_weekend.xml"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_abc_dialog_title_material.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\layout\\abc_dialog_title_material.xml"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_list_selector_disabled_holo_light.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxhdpi-v4\\abc_list_selector_disabled_holo_light.9.png"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_actionbar_setting.xml.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\layout\\actionbar_setting.xml"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_btn_colored_material.xml.flat",
@@ -1406,6 +1450,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_second.xml.flat",
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\layout\\activity_second.xml"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_actionbar_back.xml.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\layout\\actionbar_back.xml"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout-sw600dp-v13_design_layout_snackbar.xml.flat",
@@ -1560,6 +1608,10 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_tab_indicator_mtrl_alpha.9.png"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_record1.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\record1.png"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-11.0.4.aar\\7a6e72cc84a4910c98212ccdf9aa6dfd\\res\\drawable-xxhdpi-v4\\common_google_signin_btn_icon_dark_normal_background.9.png"
     },
@@ -1674,10 +1726,6 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_big_media.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-27.1.0.aar\\6d820f3f49f0274aec25470dac5385d6\\res\\layout\\notification_template_big_media.xml"
-    },
-    {
-        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_bottom3.png.flat",
-        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-mdpi\\bottom3.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_ic_voice_search_api_material.xml.flat",
@@ -1802,6 +1850,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_abc_btn_default_mtrl_shape.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_church2.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\church2.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_list_pressed_holo_light.9.png.flat",
@@ -1992,6 +2044,10 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_text_select_handle_left_mtrl_light.png"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_church.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\church.png"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_girl.png.flat",
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-hdpi\\girl.png"
     },
@@ -2054,6 +2110,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\anim_design_bottom_sheet_slide_out.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\f93f4d51a9b0e35e2525c67a7c267b89\\res\\anim\\design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_walking.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\walking.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\color-v21_abc_btn_colored_borderless_text_material.xml.flat",
@@ -2224,6 +2284,10 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-xxhdpi-v4\\abc_list_selector_disabled_holo_dark.9.png"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_actionbar_status.xml.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\layout\\actionbar_status.xml"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21_design_ic_visibility_off.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\design-27.1.0.aar\\f93f4d51a9b0e35e2525c67a7c267b89\\res\\drawable-anydpi-v21\\design_ic_visibility_off.xml"
     },
@@ -2290,6 +2354,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\font_hansans_light.otf.flat",
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\font\\hansans_light.otf"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_footprint.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\footprint.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_big_media_narrow.xml.flat",

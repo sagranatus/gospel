@@ -21,6 +21,7 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,8 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.WeekendInfoHelper;
+import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
@@ -62,29 +66,33 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hirondelle.date4j.DateTime;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class LectioActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, OnKeyboardVisibilityListener {
     final static String TAG = "lectioActivity";
 LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     Button bt_notyet;
+    String date_intent;
     EditText bg1, bg2, bg3;
     EditText sum1, sum2;
-    EditText js1, js2;
-    Button save,start, showgaspel, stopgaspel;
+    EditText js1, js2, weekend;
+    ScrollView scrollView, after_save;
+    Button save,start, showgaspel, stopgaspel, edit;
     Button prev, next;
     Button date;
     ImageButton before, after;
     InputMethodManager imm;
     String urlAddr = "http://i.catholic.or.kr/missa/";
     TextView contentsGaspel;
-    TextView q1, firstSentence;
+    TextView q1, firstSentence, after_save_tv;
     Button onesentence;
     BottomNavigationView bottomNavigationView;
     String day;
@@ -98,6 +106,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
     LectioInfoHelper lectioInfoHelper;
     int already;
+    Boolean edit_now;
 
     ListSelectorDialog dlg_left;
     String[] listk_left, listv_left;
@@ -212,17 +221,44 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lectio);
 
+        edit_now = false;
+
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 
-//actionbar setting
-        actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionbar.setCustomView(R.layout.actionbar_lectio);
-        TextView mytext = (TextView) findViewById(R.id.mytext);
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
-        actionbar.setElevation(0);
-        // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.list);
+        // bottomnavigation 뷰 등록
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+        BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
+
+
+        Intent intent = getIntent();
+        date_intent = intent.getStringExtra("date");
+        if(date_intent != null) {
+            // date_val = sdf.format(c1.getTime());
+            // date.setText(date_val+getDay()+"요일");
+            actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionbar.setCustomView(R.layout.actionbar_back_weekend);
+            actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+            actionbar.setElevation(0);
+            // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.back);
+            bottomNavigationView.setVisibility(View.GONE);
+        }else{
+            //actionbar setting
+            actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionbar.setCustomView(R.layout.actionbar_lectio);
+            TextView mytext = (TextView) findViewById(R.id.mytext);
+            actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+            actionbar.setElevation(0);
+            // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.list);
+        }
+
+
+        imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
        // bt_notyet = (Button)findViewById(R.id.bt_notyet);
        // ll_notyet = (LinearLayout) findViewById(R.id.ll_notyet);
@@ -235,6 +271,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
       //  showgaspel = (Button) findViewById(R.id.bt_showgaspel);
       //  stopgaspel = (Button) findViewById(R.id.bt_stopgaspel);
         save = (Button) findViewById(R.id.bt_save);
+        edit = (Button) findViewById(R.id.bt_edit);
         bg1 = (EditText) findViewById(R.id.et_background1);
         bg2 = (EditText) findViewById(R.id.et_background2);
         bg3 = (EditText) findViewById(R.id.et_background3);
@@ -242,12 +279,15 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         sum2 = (EditText) findViewById(R.id.et_summary2);
         js1 = (EditText) findViewById(R.id.et_jesus1);
         js2 = (EditText) findViewById(R.id.et_jesus2);
+        weekend = (EditText) findViewById(R.id.et_weekend);
 
         date = (Button) findViewById(R.id.bt_date);
         before = (ImageButton) findViewById(R.id.bt_before);
         after = (ImageButton) findViewById(R.id.bt_after);
 
         q1 = (TextView) findViewById(R.id.question1);
+        after_save = (ScrollView) findViewById(R.id.after_save);
+        after_save_tv = (TextView) findViewById(R.id.after_save_tv);
        // q2 = (TextView) findViewById(R.id.question2);
         //q3 = (TextView) findViewById(R.id.question3);
 
@@ -268,7 +308,10 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         sum2.setVisibility(View.GONE);
         js1.setVisibility(View.GONE);
         js2.setVisibility(View.GONE);
+        weekend.setVisibility(View.GONE);
         save.setVisibility(View.GONE);
+        edit.setVisibility(View.GONE);
+        after_save.setVisibility(View.GONE);
 
 
         prev = (Button) findViewById(R.id.bt_prev);
@@ -281,6 +324,12 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         prev.setOnClickListener(listener);
         next.setOnClickListener(listener);
         start.setOnClickListener(listener);
+        edit.setOnClickListener(listener);
+
+        save.setBackgroundResource(R.drawable.button_bg);
+        edit.setBackgroundResource(R.drawable.button_bg);
+        start.setBackgroundResource(R.drawable.button_bg2);
+
         SharedPreferences sp_level = getSharedPreferences("setting",0);
         String level = sp_level.getString("level", "");
         lectio_order = 0;
@@ -310,20 +359,39 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         // exp : onesentence는 안보이게 설정했다
       //  onesentence.setVisibility(onesentence.GONE);
         // exp : date에 오늘 날짜를 넣었다
-        date.setText(date_val+MainActivity.getDay()+"요일");
 
-        // exp : 렉시오디비나 작성내용 가져오기
-        lectioInfoHelper = new LectioInfoHelper(this);
-        // exp : 데이터가 있는경우 보이도록 edittext에 삽입한다
-        getDataBase();
+        if(date_intent != null){
+            before.setVisibility(View.GONE);
+            after.setVisibility(View.GONE);
+           // date_val = sdf.format(c1.getTime());
+           // date.setText(date_val+getDay()+"요일");
+            String date_detail = intent.getStringExtra("date_detail");
+            date.setText(date_detail);
+            date_val2 = date_intent;
+            checkRecord();
+            getGaspel(date_val2);
+            getDataBase();
+
+           // date.setText(date_val+getDay()+"요일");
+            // exp : 렉시오디비나 작성내용 가져오기
+        //    lectioInfoHelper = new LectioInfoHelper(this);
+            // exp : 데이터가 있는경우 보이도록 edittext에 삽입한다
+        //    getDataBase();
+        }else{
+            date.setText(date_val+getDay()+"요일");
+            // exp : 렉시오디비나 작성내용 가져오기
+            lectioInfoHelper = new LectioInfoHelper(this);
+            // exp : 데이터가 있는경우 보이도록 edittext에 삽입한다
+            getDataBase();
+            checkRecord();
+        }
+
+
 
         // exp : 맨처음에는 복음 내용이 보이지 않는다
       //  ll_upper.setVisibility(ll_upper.GONE);
 
-        // bottomnavigation 뷰 등록
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-        BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
+
 
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem_1 = menu.getItem(0);
@@ -367,55 +435,28 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
         // custom dialog key, value 설정
-        listk_left = new String[] {"a", "b", "c"};
-        listv_left = new String[] {"사용 설명서", "설정", "나의 상태"};
+        listk_left = new String[] {"a", "b"};
+        listv_left = new String[] {"설정", "나의 상태"};
 
         // exp : 텍스트사이즈 설정
         SharedPreferences sp = getSharedPreferences("setting",0);
         String textsize = sp.getString("textsize", "");
-        if(textsize.equals("small")){
-
-            showgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            stopgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-         //   bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        }else if(textsize.equals("big")){
-            showgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            stopgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+        if(textsize.equals("big")){
+            date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            onesentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+            firstSentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            weekend.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            after_save_tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
         //    bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-        }else if(textsize.equals("toobig")){
-            showgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            stopgaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-        //    bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         }else{
 
         }
@@ -425,7 +466,9 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 return true;
             }
         });
@@ -433,7 +476,9 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 return true;
             }
         });
@@ -441,7 +486,9 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 return true;
             }
         });
@@ -449,12 +496,14 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            //    if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+             //   }
                 return true;
             }
         });
 
-        setKeyboardVisibilityListener(this);
+       // setKeyboardVisibilityListener(this);
 
         // exp : 다른 부분 터치시 키보드 사라지게 하기 이벤트
 
@@ -480,8 +529,114 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             contentsGaspel.setGravity(Gravity.CENTER);
         }
 
+
+
     }
 
+    public void checkRecord(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        edit_now = false;
+        // cf : 렉시오 디비나 부분
+        lectioInfoHelper = new LectioInfoHelper(LectioActivity.this);
+        SQLiteDatabase db2;
+
+        try{
+            String bg1_str = null;
+            String bg2_str= null;
+            String bg3_str= null;
+            String sum1_str= null;
+            String sum2_str= null;
+            String js1_str= null;
+            String js2_str= null;
+
+            String date_str = null;
+            String onesentence_str = null;
+            String date_aft = (String) date.getText();
+
+            db2 = lectioInfoHelper.getReadableDatabase();
+            String[] columns = {"bg1", "bg2", "bg3", "sum1", "sum2", "js1", "js2"};
+            String whereClause = "date = ?";
+            String[] whereArgs = new String[] {
+                    date_aft // cf : 날짜에 맞는 코멘트를 가져온다.
+            };
+           // String query = "SELECT bg1, bg2, bg3, sum1, sum2, js1, js2, date, onesentence FROM lectio";
+            Cursor cursor = db2.query("lectio", columns,  whereClause, whereArgs, null, null, null);
+
+            if(cursor != null){
+                after_save.setVisibility(View.VISIBLE);
+                while(cursor.moveToNext()){
+                    bg1_str = cursor.getString(0);
+                    bg2_str = cursor.getString(1);
+                    bg3_str = cursor.getString(2);
+                    sum1_str = cursor.getString(3);
+                    sum2_str = cursor.getString(4);
+                    js1_str = cursor.getString(5);
+                    js2_str = cursor.getString(6);
+                }
+                if(bg1_str != null){
+                    edit_now = false;
+                    start.setVisibility(View.GONE);
+                    prev.setVisibility(View.GONE);
+                    next.setVisibility(View.GONE);
+                    q1.setVisibility(View.GONE);
+                    bg1.setVisibility(View.GONE);
+                    bg2.setVisibility(View.GONE);
+                    bg3.setVisibility(View.GONE);
+                    sum1.setVisibility(View.GONE);
+                    sum2.setVisibility(View.GONE);
+                    js1.setVisibility(View.GONE);
+                    js2.setVisibility(View.GONE);
+                    save.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.GONE);
+                    onesentence.setVisibility(View.VISIBLE);
+                    edit.setVisibility(View.VISIBLE);
+                    firstSentence.setVisibility(View.GONE);
+                    start.setVisibility(View.GONE);
+                    after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + bg1_str
+                            +"<br><font color=\"#999999\">· 장소는</font> " + bg2_str
+                            +"<br><font color=\"#999999\">· 시간은</font> " + bg3_str
+                            +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + sum1_str
+                            +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + sum2_str
+                            +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + js1_str
+                            +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""));
+
+
+                }else{
+                    edit_now = false;
+                    after_save.setVisibility(View.GONE);
+                    edit.setVisibility(View.GONE);
+                    onesentence.setVisibility(View.VISIBLE);
+                    firstSentence.setVisibility(View.VISIBLE);
+                    scrollView.setVisibility(View.VISIBLE);
+                    start.setVisibility(View.VISIBLE);
+                    save.setVisibility(View.GONE);
+                    q1.setVisibility(View.GONE);
+                    bg1.setVisibility(View.GONE);
+                    bg2.setVisibility(View.GONE);
+                    bg3.setVisibility(View.GONE);
+                    sum1.setVisibility(View.GONE);
+                    sum2.setVisibility(View.GONE);
+                    js1.setVisibility(View.GONE);
+                    js2.setVisibility(View.GONE);
+                    weekend.setVisibility(View.GONE);
+                    prev.setVisibility(View.GONE);
+                    next.setVisibility(View.GONE);
+                }
+
+            }else{
+
+
+            }
+            cursor.close();
+            lectioInfoHelper.close();
+        }
+        catch(Exception e){
+
+        }
+    }
     // 커스텀 다이얼로그 선택시
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -490,26 +645,28 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                 showPraying(item);
                 return true;
             default:
-                // show the list dialog.
-                dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
+                if(date_intent != null){
+                    finish();
+                }else{
+                    // show the list dialog.
+                    dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
 
-                    // procedure if user cancels the dialog.
-                    public void selectorCanceled() {
-                    }
-                    // procedure for when a user selects an item in the dialog.
-                    public void selectedItem(String key, String item) {
-                        if(item.equals("사용 설명서")){
-                            Intent i = new Intent(LectioActivity.this, ExplainActivity.class);
-                            startActivity(i);
-                        }else if(item.equals("설정")){
-                            Intent i = new Intent(LectioActivity.this, ThirdActivity.class);
-                            startActivity(i);
-                        }else if(item.equals("나의 상태")){
-                            Intent i = new Intent(LectioActivity.this, StatusActivity.class);
-                            startActivity(i);
+                        // procedure if user cancels the dialog.
+                        public void selectorCanceled() {
                         }
-                    }
-                });
+                        // procedure for when a user selects an item in the dialog.
+                        public void selectedItem(String key, String item) {
+                            if(item.equals("설정")){
+                                Intent i = new Intent(LectioActivity.this, ThirdActivity.class);
+                                startActivity(i);
+                            }else if(item.equals("나의 상태")){
+                                Intent i = new Intent(LectioActivity.this, StatusActivity.class);
+                                startActivity(i);
+                            }
+                        }
+                    });
+                }
+
                 return true;
         }
     }
@@ -574,7 +731,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             ContentValues values;
             // TODO Auto-generated method stub
             if(v.getId()==R.id.bt_save){
-
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 String background1 = bg1.getText().toString();
                 String background2 = bg2.getText().toString();
                 String background3 = bg3.getText().toString();
@@ -715,6 +872,27 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                     Toast.makeText(LectioActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
                 }
 
+                if(date_intent != null){
+                    WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(LectioActivity.this);
+                    String weekend_date = date.getText().toString();
+                    String mysentence = weekend.getText().toString();
+                    try{
+                        db=weekendInfoHelper.getWritableDatabase();
+                        values = new ContentValues();
+                        values.put("date",  weekend_date);
+                        values.put("mysentence",  mysentence);
+                        db.insert("weekend", null, values);
+                        lectioInfoHelper.close();
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    //Toast.makeText(LectioActivity.this, "날짜"+date1, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LectioActivity.this, SecondActivity.class);
+                    LectioActivity.this.startActivity(intent);
+                }else{
+                    checkRecord();
+                }
+
             }
         }
     };
@@ -753,6 +931,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                         contents = contents.replaceAll("&rsquo;", "");
                         contents = contents.replaceAll("&prime;", "'");
                         contents = contents.replaceAll("\n", " ");
+                        contents = contents.replaceAll("&hellip;", "…");
                         contents = contents.replaceAll("주님의 말씀입니다.", "\n"+"주님의 말씀입니다.");
 
                         //contents = contents.replaceAll("거룩한 복음입니다.", "거룩한 복음입니다."+"\n");
@@ -846,14 +1025,19 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             switch (v.getId()) {
                 case R.id.bt_prev:
                     if(lectio_order == 1){
-                        onesentence.setVisibility(View.VISIBLE);
-                        firstSentence.setVisibility(View.VISIBLE);
-                        start.setVisibility(View.VISIBLE);
-                        prev.setVisibility(View.GONE);
-                        next.setVisibility(View.GONE);
-                        q1.setVisibility(View.GONE);
-                        lectio_order = 0;
-                        bg1.setVisibility(View.GONE);
+                        if(edit_now){
+                            checkRecord();
+                        }else{
+                            onesentence.setVisibility(View.VISIBLE);
+                            firstSentence.setVisibility(View.VISIBLE);
+                            start.setVisibility(View.VISIBLE);
+                            prev.setVisibility(View.GONE);
+                            next.setVisibility(View.GONE);
+                            q1.setVisibility(View.GONE);
+                            lectio_order = 0;
+                            bg1.setVisibility(View.GONE);
+                        }
+
                     }else if(lectio_order == 2){
                         lectio_order = 1;
                         bg1.setVisibility(View.VISIBLE);
@@ -872,24 +1056,50 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                         sum1.setVisibility(View.VISIBLE);
                         sum2.setVisibility(View.GONE);
                     }else if(lectio_order == 6) {
-                        q1.setText("복음 전체 내용을 \n사건 중심으로 요약해 봅시다");
+                        q1.setText("복음 전체 내용을 사건 중심으로 요약해 봅시다");
                         lectio_order = 5;
                         sum2.setVisibility(View.VISIBLE);
                         js1.setVisibility(View.GONE);
                     }else if(lectio_order == 7) {
-                        lectio_order = 6;
-                        js1.setVisibility(View.VISIBLE);
-                        js2.setVisibility(View.GONE);
-                        next.setVisibility(View.VISIBLE);
-                        save.setVisibility(View.GONE);
+                        if (date_intent != null) {
+                            lectio_order = 6;
+                            js1.setVisibility(View.VISIBLE);
+                            js2.setVisibility(View.GONE);
+                            weekend.setVisibility(View.GONE);
+                            next.setVisibility(View.VISIBLE);
+                            save.setVisibility(View.GONE);
+                        }else{
+                            lectio_order = 6;
+                            js1.setVisibility(View.VISIBLE);
+                            js2.setVisibility(View.GONE);
+                            next.setVisibility(View.VISIBLE);
+                            save.setVisibility(View.GONE);
 
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        int sizeInDP2 = 280;
-                        int marginInDp2 = (int) TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
-                                        .getDisplayMetrics());
-                        params.setMargins(10,10,10, marginInDp2);
-                        contentsGaspel.setLayoutParams(params);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            int sizeInDP2 = 280;
+                            int marginInDp2 = (int) TypedValue.applyDimension(
+                                    TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
+                                            .getDisplayMetrics());
+                            params.setMargins(10,10,10, marginInDp2);
+                            contentsGaspel.setLayoutParams(params);
+                        }
+                    }else if(lectio_order == 8) {
+                        if (date_intent != null) {
+                            q1.setText("복음에서 보여지는 예수님의 모습을 보고 생각해봅시다");
+                            lectio_order = 7;
+                            js2.setVisibility(View.VISIBLE);
+                            weekend.setVisibility(View.GONE);
+                            next.setVisibility(View.VISIBLE);
+                            save.setVisibility(View.GONE);
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            int sizeInDP2 = 280;
+                            int marginInDp2 = (int) TypedValue.applyDimension(
+                                    TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
+                                            .getDisplayMetrics());
+                            params.setMargins(10, 10, 10, marginInDp2);
+                            contentsGaspel.setLayoutParams(params);
+                        }
                     }
                     break;
                 case R.id.bt_next:
@@ -903,7 +1113,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                         bg2.setVisibility(View.GONE);
                         bg3.setVisibility(View.VISIBLE);
                     }else if(lectio_order == 3) {
-                        q1.setText("복음 전체 내용을 \n사건 중심으로 요약해 봅시다");
+                        q1.setText("복음 전체 내용을 사건 중심으로 요약해 봅시다");
                         lectio_order = 4;
                         bg3.setVisibility(View.GONE);
                         sum1.setVisibility(View.VISIBLE);
@@ -912,24 +1122,48 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                         sum1.setVisibility(View.GONE);
                         sum2.setVisibility(View.VISIBLE);
                     }else if(lectio_order == 5) {
-                        q1.setText("복음에서 보여지는 예수님의 \n모습을 보고 생각해봅시다");
+                        q1.setText("복음에서 보여지는 예수님의 모습을 보고 생각해봅시다");
                         lectio_order = 6;
                         sum2.setVisibility(View.GONE);
                         js1.setVisibility(View.VISIBLE);
                     }else if(lectio_order == 6) {
-                        lectio_order = 7;
-                        js1.setVisibility(View.GONE);
-                        js2.setVisibility(View.VISIBLE);
-                        next.setVisibility(View.INVISIBLE);
-                        save.setVisibility(View.VISIBLE);
+                        if(date_intent != null){
+                            lectio_order = 7;
+                            js1.setVisibility(View.GONE);
+                            js2.setVisibility(View.VISIBLE);
+                        }else{
+                            lectio_order = 7;
+                            js1.setVisibility(View.GONE);
+                            js2.setVisibility(View.VISIBLE);
+                            next.setVisibility(View.INVISIBLE);
+                            save.setVisibility(View.VISIBLE);
 
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        int sizeInDP2 = 320;
-                        int marginInDp2 = (int) TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
-                                        .getDisplayMetrics());
-                        params.setMargins(10,10,10, marginInDp2);
-                        contentsGaspel.setLayoutParams(params);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            int sizeInDP2 = 320;
+                            int marginInDp2 = (int) TypedValue.applyDimension(
+                                    TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
+                                            .getDisplayMetrics());
+                            params.setMargins(10,10,10, marginInDp2);
+                            contentsGaspel.setLayoutParams(params);
+                        }
+
+                    }else if(lectio_order == 7) {
+                        if (date_intent != null) {
+                            q1.setText("이번주 복음에서 특별히 와닿는 구절을 선택해 봅시다");
+                            lectio_order = 8;
+                            js2.setVisibility(View.GONE);
+                            weekend.setVisibility(View.VISIBLE);
+                            next.setVisibility(View.INVISIBLE);
+                            save.setVisibility(View.VISIBLE);
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            int sizeInDP2 = 320;
+                            int marginInDp2 = (int) TypedValue.applyDimension(
+                                    TypedValue.COMPLEX_UNIT_DIP, sizeInDP2, getResources()
+                                            .getDisplayMetrics());
+                            params.setMargins(10,10,10, marginInDp2);
+                            contentsGaspel.setLayoutParams(params);
+                        }
                     }
 
 
@@ -947,20 +1181,35 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                     start.setVisibility(View.GONE);
                     break;
 
+                case R.id.bt_edit:
+                    edit.setVisibility(View.GONE);
+                    edit_now = true;
+                    lectio_order = 1;
+                    onesentence.setVisibility(View.GONE);
+                    firstSentence.setVisibility(View.GONE);
+                    after_save.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.VISIBLE);
+                    prev.setVisibility(View.VISIBLE);
+                    next.setVisibility(View.VISIBLE);
+                    q1.setVisibility(View.VISIBLE);
+                    bg1.setVisibility(View.VISIBLE);
+                    break;
+
                 case R.id.bt_before:
                     c1.add( Calendar.DATE, -1 );
                     date_val = sdf.format(c1.getTime());
-                    date.setText(date_val+MainActivity.getDay()+"요일");
+                    date.setText(date_val+getDay()+"요일");
                     date_val2 = sdf2.format(c1.getTime());
-
+                    checkRecord();
                     getGaspel(date_val2);
                     getDataBase();
                     break;
                 case R.id.bt_after:
                     c1.add( Calendar.DATE, 1 );
                     date_val = sdf.format(c1.getTime());
-                    date.setText(date_val+MainActivity.getDay()+"요일");
+                    date.setText(date_val+getDay()+"요일");
                     date_val2 = sdf2.format(c1.getTime());
+                    checkRecord();
                     getGaspel(date_val2);
                     getDataBase();
                     break;
@@ -990,7 +1239,39 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         }
     };
 
+
     */
+
+    // exp : 요일 얻어오기
+    public String getDay(){
+        int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
+
+        switch(dayNum){
+            case 1:
+                day = "일";
+                break ;
+            case 2:
+                day = "월";
+                break ;
+            case 3:
+                day = "화";
+                break ;
+            case 4:
+                day = "수";
+                break ;
+            case 5:
+                day = "목";
+                break ;
+            case 6:
+                day = "금";
+                break ;
+            case 7:
+                day = "토";
+                break ;
+
+        }
+        return day;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();

@@ -1,8 +1,10 @@
 package com.yellowpg.gaspel;
 
 import android.app.ActionBar;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,19 +20,24 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidFragment;
+import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.CaldroidSampleCustomFragment;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
- // calendar
+import java.util.Date;
+
+// calendar
 public class FourthActivity extends AppCompatActivity {
 
 	final static String TAG = "FOURTHActivity";
 	String textsize;
 	TextView date, comment, sentence;
-	TextView date2, sentence2, bg1, bg2, bg3, sum1, sum2, js1, js2;
+	TextView date2, sentence2, bg1;
 	TextView today;
 	BottomNavigationView bottomNavigationView;
 	 ListSelectorDialog dlg_left;
@@ -64,12 +71,6 @@ public class FourthActivity extends AppCompatActivity {
 		date2 = (TextView) findViewById(R.id.tv_date2);
 		sentence2 = (TextView) findViewById(R.id.tv_oneSentence2);
 		bg1 = (TextView) findViewById(R.id.tv_bg1);
-		bg2 = (TextView) findViewById(R.id.tv_bg2);
-		bg3 = (TextView) findViewById(R.id.tv_bg3);
-		sum1 = (TextView) findViewById(R.id.tv_sum1);
-		sum2 = (TextView) findViewById(R.id.tv_sum2);
-		js1 = (TextView) findViewById(R.id.tv_js1);
-		js2 = (TextView) findViewById(R.id.tv_js2);
 
 		today = (TextView)findViewById(R.id.tv_today);
 		// exp : bottombar 설정
@@ -119,54 +120,86 @@ public class FourthActivity extends AppCompatActivity {
 		// exp : 텍스트사이즈 설정
 		SharedPreferences sp2 = getSharedPreferences("setting",0);
 		textsize = sp2.getString("textsize", "");
-		if(textsize.equals("small")){
+		if(textsize.equals("big")){
 			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			sentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			date2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			sentence2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			sentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			date2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			sentence2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 			today.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-		}else if(textsize.equals("big")){
-			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			sentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			date2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			sentence2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			today.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-		}else if(textsize.equals("toobig")){
-			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-			sentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			date2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			sentence2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-			bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			today.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
+
 		}else{
 
 		}
 
+
+
+		// custom dialog setting
+		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
+
+		// custom dialog key, value 설정
+	//	listk_left = new String[] {"a", "b", "c"};
+	//	listv_left = new String[] {"설정", "나의 상태" , "기록 삭제"};
+		listk_left = new String[] {"a", "b"};
+		listv_left = new String[] {"설정", "나의 상태" };
+
+	}
+
+
+
+	 // 커스텀 다이얼로그 선택시
+	 @Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+		 switch (item.getItemId()) {
+			 default:
+				 // show the list dialog.
+				 dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
+
+					 // procedure if user cancels the dialog.
+					 public void selectorCanceled() {
+					 }
+					 // procedure for when a user selects an item in the dialog.
+					 public void selectedItem(String key, String item) {
+						 if(item.equals("설정")){
+							 Intent i = new Intent(FourthActivity.this, ThirdActivity.class);
+							 startActivity(i);
+						 }else if(item.equals("나의 상태")){
+							 Intent i = new Intent(FourthActivity.this, StatusActivity.class);
+							 startActivity(i);
+						 }/*else if(item.equals("기록 삭제")){
+							 try{
+								 CommentInfoHelper commentInfoHelper;
+								 commentInfoHelper = new CommentInfoHelper(FourthActivity.this);
+								 SQLiteDatabase db;
+								 db=commentInfoHelper.getWritableDatabase();
+
+								 String[] whereArgs = new String[] {date.getText().toString()};
+								 db.execSQL("DELETE FROM comment "+"WHERE date=?", whereArgs);
+								 commentInfoHelper.close();
+								 getRecord();
+							 }catch(Exception e){
+								 e.printStackTrace();
+							 }
+						 }*/
+					 }
+				 });
+				 return true;
+		 }
+	 }
+
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getRecord();
+
+	}
+
+	public void getRecord(){
 		// exp : caldroid 달력 fragment를 생성 하고 설정함
 		CaldroidFragment caldroidFragment = new CaldroidFragment();
+
 		// cf : 이에 대해 설정하는 부분
 		Bundle args = new Bundle();
 		Calendar cal = Calendar.getInstance();
@@ -185,56 +218,10 @@ public class FourthActivity extends AppCompatActivity {
 		caldroidFragment = new CaldroidSampleCustomFragment(); //changed 없었던 것임.
 		// Refresh view
 		caldroidFragment.refreshView();
-
 		// cf : 이 fragment를 activity_fourth의 달력부분에 넣는다
 		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
 		t.replace(R.id.calendar1, caldroidFragment);
 		t.commit();
-
-		// custom dialog setting
-		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
-
-		// custom dialog key, value 설정
-		listk_left = new String[] {"a", "b", "c"};
-		listv_left = new String[] {"사용 설명서", "설정", "나의 상태"};
-
-
-	}
-
-
-	 // 커스텀 다이얼로그 선택시
-	 @Override
-	 public boolean onOptionsItemSelected(MenuItem item) {
-		 switch (item.getItemId()) {
-			 default:
-				 // show the list dialog.
-				 dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
-
-					 // procedure if user cancels the dialog.
-					 public void selectorCanceled() {
-					 }
-					 // procedure for when a user selects an item in the dialog.
-					 public void selectedItem(String key, String item) {
-						 if(item.equals("사용 설명서")){
-							 Intent i = new Intent(FourthActivity.this, ExplainActivity.class);
-							 startActivity(i);
-						 }else if(item.equals("설정")){
-							 Intent i = new Intent(FourthActivity.this, ThirdActivity.class);
-							 startActivity(i);
-						 }else if(item.equals("나의 상태")){
-							 Intent i = new Intent(FourthActivity.this, StatusActivity.class);
-							 startActivity(i);
-						 }
-					 }
-				 });
-				 return true;
-		 }
-	 }
-
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 	}
 
 }

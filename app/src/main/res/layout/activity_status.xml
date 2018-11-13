@@ -4,303 +4,120 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="25px"
-    android:paddingRight="25px"
     tools:context="com.yellowpg.gaspel.StatusActivity"
     android:orientation="vertical"
     android:background="#ffffff">
-
-    <ImageView
-        android:id="@+id/img_status"
-        android:paddingTop="60dp"
-        android:src="@drawable/baby"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+    <Button
+    android:id="@+id/bt_thismonth"
+    style="?android:attr/borderlessButtonStyle"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:background="#e0e0e0"
+    android:fontFamily="@font/hansans_normal"
+    android:text="이번달"
+    android:textColor="#7f7f7f"
+    android:paddingLeft="10dp"
+    android:gravity="center_horizontal|center_vertical"
+    android:textSize="15dp" />
     <TextView
         android:id="@+id/tv_status"
-        android:paddingTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="19dp"
-        android:lineSpacingExtra="10dip"
-        android:gravity="center"
-        android:paddingBottom="0px"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:text="level1(신앙아기)" />
-    <TextView
-        android:id="@+id/tv_exp"
-        android:paddingTop="40dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="17dp"
-        android:lineSpacingExtra="10dip"
-        android:gravity="center"
-        android:paddingBottom="0px"
-        android:textColor="#000000"
-        android:text="오늘의복음에 코멘트를 10개 이상 남기면 신앙어린이로 성장합니다. \n주님의 사랑을 더 듬뿍 받을 수 있기 위해 복음을 열심히 묵상해 보아요!" />
-
-    <LinearLayout
-        android:id="@+id/ll_second"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal" >
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+        android:layout_gravity="center"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="14dp"
+        android:fontFamily="@font/hansans_normal"
+        android:lineSpacingExtra="10dp"
+        android:paddingBottom="5dp"
+        android:textColor="#5e5e5e"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
         <ImageView
-            android:id="@+id/row1"
+        android:visibility="gone"
+        android:id="@+id/walking1"
+        android:src="@drawable/footprint"
+        android:layout_width="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
+        />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/walking2"
+            android:layout_toRightOf="@+id/walking1"
+            android:src="@drawable/footprint"
+            android:layout_marginRight="20dp"
             android:layout_width="30dp"
-            android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row3"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row4"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row5"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row6"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row7"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row8"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row9"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row10"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row11"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <ImageView
-                android:id="@+id/row12"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
+            />
+        <ImageView
+            android:visibility="gone"
+            android:layout_toRightOf="@+id/walking2"
+            android:id="@+id/walking3"
+            android:src="@drawable/footprint"
+            android:layout_marginRight="20dp"
+            android:layout_width="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
+            />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/walking4"
+            android:layout_toRightOf="@+id/walking3"
+            android:src="@drawable/footprint"
+            android:layout_marginRight="20dp"
+            android:layout_width="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
+            />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/walking5"
+            android:layout_toRightOf="@+id/walking4"
+            android:src="@drawable/footprint"
+            android:layout_marginRight="20dp"
+            android:layout_width="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
+            />
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/walking6"
+            android:layout_toRightOf="@+id/walking5"
+            android:src="@drawable/footprint"
+            android:layout_marginRight="10dp"
+            android:layout_width="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="50dp"
+            />
+
+        <ImageView
+            android:id="@+id/walking_person"
+            android:layout_toRightOf="@+id/walking6"
+            android:layout_marginLeft="-10dp"
+            android:src="@drawable/walking"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            />
+        <ImageView
+            android:visibility="gone"
+            android:layout_toRightOf="@+id/walking_person"
+            android:id="@+id/arrive_person"
+            android:src="@drawable/arrive"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            />
+        <ImageView
+            android:src="@drawable/church2"
+            android:layout_gravity="right"
+            android:layout_alignParentRight="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            />
+
+    </RelativeLayout>
+
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_third"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="1월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="2월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="3월"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="4월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="5월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="6월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="7월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="8월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:paddingLeft="5dp"
-                android:text="9월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:text="10월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:text="11월" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-            <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:text="12월" />
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>

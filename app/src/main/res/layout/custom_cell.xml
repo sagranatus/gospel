@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_cell"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#000000"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="5dp" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv1"
-        android:textSize="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="7dp"
+        android:textSize="15dp" />
 
     <TextView
         android:id="@+id/tv2"
+        android:padding="7dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageView
-        android:id="@+id/img"
-        android:visibility="gone"
-        android:src="@drawable/smallstar"
-        android:layout_width="fill_parent"
-        android:layout_height="15dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="13dp"
+            android:layout_height="20dp"
+            android:layout_toLeftOf="@+id/img_between"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:src="@drawable/record1" />
+        <ImageView
+            android:id="@+id/img_between"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
+
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_width="13dp"
+            android:layout_height="20dp"
+            android:layout_toLeftOf="@+id/img_between"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:src="@drawable/record2"/>
+    </RelativeLayout>
+
 
 
 </FrameLayout>

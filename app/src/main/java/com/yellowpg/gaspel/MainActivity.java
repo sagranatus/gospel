@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
 	static String day;
 	String textsize;
 	EditText comment;
-
+	String daydate;
 	BottomNavigationView bottomNavigationView;
 	ListSelectorDialog dlg_left;
 	String[] listk_left, listv_left;
@@ -155,6 +155,9 @@ public class MainActivity extends AppCompatActivity
 	@SuppressLint("InvalidWakeLockTag")
 	protected void onCreate(Bundle savedInstanceState){
 
+		c1 = Calendar.getInstance();
+		//현재 해 + 달 구하기
+
 		// exp : 인터넷연결 확인
 		ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -170,7 +173,11 @@ public class MainActivity extends AppCompatActivity
 		mCredential.setSelectedAccountName(ac);
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		date_val = sdf.format(c1.getTime());
+		date_val1 = sdf1.format(c1.getTime());
+        date_val2 = sdf2.format(c1.getTime());
+
+        setContentView(R.layout.activity_main);
 		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 
 //actionbar setting
@@ -252,9 +259,17 @@ public class MainActivity extends AppCompatActivity
 
 		});
 
-		// 새로 추가한 부분
+		// 새로 추가한 부분 화면 클릭시 soft keyboard hide
 		findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
 				@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				return true;
+			}
+		});
+		findViewById(R.id.bt_network_con2).setOnTouchListener(new View.OnTouchListener() {
+			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -264,42 +279,21 @@ public class MainActivity extends AppCompatActivity
 		// exp : textsize 설정
 		SharedPreferences sp = getSharedPreferences("setting",0);
 		textsize = sp.getString("textsize", "");
-		if(textsize.equals("small")){
+		if(textsize.equals("big")){
 			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			comment_save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-           // start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			//end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-		}else if(textsize.equals("big")){
-			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
-			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			comment_save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
            // start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			//end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-		}else if(textsize.equals("toobig")){
-			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 26);
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 26);
-			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			comment_save.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-			//start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-		//	end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
 		}else{
 
 		}
 		// exp : 다른 activity에서 다른 날짜에 복음 내용을 얻기 위해 전달된 date intent값을 받아 출력하기 위한 부분
 		Intent intent = getIntent();
-		String daydate = intent.getStringExtra("date");
+		daydate = intent.getStringExtra("date");
 
 
 		// exp : 인터넷연결된 상태에서만 데이터 가져오기
@@ -324,6 +318,18 @@ public class MainActivity extends AppCompatActivity
 				date.setText(date_val1+getDay()+"요일");
 				getGaspel(timeStr);
 				getComments(timeStr);
+
+				before.setVisibility(View.GONE);
+				after.setVisibility(View.GONE);
+
+				actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+				actionbar.setCustomView(R.layout.actionbar_back);
+				actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+				actionbar.setElevation(0);
+				// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+				actionbar.setDisplayHomeAsUpEnabled(true);
+				actionbar.setHomeAsUpIndicator(R.drawable.back);
+				bottomNavigationView.setVisibility(View.GONE);
 			}else{
 				getGaspel(date_val2);
 				getComments(date_val2);
@@ -362,8 +368,8 @@ public class MainActivity extends AppCompatActivity
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
 		// custom dialog key, value 설정
-		listk_left = new String[] {"a", "b", "c"};
-		listv_left = new String[] {"사용 설명서", "설정", "나의 상태"};
+		listk_left = new String[] {"a", "b"};
+		listv_left = new String[] { "설정", "나의 상태"};
 
 		CharSequence text = getIntent()
 				.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
@@ -412,32 +418,35 @@ public class MainActivity extends AppCompatActivity
 				showPraying(item);
 				return true;
 			default:
-				// show the list dialog.
-				dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
+				if(daydate != null){
+					finish();
+				}else{
+					// show the list dialog.
+					dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
 
-					// procedure if user cancels the dialog.
-					public void selectorCanceled() {
-					}
-					// procedure for when a user selects an item in the dialog.
-					public void selectedItem(String key, String item) {
-						if(item.equals("사용 설명서")){
-							Intent i = new Intent(MainActivity.this, ExplainActivity.class);
-							startActivity(i);
-						}else if(item.equals("설정")){
-							Intent i = new Intent(MainActivity.this, ThirdActivity.class);
-							startActivity(i);
-						}else if(item.equals("나의 상태")){
-							Intent i = new Intent(MainActivity.this, StatusActivity.class);
-							startActivity(i);
+						// procedure if user cancels the dialog.
+						public void selectorCanceled() {
 						}
-					}
-				});
+						// procedure for when a user selects an item in the dialog.
+						public void selectedItem(String key, String item) {
+							if(item.equals("설정")){
+								Intent i = new Intent(MainActivity.this, ThirdActivity.class);
+								startActivity(i);
+							}else if(item.equals("나의 상태")){
+								Intent i = new Intent(MainActivity.this, StatusActivity.class);
+								startActivity(i);
+							}
+						}
+					});
+				}
+
 				return true;
 		}
 	}
 	@Override
 	protected void onResume() {
 		super.onResume();
+
 	}
 
 	@SuppressLint("InvalidWakeLockTag")
@@ -538,8 +547,8 @@ public class MainActivity extends AppCompatActivity
                         contents = contents.replaceAll("&rsquo;", "");
 						contents = contents.replaceAll("&prime;", "'");
 						contents = contents.replaceAll("\n", " ");
+						contents = contents.replaceAll("&hellip;", "…");
 						contents = contents.replaceAll("주님의 말씀입니다.", "\n"+"주님의 말씀입니다.");
-
 						//contents = contents.replaceAll("거룩한 복음입니다.", "거룩한 복음입니다."+"\n");
 
 						int idx = contents.indexOf("✠");
@@ -548,7 +557,7 @@ public class MainActivity extends AppCompatActivity
 
 						int idx3 = contents.indexOf("거룩한 복음입니다.");
 						int length = "거룩한 복음입니다.".length();
-						final String after = contents.substring(idx3+length+11);
+						final String after = contents.substring(idx3+length+17);
 						//Log.d("s", after);
 
 						Pattern p = Pattern.compile(".\\d+");
@@ -900,7 +909,7 @@ public class MainActivity extends AppCompatActivity
 	}
 */
 	// exp : 요일 얻어오기
-	public static String getDay(){
+	public String getDay(){
 		int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
 
 		switch(dayNum){
@@ -1059,6 +1068,8 @@ public class MainActivity extends AppCompatActivity
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.topmenu_main, menu);
+
+
 		//   DBManager dbMgr2 = new DBManager(this);
 		//   dbMgr2.dbOpen();
 

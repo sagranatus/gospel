@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,17 +47,11 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
         date2 = (TextView) getActivity().findViewById(R.id.tv_date2);
         sentence2 = (TextView) getActivity().findViewById(R.id.tv_oneSentence2);
         bg1 = (TextView) getActivity().findViewById(R.id.tv_bg1);
-        bg2 = (TextView) getActivity().findViewById(R.id.tv_bg2);
-        bg3 = (TextView) getActivity().findViewById(R.id.tv_bg3);
-        sum1 = (TextView) getActivity().findViewById(R.id.tv_sum1);
-        sum2 = (TextView) getActivity().findViewById(R.id.tv_sum2);
-        js1 = (TextView) getActivity().findViewById(R.id.tv_js1);
-        js2 = (TextView) getActivity().findViewById(R.id.tv_js2);
         // TODO Auto-generated method stub
 
         // exp : 아래에는 custom adapter에 값을 전달하는 부분이다
         return new CaldroidSampleCustomAdapter(getActivity(), month, year,
-                getCaldroidData(), extraData, events, events2, today, date, oneSentence, comment, date2, sentence2, bg1, bg2, bg3, sum1, sum2, js1, js2);
+                getCaldroidData(), extraData, events, events2, today, date, oneSentence, comment, date2, sentence2, bg1);
 
     }
 

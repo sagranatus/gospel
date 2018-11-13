@@ -22,7 +22,7 @@
 			<LinearLayout
 				android:id="@+id/calendar1"
 				android:layout_width="match_parent"
-				android:layout_height="265dp"
+				android:layout_height="285dp"
 				android:orientation="vertical" >
 			</LinearLayout>
 
@@ -34,8 +34,7 @@
 				android:fontFamily="@font/hansans_normal"
 				android:textSize="15dp"
 				android:lineSpacingExtra="7dp"
-				android:text="별이 있는 날짜는 복음을 묵상한 멋진 날입니다. \n각 별을 클릭하면 자신의 묵상을 다시 볼 수 있습니다. \n특별히 내게 와닿는 말씀이 있다면
-									\n내용을 복사해서 말씀새기기에 남겨보고 \n계속 되새기도록 노력해 봅시다."
+				android:text="그림이 있는 날짜는 복음을 묵상한 멋진 날입니다. 각 그림을 클릭하면 자신의 묵상을 다시 볼 수 있습니다. 특별히 내게 와닿는 말씀이 있다면 되새겨 실천해 봅시다."
 				android:gravity="center" />
 			<TextView
 				android:id="@+id/tv_date"
@@ -62,6 +61,8 @@
 				android:textColor="#16a085"
 				android:lineSpacingExtra="7dp"
 				android:textSize="15dp"
+				android:bufferType="spannable"
+				android:textIsSelectable="true"
 				android:gravity="center"/>
 
 			<TextView
@@ -88,69 +89,8 @@
 				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
+                android:lineSpacingExtra="10dp"
 				android:textSize="15dp"
-				android:gravity="center"
-				android:inputType="textMultiLine"/>
-			<TextView
-				android:id="@+id/tv_bg2"
-				android:fontFamily="@font/hansans_normal"
-				android:textColor="#16a085"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
-				android:textSize="15dp"
-				android:gravity="center"
-				android:inputType="textMultiLine"/>
-			<TextView
-				android:id="@+id/tv_bg3"
-				android:fontFamily="@font/hansans_normal"
-				android:textColor="#16a085"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
-				android:textSize="15dp"
-				android:gravity="center"
-				android:inputType="textMultiLine"/>
-			<TextView
-				android:id="@+id/tv_sum1"
-				android:fontFamily="@font/hansans_normal"
-				android:textColor="#16a085"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
-				android:textSize="15dp"
-				android:gravity="center"
-				android:inputType="textMultiLine"/>
-			<TextView
-				android:id="@+id/tv_sum2"
-				android:fontFamily="@font/hansans_normal"
-				android:textColor="#16a085"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
-				android:textSize="15dp"
-				android:gravity="center"
-				android:inputType="textMultiLine"/>
-			<TextView
-				android:id="@+id/tv_js1"
-				android:fontFamily="@font/hansans_normal"
-				android:textColor="#16a085"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
-				android:textSize="15dp"
-				android:gravity="center"
-				android:inputType="textMultiLine"/>
-			<TextView
-				android:id="@+id/tv_js2"
-				android:fontFamily="@font/hansans_normal"
-				android:textColor="#16a085"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-                android:lineSpacingExtra="5dp"
-				android:textSize="15dp"
-				android:gravity="center"
 				android:inputType="textMultiLine"/>
 
 			<Button

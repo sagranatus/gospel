@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidGridAdapter;
@@ -32,15 +34,16 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
     int year;
     TextView text;
     TextView today, date, oneSentence, comment;
-    TextView date2, sentence2, bg1, bg2, bg3, sum1, sum2, js1, js2;
+    TextView date2, sentence2, bg1;
     Context mContext;
     protected HashMap<DateTime, Comment> events = new HashMap<DateTime, Comment>();
     protected HashMap<DateTime, Lectio> events2 = new HashMap<DateTime, Lectio>();
     //hirondelle.date4j.DateTime blueDate2 = new DateTime("2017-07-19 00:00:00.000000000");
+
     public CaldroidSampleCustomAdapter(Context context, int month, int year,
                                        HashMap<String, Object> caldroidData,
                                        HashMap<String, Object> extraData, HashMap<DateTime, Comment> events, HashMap<DateTime, Lectio> events2, TextView today, TextView date, TextView oneSentence, TextView comment,
-                                       TextView date2, TextView sentence2, TextView bg1, TextView bg2, TextView bg3, TextView sum1, TextView sum2, TextView js1, TextView js2) {
+                                       TextView date2, TextView sentence2, TextView bg1) {
         super(context, month, year, caldroidData, extraData);
         this.mContext = context;
         this.month = month;
@@ -53,12 +56,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         this.date2 = date2;
         this.sentence2  = sentence2;
         this.bg1 = bg1;
-        this.bg2 = bg2;
-        this.bg3 = bg3;
-        this.sum1 = sum1;
-        this.sum2 = sum2;
-        this.js1 = js1;
-        this.js2 = js2;
+
     }
 
 
@@ -85,8 +83,8 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
         TextView tv1 = (TextView) cellView.findViewById(R.id.tv1);
         final TextView tv2 = (TextView) cellView.findViewById(R.id.tv2);
-        ImageView img = (ImageView) cellView.findViewById(R.id.img);
-
+        final ImageView img = (ImageView) cellView.findViewById(R.id.img);
+        ImageView img2 = (ImageView) cellView.findViewById(R.id.img2);
         Resources resources = context.getResources();
         final DateTime dateTime = this.datetimeList.get(position);
         // exp : 배경 하얀색 / 글씨 검정색으로 세팅 및 날짜 삽입
@@ -101,12 +99,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         date2.setVisibility(View.GONE);
         sentence2.setVisibility(View.GONE);
         bg1.setVisibility(View.GONE);
-        bg2.setVisibility(View.GONE);
-        bg3.setVisibility(View.GONE);
-        sum1.setVisibility(View.GONE);
-        sum2.setVisibility(View.GONE);
-        js1.setVisibility(View.GONE);;
-        js2.setVisibility(View.GONE);
     // exp : 이는 오늘의 경우에 가져오는 것
        /* if(dateTime.equals(getToday())) {
                 if(events2.get(dateTime)!=null) {
@@ -181,8 +173,10 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         today.setVisibility(today.VISIBLE);
         // exp :  데이터값이 있는 경우 별이 보이게 하는 부분 - 렉시오 디비나 부분
         if(events2.get(dateTime)!=null && events2.get(dateTime).getOneSentence()!=null) {
-            img.setVisibility(View.VISIBLE);
-            img.getLayoutParams().height = 50;
+
+           // img.getLayoutParams().height = 50;
+
+            img2.setVisibility(View.VISIBLE);
 
             date2.setOnClickListener(new View.OnClickListener()
             {
@@ -199,7 +193,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                     String month = _date.substring(6,m1);
                     String day = _date.substring(m1+2, d1);
                     String thisdate = year+"-"+month+"-"+day;
-                    intent.putExtra("date",thisdate);
+                    intent.putExtra("date", thisdate);
                     mContext.startActivity(intent);
                 }
             });
@@ -248,7 +242,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 }
             });
 
-            oneSentence.setOnClickListener(new View.OnClickListener()
+         /*   oneSentence.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v) {
@@ -265,7 +259,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                     intent.putExtra("date",thisdate);
                     mContext.startActivity(intent);
                 }
-            });
+            }); */
             comment.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -288,8 +282,17 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         }
 
         // exp : 별이 보이는 경우에 클릭 이벤트
-        if (img.getVisibility() == View.VISIBLE) {
-
+        if (img.getVisibility() == View.VISIBLE || img2.getVisibility() == View.VISIBLE)  {
+            if(events.get(dateTime)!=null && events2.get(dateTime)!=null){
+                ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(img.getLayoutParams());
+                int sizeInDP = 1;
+                int marginInDp = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, sizeInDP, context.getResources()
+                                .getDisplayMetrics());
+                marginParams.setMargins(0,0, marginInDp , 0);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
+                img.setLayoutParams(layoutParams);
+            }
             // Its visible
             tv1.setOnClickListener(new View.OnClickListener()
             {
@@ -299,6 +302,8 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                     // TODO Auto-generated method stub
                     //Toast.makeText(context, "oh..", Toast.LENGTH_SHORT).show();
                     //text.setText(events.get(dateTime).getPlus());
+
+
                     if(events.get(dateTime)!=null) {
                         date.setVisibility(date.VISIBLE);
                         oneSentence.setVisibility(oneSentence.VISIBLE);
@@ -315,12 +320,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                         date2.setVisibility(date2.VISIBLE);
                         sentence2.setVisibility(sentence2.VISIBLE);
                         bg1.setVisibility(bg1.VISIBLE);
-                        bg2.setVisibility(bg2.VISIBLE);
-                        bg3.setVisibility(bg3.VISIBLE);
-                        sum1.setVisibility(sum1.VISIBLE);
-                        sum2.setVisibility(sum2.VISIBLE);
-                        js1.setVisibility(js1.VISIBLE);
-                        js2.setVisibility(js2.VISIBLE);
                         if(events.get(dateTime)!=null) {
                             date2.setText("");
                             sentence2.setText("렉시오 디비나");
@@ -329,23 +328,25 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                             sentence2.setText(events2.get(dateTime).getOneSentence());
                         }
 
-                        bg1.setText("이 복음의 등장인물은\n" + events2.get(dateTime).getBg1());
-                        bg2.setText("장소는\n" + events2.get(dateTime).getBg2());
+                        bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
+                                +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
+                                "<br><font color=\"#999999\">· 시간은</font> " + events2.get(dateTime).getBg3()
+                        +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(dateTime).getSum1()
+                        +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(dateTime).getSum2()
+                        +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
+                        +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""));
+
+               //         bg1.setText(Html.fromHtml("sss"+ "<font color=\"#000000\">" +"ss"+ "</font><br><br>"));
+                      /*  bg2.setText("장소는\n" + events2.get(dateTime).getBg2());
                         bg3.setText("시간은\n" + events2.get(dateTime).getBg3());
                         sum1.setText("이 복음의 내용을 간추리면\n" + events2.get(dateTime).getSum1());
                         sum2.setText("특별히 눈에 띄는 부분은\n" + events2.get(dateTime).getSum2());
                         js1.setText("이 복음에서 보여지는 예수님은\n" + events2.get(dateTime).getJs1());
-                        js2.setText("결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은 \n\"" + events2.get(dateTime).getJs2()+"\"");
+                        js2.setText("결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은 \n\"" + events2.get(dateTime).getJs2()+"\""); */
                     }else{
                         date2.setVisibility(date2.GONE);
                         sentence2.setVisibility(sentence2.GONE);
                         bg1.setVisibility(bg1.GONE);
-                        bg2.setVisibility(bg2.GONE);
-                        bg3.setVisibility(bg3.GONE);
-                        sum1.setVisibility(sum1.GONE);
-                        sum2.setVisibility(sum2.GONE);
-                        js1.setVisibility(js1.GONE);
-                        js2.setVisibility(js2.GONE);
                     }
 
                 }

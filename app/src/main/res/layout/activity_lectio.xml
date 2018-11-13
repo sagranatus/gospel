@@ -11,8 +11,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:orientation="vertical" >
@@ -36,7 +34,7 @@
                     android:textColor="#000000" />
                 <Button
                     android:id="@+id/bt_date"
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:paddingTop="0px"
@@ -91,9 +89,7 @@
                     android:lineSpacingExtra="10dp"
                     android:paddingBottom="5dp"
                     android:textColor="#5e5e5e"
-                    android:text="당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 \n거룩한 독서를 시작해볼까요?"
-                    android:bufferType="spannable"
-                    android:textIsSelectable="true"
+                    android:text="당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?"
                     android:layout_marginBottom="10dp"/>
                 <Button
                     android:id="@+id/bt_start"
@@ -112,8 +108,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="-10dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal" >
                     <Button
@@ -244,6 +238,19 @@
                     android:textSize="14dp"
                     android:hint="복음을 통해 예수님께서 내게 해주시는 말씀은.."
                     android:textColor="#16a085" />
+                <EditText
+                    android:id="@+id/et_weekend"
+                    android:paddingLeft="5px"
+                    android:paddingRight="5px"
+                    android:paddingTop="50px"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dip"
+                    android:fontFamily="@font/hansans_normal"
+                    android:textSize="14dp"
+                    android:hint="특별히 와닿는 구절을 선택하여 한주동안 묵상해 봅시다."
+                    android:textColor="#16a085" />
+
         </LinearLayout>
 
             <Button
@@ -259,9 +266,42 @@
                 android:text="SAVE"
                 android:textColor="#ffffff"
                 android:textSize="11dp" />
+            <ScrollView
+                android:id="@+id/after_save"
+                android:layout_width="match_parent"
+                android:typeface="sans"
+                android:background="#ffffff"
+                android:layout_height="310dp"
+                >
+            <TextView
+                android:id="@+id/after_save_tv"
+                android:fontFamily="@font/hansans_normal"
+                android:textColor="#16a085"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="10dp"
+                android:textSize="15dp"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="100dp"/>
 
+            </ScrollView>
+            <Button
+                android:id="@+id/bt_edit"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:background="#16a085"
+                android:fontFamily="@font/hansans_bold"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="EDIT"
+                android:textColor="#ffffff"
+                android:textSize="11dp" />
             <!-- This could be your fragment container, or something -->
             <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:typeface="sans"
                 android:background="#ffffff"
@@ -288,7 +328,7 @@
                         android:textColor="#5e5e5e"
                         android:bufferType="spannable"
                         android:textIsSelectable="true"
-                        android:layout_marginBottom="280dp"/>
+                        android:layout_marginBottom="300dp"/>
 
                 </LinearLayout>
             </ScrollView>
