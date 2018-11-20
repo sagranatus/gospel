@@ -717,6 +717,7 @@ dimen design_tab_text_size
 dimen design_tab_text_size_2line
 dimen disabled_alpha_material_dark
 dimen disabled_alpha_material_light
+dimen fab_margin
 dimen fastscroll_default_thickness
 dimen fastscroll_margin
 dimen fastscroll_minimum_range
@@ -889,6 +890,7 @@ drawable design_password_eye
 drawable design_snackbar_background
 drawable disable_cell
 drawable disabled_cell_dark
+drawable edit_bg
 drawable footprint
 drawable gaspel
 drawable girl
@@ -898,6 +900,7 @@ drawable ic_info_black_24dp
 drawable ic_launcher
 drawable ic_notifications_black_24dp
 drawable ic_sync_black_24dp
+drawable icon
 drawable lectio
 drawable left
 drawable left_arrow
@@ -934,6 +937,7 @@ drawable today
 drawable today_big
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
+drawable update
 drawable walking
 drawable woman
 font hansans_bold
@@ -1026,6 +1030,11 @@ id bt_time
 id bt_timeset
 id bt_title
 id bt_weekend_gaspel
+id btnLinkToLoginScreen
+id btnLinkToRegisterScreen
+id btnLogin
+id btnLogout
+id btnRegister
 id buttonPanel
 id calendar1
 id calendar_gridview
@@ -1035,11 +1044,13 @@ id calendar_right_arrow
 id calendar_title_view
 id calendar_tv
 id cancel_action
+id cathedral
 id center
 id center_horizontal
 id center_vertical
 id chains
 id checkbox
+id christ_name
 id chronometer
 id clip_horizontal
 id clip_vertical
@@ -1061,6 +1072,7 @@ id design_menu_item_text
 id design_navigation_view
 id disableHome
 id edit_query
+id email
 id end
 id end_padder
 id enterAlways
@@ -1122,6 +1134,7 @@ id months_infinite_pager
 id multiply
 id mySentence
 id mytext
+id name
 id navigation_header_container
 id never
 id none
@@ -1134,6 +1147,7 @@ id parallax
 id parent
 id parentPanel
 id parent_matrix
+id password
 id pin
 id pray
 id progress_circular
@@ -1229,6 +1243,7 @@ id tv_today
 id uniform
 id up
 id useLogo
+id userid
 id view_offset_helper
 id visible
 id walking1
@@ -1285,14 +1300,20 @@ layout actionbar
 layout actionbar_back
 layout actionbar_back_weekend
 layout actionbar_lectio
+layout actionbar_login
+layout actionbar_mypage
 layout actionbar_record
+layout actionbar_register
 layout actionbar_second
 layout actionbar_setting
 layout actionbar_status
 layout activity_explain
 layout activity_fourth
 layout activity_lectio
+layout activity_login
 layout activity_main
+layout activity_profile
+layout activity_register
 layout activity_second
 layout activity_status
 layout activity_third
@@ -1344,6 +1365,7 @@ menu menu
 menu second
 menu third
 menu topmenu_main
+menu topmenu_profile
 raw calm
 string abc_action_bar_home_description
 string abc_action_bar_up_description
@@ -1423,6 +1445,7 @@ string title_activity_explain
 string title_activity_fourth
 string title_activity_lectio
 string title_activity_login
+string title_activity_register
 string title_activity_second
 string title_activity_settings
 string title_activity_status
@@ -1437,6 +1460,9 @@ style Animation_AppCompat_Tooltip
 style Animation_Design_BottomSheetDialog
 style AppBaseTheme
 style AppTheme
+style AppTheme_AppBarOverlay
+style AppTheme_NoActionBar
+style AppTheme_PopupOverlay
 style Base_AlertDialog_AppCompat
 style Base_AlertDialog_AppCompat_Light
 style Base_Animation_AppCompat_Dialog

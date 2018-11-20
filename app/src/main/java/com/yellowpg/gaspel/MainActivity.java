@@ -59,7 +59,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.DB.DBManager_Comment;
+import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BaseActivity;
@@ -75,6 +78,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -368,8 +372,8 @@ public class MainActivity extends AppCompatActivity
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
 		// custom dialog key, value 설정
-		listk_left = new String[] {"a", "b"};
-		listv_left = new String[] { "설정", "나의 상태"};
+		listk_left = new String[] {"a", "b", "c"};
+		listv_left = new String[] { "설정", "나의 상태", "계정정보"};
 
 		CharSequence text = getIntent()
 				.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
@@ -434,6 +438,9 @@ public class MainActivity extends AppCompatActivity
 								startActivity(i);
 							}else if(item.equals("나의 상태")){
 								Intent i = new Intent(MainActivity.this, StatusActivity.class);
+								startActivity(i);
+							}else if(item.equals("계정정보")){
+								Intent i = new Intent(MainActivity.this, LoginActivity.class);
 								startActivity(i);
 							}
 						}
@@ -621,7 +628,7 @@ public class MainActivity extends AppCompatActivity
 	public void getComments(String date){
 
 // exp : 아래에는 date값에 해당하는 저장한 comment값을 가져오도록 하였다.
-		CommentInfoHelper commentInfoHelper;
+	/*	CommentInfoHelper commentInfoHelper;
 		commentInfoHelper = new CommentInfoHelper(this);
 		SQLiteDatabase db;
 		//ContentValues values1;
@@ -638,20 +645,32 @@ public class MainActivity extends AppCompatActivity
 
 			Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null); // cf : 그때의 코멘트를 가져온다.
 
-			if(cursor != null){
-				while(cursor.moveToNext()){
-					comment_str = cursor.getString(0);
-					comment.setText(comment_str, TextView.BufferType.EDITABLE);
-				}
+*/
+		 	String comment_str = null;
+		Date origin_date = null;
+		try {
+			origin_date = sdf2.parse(date);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		    String date_aft = sdf1.format(origin_date) + getDay() + "요일";
+			String date_str =  date_aft;
+			ArrayList<Comment> aDataList =  new ArrayList<Comment>();
+			DBManager_Comment dbMgr = new DBManager_Comment(MainActivity.this);
+			dbMgr.dbOpen();
+			dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, date_str, aDataList);
+			dbMgr.dbClose();
+			if(!aDataList.isEmpty()){
+				already = 1;
+
+				Log.d("saea", aDataList.get(0).getComment());
+				comment.setText(aDataList.get(0).getComment(), TextView.BufferType.EDITABLE);
+				//	return aDataList.get(0).getDate();
 			}else{
-				comment.setText("", TextView.BufferType.EDITABLE);
+				already = 0;
+				//	return "none";
 			}
 
-
-
-		}catch(Exception e){
-
-		}
 	}
 
 
@@ -980,6 +999,22 @@ public class MainActivity extends AppCompatActivity
 
 				}
 
+			/*
+				String date_str = date.getText().toString();
+					ArrayList<Comment> aDataList =  new ArrayList<Comment>();
+					DBManager_Comment dbMgr = new DBManager_Comment(MainActivity.this);
+					dbMgr.dbOpen();
+					dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, date_str, aDataList);
+					dbMgr.dbClose();
+					if(!aDataList.isEmpty()){
+						already = 1;
+						Log.d("saea", aDataList.get(0).getComment() + "date"+aDataList.get(0).getDate()+"sentence"+aDataList.get(0).getOneSentence());
+					//	return aDataList.get(0).getDate();
+					}else{
+						already = 0;
+					//	return "none";
+					}
+				*/
 
 				// cf : comment가 없는 경우에는 삽입한다 -> already = 0
 				if(already==0){
@@ -995,18 +1030,10 @@ public class MainActivity extends AppCompatActivity
 						e.printStackTrace();
 					}
 
-					//exp : 이는 구글캘린더 연동 하는 부분
-					int yearsite = comment_date.indexOf("년");
-					int monthsite = comment_date.indexOf("월");
-					int daysite = comment_date.indexOf("일 ");
-					String year= comment_date.substring(0, yearsite);
-					String month= comment_date.substring(yearsite+2, monthsite);
-					String day = comment_date.substring(monthsite+2, daysite);
-					SharedPreferences sp = getSharedPreferences("setting",0);
-					String calendarstatus = sp.getString("gcal", "");
-					if(calendarstatus.equals("on")) {
-						new MakeInsertTask(mCredential, year+"-"+month+"-"+day, year+month+day+"aeasaeapj", sentence+"&"+comment_con, "오늘의복음").execute();
-					}
+				//	dbMgr = new DBManager_Comment(MainActivity.this);
+				//	dbMgr.dbOpen();
+				//	dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, new Comment(comment_con, comment_date, sentence));
+				//	dbMgr.dbClose();
 
 					Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
 
@@ -1023,19 +1050,11 @@ public class MainActivity extends AppCompatActivity
 					}catch(Exception e){
 						e.printStackTrace();
 					}
-					//exp : 이는 구글캘린더 연동 하는 부분
-					int yearsite = comment_date.indexOf("년");
-					int monthsite = comment_date.indexOf("월");
-					int daysite = comment_date.indexOf("일 ");
-					String year= comment_date.substring(0, yearsite);
-					String month= comment_date.substring(yearsite+2, monthsite);
-					String day = comment_date.substring(monthsite+2, daysite);
 
-					SharedPreferences sp = getSharedPreferences("setting",0);
-					String calendarstatus = sp.getString("gcal", "");
-						if(calendarstatus.equals("on")) {
-							new MakeUpdateTask(mCredential, year+"-"+month+"-"+day, year+month+day+"aeasaeapj", sentence+"&"+comment_con, "오늘의복음").execute();
-						}
+				//	dbMgr.dbOpen();
+				//	dbMgr.updateCommentData(CommentDBSqlData.SQL_DB_UPDATE_DATA, new String[]{comment_con, date_str});
+				//	dbMgr.dbClose();
+
 					Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
 									}
 

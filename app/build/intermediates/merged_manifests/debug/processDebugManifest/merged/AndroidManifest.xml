@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yellowpg.gaspel"
-    android:versionCode="66"
-    android:versionName="1.7.0" >
+    android:versionCode="69"
+    android:versionName="1.8.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -23,12 +23,14 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.yellowpg.gaspel.etc.AppController"
         android:allowBackup="true"
         android:debuggable="true"
-        android:icon="@drawable/gaspel"
+        android:icon="@drawable/icon"
         android:label="오늘의 복음"
         android:largeHeap="true"
         android:supportsRtl="true"
@@ -88,6 +90,17 @@
             android:configChanges="screenSize|orientation|layoutDirection"
             android:label="오늘의복음"
             android:screenOrientation="sensor" />
+        <activity
+            android:name="com.yellowpg.gaspel.LoginActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity
+            android:name="com.yellowpg.gaspel.RegisterActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:label="오늘의복음"
+            android:screenOrientation="sensor" />
+        <activity android:name="com.yellowpg.gaspel.ProfileActivity" />
         <activity
             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
             android:excludeFromRecents="true"

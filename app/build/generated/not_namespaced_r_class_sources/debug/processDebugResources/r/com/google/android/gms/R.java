@@ -56,8 +56,8 @@ public final class R {
         public static final int common_google_signin_btn_text_light_focused = 0x7f080081;
         public static final int common_google_signin_btn_text_light_normal = 0x7f080082;
         public static final int common_google_signin_btn_text_light_normal_background = 0x7f080083;
-        public static final int googleg_disabled_color_18 = 0x7f080091;
-        public static final int googleg_standard_color_18 = 0x7f080092;
+        public static final int googleg_disabled_color_18 = 0x7f080092;
+        public static final int googleg_standard_color_18 = 0x7f080093;
     }
     public static final class id {
         private id() {}
@@ -65,18 +65,19 @@ public final class R {
         public static final int adjust_height = 0x7f0a0025;
         public static final int adjust_width = 0x7f0a0026;
         public static final int auto = 0x7f0a002e;
-        public static final int center = 0x7f0a005d;
-        public static final int dark = 0x7f0a006c;
-        public static final int icon_only = 0x7f0a0093;
-        public static final int light = 0x7f0a009e;
-        public static final int none = 0x7f0a00b6;
-        public static final int normal = 0x7f0a00b7;
-        public static final int radio = 0x7f0a00c5;
-        public static final int standard = 0x7f0a00ed;
-        public static final int text = 0x7f0a00f4;
-        public static final int text2 = 0x7f0a00f5;
-        public static final int wide = 0x7f0a0129;
-        public static final int wrap_content = 0x7f0a012c;
+        public static final int center = 0x7f0a0063;
+        public static final int dark = 0x7f0a0073;
+        public static final int email = 0x7f0a007e;
+        public static final int icon_only = 0x7f0a009b;
+        public static final int light = 0x7f0a00a6;
+        public static final int none = 0x7f0a00bf;
+        public static final int normal = 0x7f0a00c0;
+        public static final int radio = 0x7f0a00cf;
+        public static final int standard = 0x7f0a00f7;
+        public static final int text = 0x7f0a00fe;
+        public static final int text2 = 0x7f0a00ff;
+        public static final int wide = 0x7f0a0134;
+        public static final int wrap_content = 0x7f0a0137;
     }
     public static final class integer {
         private integer() {}

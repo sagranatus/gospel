@@ -1,7 +1,0 @@
-#Tue Sep 04 11:47:43 KST 2018
-base.0=C\:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_577fadc112b3b81dccd564eb74f7c95498a233ee
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=C\:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_7795703dcb8632aa492bf0d7bec3c43e99fb0454\\classes.dex
-base.1=C\:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_7795703dcb8632aa492bf0d7bec3c43e99fb0454
-file.0=C\:\\Users\\Saea\\Desktop\\OneDrive\\StudioProjects\\gospel\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_577fadc112b3b81dccd564eb74f7c95498a233ee\\classes.dex

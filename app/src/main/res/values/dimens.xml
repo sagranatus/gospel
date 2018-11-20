@@ -6,4 +6,5 @@
     <dimen name="design_bottom_navigation_text_size" tools:override="true">12dp</dimen>
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12dp</dimen>
     <dimen name="design_bottom_navigation_height" tools:override="true">66dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

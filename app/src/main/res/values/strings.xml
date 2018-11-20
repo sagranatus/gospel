@@ -85,5 +85,6 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_explain">ExplainActivity</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
 
 </resources>

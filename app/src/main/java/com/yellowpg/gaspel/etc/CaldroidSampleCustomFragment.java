@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +16,17 @@ import android.widget.TextView;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
 import com.roomorama.caldroid.WeekdayArrayAdapter;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
+import com.yellowpg.gaspel.DB.DBManager_Comment;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.R;
 import com.yellowpg.gaspel.adapter.CaldroidSampleCustomAdapter;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import hirondelle.date4j.DateTime;
@@ -76,7 +81,8 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
 
          // exp : 여기서 데이터를 가져온다
             // cf : 코멘트 부분
-            dailyInfoHelper = new CommentInfoHelper(getActivity());
+
+      /*      dailyInfoHelper = new CommentInfoHelper(getActivity());
             SQLiteDatabase db;
             ContentValues values;
 
@@ -113,6 +119,51 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
                 dailyInfoHelper.close();
             }catch(Exception e){
                 e.printStackTrace();
+            }
+
+            */
+
+
+
+            ArrayList<Comment> aDataList =  new ArrayList<Comment>();
+            DBManager_Comment dbMgr = new DBManager_Comment(getContext());
+            dbMgr.dbOpen();
+            dbMgr.selectCommentAllData(CommentDBSqlData.SQL_DB_SELECT_DATA_ALL, aDataList);
+            dbMgr.dbClose();
+            if(!aDataList.isEmpty()){
+                //for-loop 통한 전체 조회
+                for(Object data : aDataList) {
+                    Comment comment =(Comment) data;
+                    String sentence = comment.getOneSentence();
+                    String date = comment.getDate();
+                    String comment_con = comment.getComment();
+
+                    int yearsite = date.indexOf("년");
+                    int monthsite = date.indexOf("월");
+                    int daysite = date.indexOf("일 ");
+                    String year= date.substring(0, yearsite);
+                    String month;
+                    String day;
+                    if(date.substring(yearsite+2, monthsite).length() > 1){
+                        month= date.substring(yearsite+2, monthsite);
+                    }else{
+                        month= "0"+date.substring(yearsite+2, monthsite);
+                    }
+                    if(date.substring(monthsite+2, daysite).length() > 1){
+                        day = date.substring(monthsite+2, daysite);
+                    }else{
+                        day = "0"+date.substring(monthsite+2, daysite);
+                    }
+
+                    events.put(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000") , new Comment(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000"), date, comment_con, sentence));
+                    Log.d("saea", comment.getComment() + "date"+comment.getDate()+"sentence"+comment.getOneSentence());
+                }
+
+
+
+                //	return aDataList.get(0).getDate();
+            }else{
+
             }
 
             // cf : 렉시오 디비나 부분
