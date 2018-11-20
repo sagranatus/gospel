@@ -59,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
     public ImageView profileImg;
     private SessionManager session;
 
+
     Context mContext;
     EditText name_et, userId_et, email_et, christ_name_et, cathedral_et;
     String uid;
