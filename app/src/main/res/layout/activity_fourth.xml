@@ -31,9 +31,9 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_margin="5dp"
-				android:fontFamily="@font/hansans_normal"
+				android:fontFamily="@font/notosans_regular"
 				android:textSize="15dp"
-				android:lineSpacingExtra="7dp"
+				android:lineSpacingExtra="5dp"
 				android:text="그림이 있는 날짜는 복음을 묵상한 멋진 날입니다. 각 그림을 클릭하면 자신의 묵상을 다시 볼 수 있습니다. 특별히 내게 와닿는 말씀이 있다면 되새겨 실천해 봅시다."
 				android:gravity="center" />
 			<TextView
@@ -41,25 +41,25 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:textSize="13dp"
-				android:fontFamily="@font/hansans_normal"
+				android:fontFamily="@font/notosans_regular"
 				android:gravity="center" />
 			<TextView
 				android:id="@+id/tv_comment"
-				android:fontFamily="@font/hansans_medium"
+				android:fontFamily="@font/notosans_semibold"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:lineSpacingExtra="7dp"
-				android:textSize="17dp"
+				android:lineSpacingExtra="3dp"
+				android:textSize="16dp"
 				android:gravity="center"
 				android:textColor="@color/actionbar" />
 
 			<TextView
 				android:id="@+id/tv_oneSentence"
-				android:fontFamily="@font/hansans_normal"
+				android:fontFamily="@font/notosans_regular"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:textColor="#16a085"
-				android:lineSpacingExtra="7dp"
+				android:lineSpacingExtra="5dp"
 				android:textSize="15dp"
 				android:bufferType="spannable"
 				android:textIsSelectable="true"
@@ -67,29 +67,30 @@
 
 			<TextView
 				android:id="@+id/tv_date2"
-				android:fontFamily="@font/hansans_normal"
+				android:fontFamily="@font/notosans_regular"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:textSize="13dp"
 				android:gravity="center" />
 			<TextView
 				android:id="@+id/tv_oneSentence2"
-				android:fontFamily="@font/hansans_medium"
+				android:fontFamily="@font/notosans_semibold"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:textSize="17dp"
+				android:textSize="16dp"
 				android:gravity="center"
+				android:lineSpacingExtra="3dp"
 				android:textColor="@color/actionbar"
 				android:maxLines="4"
 				android:inputType="textMultiLine" />
 
 			<TextView
 				android:id="@+id/tv_bg1"
-				android:fontFamily="@font/hansans_normal"
+				android:fontFamily="@font/notosans_regular"
 				android:textColor="#16a085"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-                android:lineSpacingExtra="10dp"
+                android:lineSpacingExtra="5dp"
 				android:textSize="15dp"
 				android:inputType="textMultiLine"/>
 

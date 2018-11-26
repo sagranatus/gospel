@@ -56,9 +56,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
 import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.DBManager_Comment;
@@ -69,8 +66,8 @@ import com.yellowpg.gaspel.etc.BaseActivity;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.Fonttype;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
-import com.yellowpg.gaspel.googlesync.MakeInsertTask;
-import com.yellowpg.gaspel.googlesync.MakeUpdateTask;
+import com.yellowpg.gaspel.etc.SessionManager;
+import com.yellowpg.gaspel.server.Server_CommentData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,9 +85,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import pub.devrel.easypermissions.EasyPermissions;
-public class MainActivity extends AppCompatActivity
-		implements EasyPermissions.PermissionCallbacks {
+public class MainActivity extends AppCompatActivity {
 	final static String TAG = "MainActivity";
 	Button btnNetCon;
 	Button btnNetCon2;
@@ -106,6 +101,8 @@ public class MainActivity extends AppCompatActivity
 	BottomNavigationView bottomNavigationView;
 	ListSelectorDialog dlg_left;
 	String[] listk_left, listv_left;
+	private SessionManager session;
+	String uid = null;
 
 	int already = 0;
 	private static MediaPlayer mMediaPlayer;
@@ -124,26 +121,23 @@ public class MainActivity extends AppCompatActivity
 	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 	String date_val2 = sdf2.format(c1.getTime());
 
-/*
-	// exp : 묵상하기 부분
-	private CountDownTimer countDownTimer;
-	CountDownTimer countDownTimer2;
-	final int MILLISINFUTURE = 11*1000;
-	final int COUNT_DOWN_INTERVAL = 1000;
-	final int MILLISINFUTURE2 = 21*1000;
-	Toast unlockMessage;
-	Toast unlockMessage2;
-    Toast last;
-	MediaPlayer mediaPlayer;
-
-    ViewGroup group;
-    TextView messageTextView;
-	*/
+	/*
+        // exp : 묵상하기 부분
+        private CountDownTimer countDownTimer;
+        CountDownTimer countDownTimer2;
+        final int MILLISINFUTURE = 11*1000;
+        final int COUNT_DOWN_INTERVAL = 1000;
+        final int MILLISINFUTURE2 = 21*1000;
+        Toast unlockMessage;
+        Toast unlockMessage2;
+        Toast last;
+        MediaPlayer mediaPlayer;
+        ViewGroup group;
+        TextView messageTextView;
+        */
 	// exp : 알람 연관된 부분
 	private static PowerManager.WakeLock myWakeLock;
 
-		// exp : 구글 캘린더 연동 부분이다.
-		GoogleAccountCredential mCredential;
 	//	private TextView mOutputText;
 	//	ProgressDialog mProgress;
 
@@ -152,12 +146,12 @@ public class MainActivity extends AppCompatActivity
 	//	static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
 	//	static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-	//	private static final String BUTTON_TEXT = "Call Google Calendar API";
-	//	private static final String PREF_ACCOUNT_NAME = "accountName";
-		private static final String[] SCOPES = { CalendarScopes.CALENDAR }; // exp : 읽기만 허용하는 부분 CalendarScopes.CALENDAR_READONLY
 
 	@SuppressLint("InvalidWakeLockTag")
 	protected void onCreate(Bundle savedInstanceState){
+		session = new SessionManager(getApplicationContext());
+
+		uid = session.getUid();
 
 		c1 = Calendar.getInstance();
 		//현재 해 + 달 구하기
@@ -167,21 +161,13 @@ public class MainActivity extends AppCompatActivity
 		NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-		// exp : 구글캘린더 연동 부분
-		mCredential = GoogleAccountCredential.usingOAuth2( // exp : 사용자 인증을 얻는 부분
-				getApplicationContext(), Arrays.asList(SCOPES))
-				.setBackOff(new ExponentialBackOff());
-
-		SharedPreferences sp_account = getSharedPreferences("setting",0);
-		String ac = sp_account.getString("account", "");
-		mCredential.setSelectedAccountName(ac);
 
 		super.onCreate(savedInstanceState);
 		date_val = sdf.format(c1.getTime());
 		date_val1 = sdf1.format(c1.getTime());
-        date_val2 = sdf2.format(c1.getTime());
+		date_val2 = sdf2.format(c1.getTime());
 
-        setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);
 		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 
 //actionbar setting
@@ -265,7 +251,7 @@ public class MainActivity extends AppCompatActivity
 
 		// 새로 추가한 부분 화면 클릭시 soft keyboard hide
 		findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
-				@Override
+			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -290,7 +276,7 @@ public class MainActivity extends AppCompatActivity
 			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-           // start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			// start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			//end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 		}else{
 
@@ -303,9 +289,9 @@ public class MainActivity extends AppCompatActivity
 		// exp : 인터넷연결된 상태에서만 데이터 가져오기
 		if ((wifi.isConnected() || mobile.isConnected())) {
 			// exp : 이는 비동기적 방식으로 데이터를 가져오는 부분이다.
-		//	start.setVisibility(start.VISIBLE);
-		//	start.setOnClickListener(startlistener);
-		//	end.setOnClickListener(startlistener);
+			//	start.setVisibility(start.VISIBLE);
+			//	start.setOnClickListener(startlistener);
+			//	end.setOnClickListener(startlistener);
 			if(daydate != null){ // daydate가 null이 아니면 그때의 값을 가져온다
 				comment.setText("");
 				String timeStr = daydate;
@@ -361,7 +347,7 @@ public class MainActivity extends AppCompatActivity
 			myWakeLock.acquire(); //실행후 리소스 반환 필수
 			releaseCpuLock();
 			playSound(MainActivity.this, "alarm"); //
-	}
+		}
 
 
 		// exp : 이는 현재날짜의 경우와 오늘의 복음을 클릭할때만 복음묵상 시작하기 버튼이 보이고 이벤트를 주기 위한 부분
@@ -526,102 +512,102 @@ public class MainActivity extends AppCompatActivity
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-		// Tag used to cancel the request
-		String tag_string_req = "req_getgaspel";
-		StringRequest strReq = new StringRequest(Request.Method.POST,
-				AppConfig.URL_TODAY, new Response.Listener<String>() { // URL_LOGIN : "http://192.168.116.1/android_login_api/login.php";
-			boolean error;
-			@Override
-			public void onResponse(String response) {
-				Log.d(TAG, "Login Response: " + response.toString());
-				try {
-					JSONObject jObj = new JSONObject(response);
-					error = jObj.getBoolean("error");
+				// Tag used to cancel the request
+				String tag_string_req = "req_getgaspel";
+				StringRequest strReq = new StringRequest(Request.Method.POST,
+						AppConfig.URL_TODAY, new Response.Listener<String>() { // URL_LOGIN : "http://192.168.116.1/android_login_api/login.php";
+					boolean error;
+					@Override
+					public void onResponse(String response) {
+						Log.d(TAG, "Login Response: " + response.toString());
+						try {
+							JSONObject jObj = new JSONObject(response);
+							error = jObj.getBoolean("error");
 
-					// Check for error node in json
-					if (!error) { // error가 false인 경우에 데이터가져오기 성공
-						// Now store the user in SQLite
-						gaspel_date = jObj.getString("created_at");
-						Log.d(TAG,gaspel_date);
-						gaspel_sentence = jObj.getString("sentence");
-						gaspel_contents = jObj.getString("contents");
-						String contents = gaspel_contents;
-						contents = contents.replaceAll("&gt;", ">");
-						contents = contents.replaceAll("&lt;", "<");
-						contents = contents.replaceAll("&ldquo;", "");
-						contents = contents.replaceAll("&rdquo;", "");
-                        contents = contents.replaceAll("&lsquo;", "");
-                        contents = contents.replaceAll("&rsquo;", "");
-						contents = contents.replaceAll("&prime;", "'");
-						contents = contents.replaceAll("\n", " ");
-						contents = contents.replaceAll("&hellip;", "…");
-						contents = contents.replaceAll("주님의 말씀입니다.", "\n"+"주님의 말씀입니다.");
-						//contents = contents.replaceAll("거룩한 복음입니다.", "거룩한 복음입니다."+"\n");
+							// Check for error node in json
+							if (!error) { // error가 false인 경우에 데이터가져오기 성공
+								// Now store the user in SQLite
+								gaspel_date = jObj.getString("created_at");
+								Log.d(TAG,gaspel_date);
+								gaspel_sentence = jObj.getString("sentence");
+								gaspel_contents = jObj.getString("contents");
+								String contents = gaspel_contents;
+								contents = contents.replaceAll("&gt;", ">");
+								contents = contents.replaceAll("&lt;", "<");
+								contents = contents.replaceAll("&ldquo;", "");
+								contents = contents.replaceAll("&rdquo;", "");
+								contents = contents.replaceAll("&lsquo;", "");
+								contents = contents.replaceAll("&rsquo;", "");
+								contents = contents.replaceAll("&prime;", "'");
+								contents = contents.replaceAll("\n", " ");
+								contents = contents.replaceAll("&hellip;", "…");
+								contents = contents.replaceAll("주님의 말씀입니다.", "\n"+"주님의 말씀입니다.");
+								//contents = contents.replaceAll("거룩한 복음입니다.", "거룩한 복음입니다."+"\n");
 
-						int idx = contents.indexOf("✠");
-						int idx2 = contents.indexOf("◎ 그리스도님 찬미합니다");
-						contents = contents.substring(idx, idx2);
+								int idx = contents.indexOf("✠");
+								int idx2 = contents.indexOf("◎ 그리스도님 찬미합니다");
+								contents = contents.substring(idx, idx2);
 
-						int idx3 = contents.indexOf("거룩한 복음입니다.");
-						int length = "거룩한 복음입니다.".length();
-						final String after = contents.substring(idx3+length+17);
-						//Log.d("s", after);
+								int idx3 = contents.indexOf("거룩한 복음입니다.");
+								int length = "거룩한 복음입니다.".length();
+								final String after = contents.substring(idx3+length+17);
+								//Log.d("s", after);
 
-						Pattern p = Pattern.compile(".\\d+");
-						Matcher m = p.matcher(after);
-						while (m.find()) {
-							Log.d("s", after);
-							contents = contents.replaceAll(m.group(), "\n"+m.group());
-						//	Log.d("s", contents);
+								Pattern p = Pattern.compile(".\\d+");
+								Matcher m = p.matcher(after);
+								while (m.find()) {
+									Log.d("s", after);
+									contents = contents.replaceAll(m.group(), "\n"+m.group());
+									//	Log.d("s", contents);
+								}
+
+								tv.setText(contents);
+								tv2.setText("주님께서 오늘 나에게 하시는 말씀이 무엇인지 생각해보며, 말씀을 살아가기 위하여 어떻게 해야할지 적어 봅시다.");
+
+								btnNetCon.setText(gaspel_sentence);
+								btnNetCon2.setText("말씀새기기");
+								comment.setVisibility(comment.VISIBLE);
+								comment_save.setVisibility(comment_save.VISIBLE);
+
+							} else {
+								// Error in login. Get the error message
+								String errorMsg = jObj.getString("error_msg");
+
+							}
+						} catch (JSONException e) {
+							// JSON error
+							e.printStackTrace();
 						}
 
-						tv.setText(contents);
-						tv2.setText("주님께서 오늘 나에게 하시는 말씀이 무엇인지 생각해보며, 말씀을 살아가기 위하여 어떻게 해야할지 적어 봅시다.");
-
-						btnNetCon.setText(gaspel_sentence);
-						btnNetCon2.setText("말씀새기기");
-						comment.setVisibility(comment.VISIBLE);
-						comment_save.setVisibility(comment_save.VISIBLE);
-
-					} else {
-						// Error in login. Get the error message
-						String errorMsg = jObj.getString("error_msg");
-
 					}
-				} catch (JSONException e) {
-					// JSON error
-					e.printStackTrace();
-				}
+				}, new Response.ErrorListener() {
 
-			}
-		}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						Log.e(TAG, "Login Error: " + error.getMessage());
+					}
 
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				Log.e(TAG, "Login Error: " + error.getMessage());
-			}
+				}) {
 
-		}) {
+					@Override
+					protected Map<String, String> getParams() { // 파라미터를 전달한다. date 값
+						// Posting parameters to login url
+						Map<String, String> params = new HashMap<String, String>();
+						params.put("date", date);
 
-			@Override
-			protected Map<String, String> getParams() { // 파라미터를 전달한다. date 값
-				// Posting parameters to login url
-				Map<String, String> params = new HashMap<String, String>();
-				params.put("date", date);
+						return params;
+					}
 
-				return params;
-			}
-
-		};
+				};
 
 
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+				// Adding request to request queue
+				AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 			}
 		});
 		t.start();
-	//	gaspel_date = "date";
-	//	Log.d(TAG,gaspel_date);
+		//	gaspel_date = "date";
+		//	Log.d(TAG,gaspel_date);
 
 	}
 
@@ -642,34 +628,32 @@ public class MainActivity extends AppCompatActivity
 			String[] whereArgs = new String[] {
 					date_aft // cf : 날짜에 맞는 코멘트를 가져온다.
 			};
-
 			Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null); // cf : 그때의 코멘트를 가져온다.
-
 */
-		 	String comment_str = null;
+		String comment_str = null;
 		Date origin_date = null;
 		try {
 			origin_date = sdf2.parse(date);
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
-		    String date_aft = sdf1.format(origin_date) + getDay() + "요일";
-			String date_str =  date_aft;
-			ArrayList<Comment> aDataList =  new ArrayList<Comment>();
-			DBManager_Comment dbMgr = new DBManager_Comment(MainActivity.this);
-			dbMgr.dbOpen();
-			dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, date_str, aDataList);
-			dbMgr.dbClose();
-			if(!aDataList.isEmpty()){
-				already = 1;
+		String date_aft = sdf1.format(origin_date) + getDay() + "요일";
+		String date_str =  date_aft;
+		ArrayList<Comment> aDataList =  new ArrayList<Comment>();
+		DBManager_Comment dbMgr = new DBManager_Comment(MainActivity.this);
+		dbMgr.dbOpen();
+		dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, date_str, aDataList);
+		dbMgr.dbClose();
+		if(!aDataList.isEmpty()){
+			already = 1;
 
-				Log.d("saea", aDataList.get(0).getComment());
-				comment.setText(aDataList.get(0).getComment(), TextView.BufferType.EDITABLE);
-				//	return aDataList.get(0).getDate();
-			}else{
-				already = 0;
-				//	return "none";
-			}
+			Log.d("saea", aDataList.get(0).getComment());
+			comment.setText(aDataList.get(0).getComment(), TextView.BufferType.EDITABLE);
+			//	return aDataList.get(0).getDate();
+		}else{
+			already = 0;
+			//	return "none";
+		}
 
 	}
 
@@ -733,11 +717,11 @@ public class MainActivity extends AppCompatActivity
 		try {
 			AssetFileDescriptor afd = null;
 			if(sound.equals("alarm")){
-				 afd = mcontext.getAssets().openFd("bell.mp3"); // cf : 파일을 여는 부분
+				afd = mcontext.getAssets().openFd("bell.mp3"); // cf : 파일을 여는 부분
 			}else if(sound.equals("pray")){
 				afd = mcontext.getAssets().openFd("pray.mp3"); // cf : 파일을 여는 부분
 			}
-			
+
 			mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			afd.close();
 			mMediaPlayer.prepare();
@@ -784,7 +768,7 @@ public class MainActivity extends AppCompatActivity
 				editor =  sp_level.edit();
 				editor.putString("first", "done");
 				editor.commit();
-			//	Toast.makeText(MainActivity.this, "10개", Toast.LENGTH_SHORT).show();
+				//	Toast.makeText(MainActivity.this, "10개", Toast.LENGTH_SHORT).show();
 			}
 
 		}catch (Exception e){
@@ -792,141 +776,6 @@ public class MainActivity extends AppCompatActivity
 		}
 	}
 
-/*
-	OnClickListener startlistener = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			switch (view.getId()) {
-				case R.id.bt_start: // start를 누르면 countDownTimer1이 불러와짐
-					start.setVisibility(start.GONE);
-					end.setVisibility(end.VISIBLE);
-					countDownTimer1(); // cf : 카운트다운타이머를 주어서 토스트가 나오는 시간을 조정
-					countDownTimer.start();
-							 // cf : 이는 새로운 custom_toast.xml의 레이아웃가 토스트를 대체하는 방법이다.
-
-					unlockMessage = Toast.makeText(MainActivity.this, "음악이 나오는 동안 \n 잠시 눈을 감고, \n 침묵해 봅시다", Toast.LENGTH_LONG);
-
-					group = (ViewGroup) unlockMessage.getView(); // cf : 이는 토스트에 있는 텍스트를 얻어와서 설정해주기 위한 부분
-					messageTextView = (TextView) group.getChildAt(0);
-
-					SharedPreferences sp = getSharedPreferences("setting",0); // cf : 글씨 크기 조정
-					textsize = sp.getString("textsize", "");
-					if(textsize.equals("small")){
-						messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-					}else if(textsize.equals("big")){
-						messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-					}else if(textsize.equals("toobig")){
-						messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-					}else{
-						messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-					}
-					messageTextView.setGravity(Gravity.CENTER);
-					messageTextView.setLineSpacing(5, 1);
-					unlockMessage.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-					//unlockMessage.show();
-					break;
-				case R.id.bt_end:
-				//	end.setVisibility(end.GONE);
-				//	start.setVisibility(start.VISIBLE);
-					onDestroy();
-					break;
-			}
-		}
-	};
-
-	// exp : 카운트다운타이머(토스트 시간조정) 함수
-	public void countDownTimer1(){ // 음악이 나오고, 동시에 countdowntimer를 통해서 메시지가 시간동안 나온다.
-		mediaPlayer= MediaPlayer.create(MainActivity.this, R.raw.calm);
-		mediaPlayer.start();
-		countDownTimer = new CountDownTimer(MILLISINFUTURE, COUNT_DOWN_INTERVAL) {
-			public void onTick(long millisUntilFinished) {
-				unlockMessage.show();
-
-				//date.setText(String.valueOf(count)); // cf : count 숫자 출력방법
-				//count --;
-			}
-			public void onFinish() {
-				//unlockMessage.show();
-
-				countDownTimer2(); // cf : 이어서 성령청원기도 토스트 출력 20초간
-				countDownTimer2.start();
-
-
-				unlockMessage2 = Toast.makeText(MainActivity.this, "청원 기도를 바쳐봅시다. \n\n 오소서, 성령님,주님의 빛, 그 빛살을 하늘에서 내리소서.\n " +
-								"가난한 이 아버지, 오소서 은총 주님, 오소서 마음의 빛.\n 가장 좋은 위로자, 영혼의 기쁜 손님, 저희 생기 돋우소서." +
-								"\n일할 때에 휴식을, 무더위에 시원함을, 슬플 때에 위로를.\n영원하신 행복의 빛, 저희 마음 깊은 곳을 가득하게 채우소서." +
-								"\n주님 도움 없으시면, 저희 삶의 그 모든 것, 해로운 것 뿐이리라.\n허물들은 씻어 주고, 마른 땅 물 주시고, 병든 것을 고치소서." +
-								"\n굳은 마음 풀어 주고,차디찬 맘 데우시고, 빗나간 길 바루소서.\n 성령님을 굳게 믿고, 의지하는 이들에게, 성령칠은 베푸소서." +
-								"\n덕행 공로 쌓게 하고,구원의 문 활짝 열어, 영원복락 주옵소서. 아멘."
-										, Toast.LENGTH_LONG);
-				group = (ViewGroup) unlockMessage2.getView();
-				messageTextView = (TextView) group.getChildAt(0);
-                SharedPreferences sp = getSharedPreferences("setting",0);
-                textsize = sp.getString("textsize", "");
-                if(textsize.equals("small")){
-                    messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                }else if(textsize.equals("big")){
-                    messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-                }else if(textsize.equals("toobig")){
-					messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-				}else{
-                    messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-                }
-                messageTextView.setGravity(Gravity.CENTER);
-                messageTextView.setLineSpacing(5, 1);
-				unlockMessage2.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-				//unlockMessage2.show();
-			}
-		};
-	}
-
-	public void countDownTimer2(){
-
-		countDownTimer2 = new CountDownTimer(MILLISINFUTURE2, COUNT_DOWN_INTERVAL) {
-			public void onTick(long millisUntilFinished) {
-				unlockMessage2.show();
-			}
-			public void onFinish() {
-				//unlockMessage2.show();
-				last = Toast.makeText(MainActivity.this, "이제 복음을 소리내어 읽어봅시다", Toast.LENGTH_LONG);
-				group = (ViewGroup) last.getView();
-				messageTextView = (TextView) group.getChildAt(0);
-                SharedPreferences sp = getSharedPreferences("setting",0);
-                textsize = sp.getString("textsize", "");
-                if(textsize.equals("small")){
-                    messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                }else if(textsize.equals("big")){
-                    messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-                }else if(textsize.equals("toobig")){
-					messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-				}else{
-                    messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-                }
-                messageTextView.setGravity(Gravity.CENTER);
-				last.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-				last.show();
-
-			//	start.setVisibility(start.VISIBLE);
-			//	end.setVisibility(end.GONE);
-			}
-		};
-	}
-
-	//exp : CountTimer 멈출때 메소드
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		try{
-			countDownTimer.cancel();
-			unlockMessage.cancel();
-			unlockMessage2.cancel();
-			countDownTimer2.cancel();
-		} catch (Exception e) {}
-		countDownTimer=null;
-		countDownTimer2=null;
-		mediaPlayer.stop();
-	}
-*/
 	// exp : 요일 얻어오기
 	public String getDay(){
 		int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
@@ -972,32 +821,32 @@ public class MainActivity extends AppCompatActivity
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 				case R.id.bt_comment:
-					getlevelchange();
-				String comment_con = comment.getText().toString();
-				String comment_date = (String) date.getText();
-				String sentence = (String) btnNetCon.getText();
+					//getlevelchange();
+					String comment_con = comment.getText().toString();
+					String comment_date = (String) date.getText();
+					String sentence = (String) btnNetCon.getText();
 
-				// cf : 기존에 comment 값이 있는지 값이 있는지 확인하여 있는 경우, already값을 1로 준다.
-				try{
-					String comment_str = null;
-					db = commentInfoHelper.getReadableDatabase();
-					String[] columns = {"comment_con", "date", "sentence"};
-					String whereClause = "date = ?";
-					String[] whereArgs = new String[] {
-							date.getText().toString()
-					};
-					Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null);
+					// cf : 기존에 comment 값이 있는지 값이 있는지 확인하여 있는 경우, already값을 1로 준다.
+					try{
+						String comment_str = null;
+						db = commentInfoHelper.getReadableDatabase();
+						String[] columns = {"comment_con", "date", "sentence"};
+						String whereClause = "date = ?";
+						String[] whereArgs = new String[] {
+								date.getText().toString()
+						};
+						Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null);
 
-					while(cursor.moveToNext()){
-						comment_str = cursor.getString(0);
+						while(cursor.moveToNext()){
+							comment_str = cursor.getString(0);
+						}
+						if(comment_str!=null){
+							already = 1;
+						}
+
+					}catch(Exception e){
+
 					}
-					if(comment_str!=null){
-						already = 1;
-					}
-
-				}catch(Exception e){
-
-				}
 
 			/*
 				String date_str = date.getText().toString();
@@ -1016,47 +865,45 @@ public class MainActivity extends AppCompatActivity
 					}
 				*/
 
-				// cf : comment가 없는 경우에는 삽입한다 -> already = 0
-				if(already==0){
-					try{
-						db=commentInfoHelper.getWritableDatabase();
-						values = new ContentValues();
-						values.put("comment_con", comment_con);
-						values.put("date", comment_date);
-						values.put("sentence", sentence);
-						db.insert("comment", null, values);
-						commentInfoHelper.close();
-					}catch(Exception e){
-						e.printStackTrace();
+					// cf : comment가 없는 경우에는 삽입한다 -> already = 0
+					if(already==0){
+						try{
+							db=commentInfoHelper.getWritableDatabase();
+							values = new ContentValues();
+							values.put("comment_con", comment_con);
+							values.put("date", comment_date);
+							values.put("sentence", sentence);
+							db.insert("comment", null, values);
+							commentInfoHelper.close();
+						}catch(Exception e){
+							e.printStackTrace();
+						}
+						if(uid != null && uid != ""){
+							Server_CommentData.insertComment(MainActivity.this, uid, comment_date, sentence, comment_con);
+						}
+
+
+						Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+
+					}else if(already ==1 ){ // cf : comment가 있는 경우에는 update 한다 -> already =1
+						try{
+							db=commentInfoHelper.getWritableDatabase();
+							values = new ContentValues();
+							values.put("comment_con", comment_con);
+							String where = "date=?";
+							String[] whereArgs = new String[] {date.getText().toString()};
+
+							db.update("comment", values, where, whereArgs);
+							commentInfoHelper.close();
+						}catch(Exception e){
+							e.printStackTrace();
+						}
+
+						if(uid != null && uid != ""){
+							Server_CommentData.updateComment(MainActivity.this, uid, comment_date, sentence, comment_con);
+						}
+						Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
 					}
-
-				//	dbMgr = new DBManager_Comment(MainActivity.this);
-				//	dbMgr.dbOpen();
-				//	dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, new Comment(comment_con, comment_date, sentence));
-				//	dbMgr.dbClose();
-
-					Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
-
-				}else if(already ==1){ // cf : comment가 있는 경우에는 update 한다 -> already =1
-					try{
-						db=commentInfoHelper.getWritableDatabase();
-						values = new ContentValues();
-						values.put("comment_con", comment_con);
-						String where = "date=?";
-						String[] whereArgs = new String[] {date.getText().toString()};
-
-						db.update("comment", values, where, whereArgs);
-						commentInfoHelper.close();
-					}catch(Exception e){
-						e.printStackTrace();
-					}
-
-				//	dbMgr.dbOpen();
-				//	dbMgr.updateCommentData(CommentDBSqlData.SQL_DB_UPDATE_DATA, new String[]{comment_con, date_str});
-				//	dbMgr.dbClose();
-
-					Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
-									}
 
 					break;
 
@@ -1066,16 +913,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-	@Override
-	public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-	}
-
-	@Override
-	public void onPermissionsDenied(int requestCode, List<String> perms) {
-
-	}
 
 	@Override
 	public void onBackPressed() {

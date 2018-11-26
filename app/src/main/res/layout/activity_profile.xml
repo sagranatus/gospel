@@ -18,10 +18,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_regular"
             android:text="이름"
             android:textSize="12dp" />
         <EditText
             android:id="@+id/name"
+            android:fontFamily="@font/notosans_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12dp" />
@@ -29,10 +31,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_regular"
             android:text="사용자 아이디"
             android:textSize="12dp" />
         <EditText
             android:id="@+id/userid"
+            android:fontFamily="@font/notosans_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12dp" />
@@ -40,10 +44,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_regular"
             android:text="이메일"
             android:textSize="12dp" />
         <EditText
             android:id="@+id/email"
+            android:fontFamily="@font/notosans_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12dp" />
@@ -51,10 +57,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_regular"
             android:text="세례명"
             android:textSize="12dp" />
         <EditText
             android:id="@+id/christ_name"
+            android:fontFamily="@font/notosans_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12dp" />
@@ -62,10 +70,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/notosans_regular"
             android:text="본당"
             android:textSize="12dp" />
         <EditText
             android:id="@+id/cathedral"
+            android:fontFamily="@font/notosans_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12dp" />
@@ -73,6 +83,7 @@
 
         <Button
             android:id="@+id/btnLogout"
+            android:fontFamily="@font/notosans_bold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dip"

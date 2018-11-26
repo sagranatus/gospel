@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:textSize="13dp"
             android:paddingTop="0px"
-            android:fontFamily="@font/hansans_normal"
+            android:fontFamily="@font/notosans_regular"
             android:layout_toLeftOf="@+id/bt_before"
             android:layout_toRightOf="@+id/bt_after"
             android:layout_gravity="center"
@@ -66,11 +66,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/actionbar"
-        android:fontFamily="@font/hansans_medium"
+        android:fontFamily="@font/notosans_semibold"
         android:textSize="17dp"
         android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:lineSpacingExtra="7dp"
+        android:paddingBottom="5dp"
+        android:lineSpacingExtra="3dp"
         android:background="#ffffff"
         style="?android:attr/borderlessButtonStyle" />
 
@@ -79,8 +79,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15dp"
-        android:fontFamily="@font/hansans_normal"
-        android:lineSpacingExtra="10dp"
+        android:fontFamily="@font/notosans_regular"
+        android:lineSpacingExtra="5dp"
         android:paddingBottom="5dp"
         android:textColor="#5e5e5e"
         android:bufferType="spannable"
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#16a085"
-        android:fontFamily="@font/hansans_medium"
+        android:fontFamily="@font/notosans_semibold"
         android:paddingTop="3dp"
         android:paddingBottom="0dp"
         android:background="#ffffff"
@@ -100,12 +100,13 @@
     
      <TextView
         android:id="@+id/tv_02"
-         android:fontFamily="@font/hansans_normal"
+        android:fontFamily="@font/notosans_regular"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="5dp"
+        android:paddingBottom="5dp"
         android:textSize="14dp"
         android:textColor="#5e5e5e" />
 
@@ -120,7 +121,7 @@
         android:orientation="vertical" >
      <EditText
         android:id="@+id/et_comment"
-        android:fontFamily="@font/hansans_normal"
+        android:fontFamily="@font/notosans_regular"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="0dp"
@@ -137,7 +138,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="#16a085"
-            android:fontFamily="@font/hansans_bold"
+            android:fontFamily="@font/notosans_bold"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:layout_marginBottom="70dp"

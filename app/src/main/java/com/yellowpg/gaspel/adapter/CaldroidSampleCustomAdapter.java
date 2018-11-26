@@ -19,6 +19,7 @@ import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.R;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
+import com.yellowpg.gaspel.data.Weekend;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,6 +39,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
     Context mContext;
     protected HashMap<DateTime, Comment> events = new HashMap<DateTime, Comment>();
     protected HashMap<DateTime, Lectio> events2 = new HashMap<DateTime, Lectio>();
+    protected HashMap<DateTime, Weekend> events3 = new HashMap<DateTime, Weekend>();
     //hirondelle.date4j.DateTime blueDate2 = new DateTime("2017-07-19 00:00:00.000000000");
 
     public CaldroidSampleCustomAdapter(Context context, int month, int year,
@@ -68,6 +70,11 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
     public void setEvents2(HashMap<DateTime, Lectio> events2) {
         // TODO Auto-generated method stub
         this.events2 = events2;
+    }
+
+    public void setEvents3(HashMap<DateTime, Weekend> events3) {
+        // TODO Auto-generated method stub
+        this.events3 = events3;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -204,7 +211,13 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         Intent intent = new Intent(mContext, MainActivity.class);
-                        String _date = date.getText().toString();
+                        String _date = null;
+                        if(date2.getText().toString() == ""){
+                            _date = date.getText().toString();
+                        }else{
+                            _date = date2.getText().toString();
+                        }
+
                         int y1 = _date.indexOf("년");
                         int m1 = _date.indexOf("월 ");
                         int d1 = _date.indexOf("일 ");
@@ -327,14 +340,27 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                             date2.setText(events2.get(dateTime).getDate());
                             sentence2.setText(events2.get(dateTime).getOneSentence());
                         }
+                        if(events3.get(dateTime) != null){
+                            bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
+                                    +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
+                                    "<br><font color=\"#999999\">· 시간은</font> " + events2.get(dateTime).getBg3()
+                                    +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(dateTime).getSum1()
+                                    +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(dateTime).getSum2()
+                                    +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
+                                    +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""
+                                    +"<br><font color=\"#999999\">· 주일 복음에서 묵상한 구절은 </font> " + events3.get(dateTime).getMySentence()
+                                    +"<br><font color=\"#999999\">· 구절을 묵상하면 내가 느낀 점은 </font> " + events3.get(dateTime).getMyThought()
+                                    ));
+                        }else{
+                            bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
+                                    +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
+                                    "<br><font color=\"#999999\">· 시간은</font> " + events2.get(dateTime).getBg3()
+                                    +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(dateTime).getSum1()
+                                    +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(dateTime).getSum2()
+                                    +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
+                                    +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""));
+                        }
 
-                        bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
-                                +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
-                                "<br><font color=\"#999999\">· 시간은</font> " + events2.get(dateTime).getBg3()
-                        +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(dateTime).getSum1()
-                        +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(dateTime).getSum2()
-                        +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
-                        +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""));
 
                //         bg1.setText(Html.fromHtml("sss"+ "<font color=\"#000000\">" +"ss"+ "</font><br><br>"));
                       /*  bg2.setText("장소는\n" + events2.get(dateTime).getBg2());

@@ -20,11 +20,13 @@ import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager_Comment;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.DB.WeekendInfoHelper;
 import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.R;
 import com.yellowpg.gaspel.adapter.CaldroidSampleCustomAdapter;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
+import com.yellowpg.gaspel.data.Weekend;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +38,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
     LectioInfoHelper lectioInfoHelper;
     protected HashMap<DateTime, Comment> events = new HashMap<DateTime, Comment>();
     protected HashMap<DateTime, Lectio> events2 = new HashMap<DateTime, Lectio>();
+    protected HashMap<DateTime, Weekend> events3 = new HashMap<DateTime, Weekend>();
     TextView text;
     TextView today, date, oneSentence, comment;
     TextView date2, sentence2, bg1, bg2, bg3, sum1, sum2, js1, js2;
@@ -82,7 +85,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
          // exp : 여기서 데이터를 가져온다
             // cf : 코멘트 부분
 
-      /*      dailyInfoHelper = new CommentInfoHelper(getActivity());
+            dailyInfoHelper = new CommentInfoHelper(getActivity());
             SQLiteDatabase db;
             ContentValues values;
 
@@ -121,9 +124,9 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
                 e.printStackTrace();
             }
 
-            */
 
 
+        /*
 
             ArrayList<Comment> aDataList =  new ArrayList<Comment>();
             DBManager_Comment dbMgr = new DBManager_Comment(getContext());
@@ -165,7 +168,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
             }else{
 
             }
-
+ */
             // cf : 렉시오 디비나 부분
             lectioInfoHelper = new LectioInfoHelper(getActivity());
             SQLiteDatabase db2;
@@ -215,10 +218,53 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
 
             }
 
+            //weekend 값 가져오기
+
+            WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(getActivity());
+            SQLiteDatabase db3;
+            ContentValues values3;
+
+            try{
+                db3 = weekendInfoHelper.getReadableDatabase();
+                String query = "SELECT date, mysentence, mythought FROM weekend";
+                Cursor cursor = db3.rawQuery(query, null);
+
+                while(cursor.moveToNext()){
+                    String date = cursor.getString(0);
+                    String mysentence = cursor.getString(1);
+                    String mythought = cursor.getString(2);
+
+                    int yearsite = date.indexOf("년");
+                    int monthsite = date.indexOf("월");
+                    int daysite = date.indexOf("일 ");
+                    String year= date.substring(0, yearsite);
+                    String month;
+                    String day;
+                    if(date.substring(yearsite+2, monthsite).length() > 1){
+                        month= date.substring(yearsite+2, monthsite);
+                    }else{
+                        month= "0"+date.substring(yearsite+2, monthsite);
+                    }
+                    if(date.substring(monthsite+2, daysite).length() > 1){
+                        day = date.substring(monthsite+2, daysite);
+                    }else{
+                        day = "0"+date.substring(monthsite+2, daysite);
+                    }
+
+                    events3.put(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000") , new Weekend(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000"), date, mysentence, mythought));
+                }
+                cursor.close();
+                weekendInfoHelper.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+
             // exp : 이는 events와 events2인 hashmap을 adapter에서 불러올 수 있도록 설정해준 부분이다.
             // reset events
             ((CaldroidSampleCustomAdapter)adapter).setEvents(events);
             ((CaldroidSampleCustomAdapter)adapter).setEvents2(events2);
+            ((CaldroidSampleCustomAdapter)adapter).setEvents3(events3);
             // Refresh view
             adapter.notifyDataSetChanged();
         }

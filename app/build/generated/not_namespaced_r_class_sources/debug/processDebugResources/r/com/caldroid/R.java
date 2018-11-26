@@ -12,18 +12,18 @@ public final class R {
     public static final class attr {
         private attr() {}
 
-        public static final int state_date_disabled = 0x7f04013c;
-        public static final int state_date_prev_next_month = 0x7f04013d;
-        public static final int state_date_selected = 0x7f04013e;
-        public static final int state_date_today = 0x7f04013f;
-        public static final int styleCaldroidGridView = 0x7f040142;
-        public static final int styleCaldroidLeftArrow = 0x7f040143;
-        public static final int styleCaldroidMonthName = 0x7f040144;
-        public static final int styleCaldroidNormalCell = 0x7f040145;
-        public static final int styleCaldroidRightArrow = 0x7f040146;
-        public static final int styleCaldroidSquareCell = 0x7f040147;
-        public static final int styleCaldroidViewLayout = 0x7f040148;
-        public static final int styleCaldroidWeekdayView = 0x7f040149;
+        public static final int state_date_disabled = 0x7f040136;
+        public static final int state_date_prev_next_month = 0x7f040137;
+        public static final int state_date_selected = 0x7f040138;
+        public static final int state_date_today = 0x7f040139;
+        public static final int styleCaldroidGridView = 0x7f04013c;
+        public static final int styleCaldroidLeftArrow = 0x7f04013d;
+        public static final int styleCaldroidMonthName = 0x7f04013e;
+        public static final int styleCaldroidNormalCell = 0x7f04013f;
+        public static final int styleCaldroidRightArrow = 0x7f040140;
+        public static final int styleCaldroidSquareCell = 0x7f040141;
+        public static final int styleCaldroidViewLayout = 0x7f040142;
+        public static final int styleCaldroidWeekdayView = 0x7f040143;
     }
     public static final class color {
         private color() {}
@@ -51,13 +51,13 @@ public final class R {
         public static final int calendar_prev_arrow = 0x7f08006c;
         public static final int cell_bg = 0x7f08006d;
         public static final int cell_bg_dark = 0x7f08006e;
-        public static final int disable_cell = 0x7f08008c;
-        public static final int disabled_cell_dark = 0x7f08008d;
-        public static final int left_arrow = 0x7f08009b;
-        public static final int red_border = 0x7f0800b1;
-        public static final int red_border_dark = 0x7f0800b2;
-        public static final int red_border_gray_bg = 0x7f0800b3;
-        public static final int right_arrow = 0x7f0800b5;
+        public static final int disable_cell = 0x7f080079;
+        public static final int disabled_cell_dark = 0x7f08007a;
+        public static final int left_arrow = 0x7f080086;
+        public static final int red_border = 0x7f08009c;
+        public static final int red_border_dark = 0x7f08009d;
+        public static final int red_border_gray_bg = 0x7f08009e;
+        public static final int right_arrow = 0x7f0800a0;
     }
     public static final class id {
         private id() {}
@@ -68,8 +68,8 @@ public final class R {
         public static final int calendar_right_arrow = 0x7f0a005e;
         public static final int calendar_title_view = 0x7f0a005f;
         public static final int calendar_tv = 0x7f0a0060;
-        public static final int months_infinite_pager = 0x7f0a00b8;
-        public static final int weekday_gridview = 0x7f0a0133;
+        public static final int months_infinite_pager = 0x7f0a00b5;
+        public static final int weekday_gridview = 0x7f0a012f;
     }
     public static final class layout {
         private layout() {}
@@ -115,7 +115,7 @@ public final class R {
         public static final int[] Cell = { 0x1010098, 0x10100d4 };
         public static final int Cell_android_textColor = 0;
         public static final int Cell_android_background = 1;
-        public static final int[] DateState = { 0x7f04013c, 0x7f04013d, 0x7f04013e, 0x7f04013f };
+        public static final int[] DateState = { 0x7f040136, 0x7f040137, 0x7f040138, 0x7f040139 };
         public static final int DateState_state_date_disabled = 0;
         public static final int DateState_state_date_prev_next_month = 1;
         public static final int DateState_state_date_selected = 2;

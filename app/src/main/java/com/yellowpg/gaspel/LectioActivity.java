@@ -45,9 +45,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.WeekendInfoHelper;
@@ -57,8 +54,6 @@ import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.OnKeyboardVisibilityListener;
-import com.yellowpg.gaspel.googlesync.MakeInsertTask;
-import com.yellowpg.gaspel.googlesync.MakeUpdateTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,9 +69,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hirondelle.date4j.DateTime;
-import pub.devrel.easypermissions.EasyPermissions;
 
-public class LectioActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, OnKeyboardVisibilityListener {
+public class LectioActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     final static String TAG = "lectioActivity";
 LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
     Button bt_notyet;
@@ -113,9 +107,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
     int lectio_order;
 
-    // exp : 이 아래는 구글 캘린더 연동 부분이다.
-    GoogleAccountCredential mCredential;
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR }; // exp : 읽기만 허용하는 부분 CalendarScopes.CALENDAR_READONLY
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -124,15 +116,6 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
         NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        // exp : 구글캘린더 연동 부분
-        mCredential = GoogleAccountCredential.usingOAuth2( // exp : 사용자 인증을 얻는 부분
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
-
-
-        SharedPreferences sp_account = getSharedPreferences("setting",0);
-        String ac = sp_account.getString("account", "");
-        mCredential.setSelectedAccountName(ac);
 
 
         // exp : 이 부분은 코멘트 데이터를 가져와서 레벨 업 시켜주는 부분
@@ -496,9 +479,9 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            //    if (getCurrentFocus() != null) {
+                if (getCurrentFocus() != null) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-             //   }
+                }
                 return true;
             }
         });
@@ -595,6 +578,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                     edit.setVisibility(View.VISIBLE);
                     firstSentence.setVisibility(View.GONE);
                     start.setVisibility(View.GONE);
+
                     after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + bg1_str
                             +"<br><font color=\"#999999\">· 장소는</font> " + bg2_str
                             +"<br><font color=\"#999999\">· 시간은</font> " + bg3_str
@@ -602,8 +586,6 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                             +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + sum2_str
                             +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + js1_str
                             +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""));
-
-
                 }else{
                     edit_now = false;
                     after_save.setVisibility(View.GONE);
@@ -630,6 +612,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
 
             }
+
             cursor.close();
             lectioInfoHelper.close();
         }
@@ -805,18 +788,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                         day = "0"+date1.substring(monthsite+2, daysite);
                     }
                     SharedPreferences sp = getSharedPreferences("setting",0);
-                    String calendarstatus = sp.getString("gcal", "");
-                    if( calendarstatus != "") {
-                        if(calendarstatus.equals("on")) {
-                            new MakeInsertTask(mCredential, year+"-"+month+"-"+day, year+month+day+"aeasaeapj2", onesentence1+"&"+"이 복음의 등장인물은 "+background1+
-                                    "장소는 "+background2+"시간은 "+background3+
-                                    "이 복음의 내용을 간추리면 "+summary1+
-                                    "특별히 눈에 띄는 부분은 "+summary2+
-                                    "이 복음에서 보여지는 예수님은 "+jesus1+
-                                    "결과적으로 이 복음을 통해 예수님께서 내게 해주시는 말씀은 "+jesus2, "렉시오디비나").execute();
-                        }
 
-                    }
 
                  // cf : 내용이 있는 경우에는 update 한다 -> already =1
                     Toast.makeText(LectioActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
@@ -858,17 +830,7 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
                         day = "0"+date1.substring(monthsite+2, daysite);
                     }
                     SharedPreferences sp = getSharedPreferences("setting",0);
-                    String calendarstatus = sp.getString("gcal", "");
-                    if( calendarstatus != "") {
-                        if(calendarstatus.equals("on")) {
-                            new MakeUpdateTask(mCredential, year+"-"+month+"-"+day, year+month+day+"aeasaeapj2", onesentence1+"&"+"이 복음의 등장인물은 "+background1+
-                                    "장소는 "+background2+"시간은 "+background3+
-                                    "이 복음의 내용을 간추리면 "+summary1+
-                                    "특별히 눈에 띄는 부분은 "+summary2+
-                                    "이 복음에서 보여지는 예수님은 "+jesus1+
-                                    "결과적으로 이 복음을 통해 예수님께서 내게 해주시는 말씀은 "+jesus2, "렉시오디비나").execute();
-                        }
-                    }
+
                     Toast.makeText(LectioActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -1343,16 +1305,6 @@ LinearLayout ll_notyet, ll_first, ll1, ll2, ll3, ll_upper, ll_date;
 
             }
         });
-    }
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-
     }
 
 

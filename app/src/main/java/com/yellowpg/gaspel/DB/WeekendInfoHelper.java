@@ -20,7 +20,7 @@ public class WeekendInfoHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) { //맨처음 테이블을 생성한다.
         // TODO Auto-generated method stub
-        String query ="CREATE TABLE weekend (_id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, mysentence TEXT, mythought TEXT)"; // 선택구절, 나의묵상.
+        String query ="CREATE TABLE weekend (_id INTEGER PRIMARY KEY AUTOINCREMENT, uid TEXT, date TEXT, mysentence TEXT, mythought TEXT)"; // 선택구절, 나의묵상.
         db.execSQL(query);
     }
 

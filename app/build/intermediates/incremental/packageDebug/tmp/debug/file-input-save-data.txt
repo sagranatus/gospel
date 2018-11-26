@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Nov 18 14:52:19 KST 2018
+#Mon Nov 26 17:38:22 KST 2018
 2.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
 5.set=ASSET
 0.path=Billabong/Billabong.ttf

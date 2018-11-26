@@ -16,6 +16,7 @@ import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.UserDBSqlData;
 import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.ProfileActivity;
+import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.UserData;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -67,8 +68,9 @@ public class Server_UserData {
 
                         String created_at = user
                                 .getString("created_at"); // 보내는 값이 json형식의 response 이다
-
                         // Launch main activity
+                        ArrayList<Comment> comments = new  ArrayList<Comment>();
+                        Server_CommentData.selectAll(context, uid, comments);
                         Intent intent = new Intent(context, ProfileActivity.class);
                         context.startActivity(intent);
 
@@ -169,6 +171,9 @@ public class Server_UserData {
                         SharedPreferences.Editor setEditPreference = setPreference.edit();
                         Log.d("saea", name+christ_name);
                         Toast.makeText(context, "성공적으로 가입되었습니다.", Toast.LENGTH_LONG).show();
+
+                        ArrayList<Comment> comments = new  ArrayList<Comment>();
+                        Server_CommentData.selectAll(context, uid, comments);
 
                         Intent i = new Intent(context,
                                 MainActivity.class);

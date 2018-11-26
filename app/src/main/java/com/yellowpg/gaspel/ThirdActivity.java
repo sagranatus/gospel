@@ -38,24 +38,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.DateTime;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
-import com.yellowpg.gaspel.etc.ListSelectorDialog;
-import com.yellowpg.gaspel.googlesync.MakeInsertTask;
+import com.yellowpg.gaspel.data.Comment;
+import com.yellowpg.gaspel.etc.SessionManager;
+import com.yellowpg.gaspel.server.Server_CommentData;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -66,20 +53,23 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
+import hirondelle.date4j.DateTime;
+
 
 // setting 설정 페이지
 public class ThirdActivity extends AppCompatActivity {
 	CommentInfoHelper memberInfoHelper;
 	LectioInfoHelper lectioInfoHelper;
 	LinearLayout ll_step1, ll_step2;
+	private SessionManager session;
+	String uid = null;
 
 	private static final String TAG = "ha";
 	Button timebtn, textbtn, sxbtn;
 	Button timesetbtn;
 	Button stop;
 	Button timeset;
+	Button dataset;
 	Editable writeTime;
 	String time;
 	AlarmManager am;
@@ -97,17 +87,15 @@ public class ThirdActivity extends AppCompatActivity {
 	String now_min = new java.text.SimpleDateFormat("mm").format(new java.util.Date()); //현재 분
 	String textsize;
 
-	//cf : 구글 캘린더
-	GoogleAccountCredential mCredential;
-	Button googlecalon, googlecaloff, cal;
 
-	private static final String[] SCOPES = {CalendarScopes.CALENDAR}; // exp : 읽기만 허용하는 부분 CalendarScopes.CALENDAR_READONLY
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_third);
+		session = new SessionManager(getApplicationContext());
+		uid = session.getUid();
 
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 
@@ -142,11 +130,13 @@ public class ThirdActivity extends AppCompatActivity {
 		timesetbtn = (Button) findViewById(R.id.bt_timeset);
 		stop = (Button) findViewById(R.id.bt_stop);
 		timeset = (Button) findViewById(R.id.et_timeset);
-		mTimePicker = (TimePicker) findViewById(R.id.timePicker);
-
+		dataset = (Button) findViewById(R.id.bt_setdata);
+ 		mTimePicker = (TimePicker) findViewById(R.id.timePicker);
+		dataset.setBackgroundResource(R.drawable.button_bg2);
 		// exp : time세팅에 대한 저장 및 해제
 		timesetbtn.setOnClickListener(listener);
 		stop.setOnClickListener(listener);
+		dataset.setOnClickListener(listener);
 
 		normal = (Button) findViewById(R.id.bt_normal);
 		big = (Button) findViewById(R.id.bt_big);
@@ -305,6 +295,31 @@ public class ThirdActivity extends AppCompatActivity {
 					editor2.commit();
 					timeset.setText("");
 					timeset.setHint("");
+					break;
+				case R.id.bt_setdata:
+					CommentInfoHelper commentInfoHelper = new CommentInfoHelper(ThirdActivity.this);
+					SQLiteDatabase db;
+					ContentValues values;
+
+					try{
+						db = commentInfoHelper.getReadableDatabase();
+						String query = "SELECT comment_con, date, sentence FROM comment";
+						Cursor cursor = db.rawQuery(query, null);
+
+						while(cursor.moveToNext()){
+							String comment_con = cursor.getString(0);
+							String date = cursor.getString(1);
+							String sentence = cursor.getString(2);
+							if(uid != null){
+								Log.d("saea", uid+date+sentence+comment_con);
+								Server_CommentData.insertComment(ThirdActivity.this, uid, date, sentence, comment_con);
+							}
+						}
+						cursor.close();
+						commentInfoHelper.close();
+					}catch(Exception e){
+						e.printStackTrace();
+					}
 					break;
 			}
 		}

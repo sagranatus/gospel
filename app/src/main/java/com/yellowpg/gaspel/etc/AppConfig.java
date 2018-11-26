@@ -13,5 +13,8 @@ public class AppConfig {
     // Server user register url
     public static String URL_USERUPDATE = "https://sssagranatus.cafe24.com/userData.php";
     public static String URL_REGISTER = "https://sssagranatus.cafe24.com/userData.php";
+    public static String URL_COMMENTDATA = "https://sssagranatus.cafe24.com/commentData.php";
+
+
 // public static String URL_LOGIN = "http://192.168.116.1/android_login_api/login.php";
 }

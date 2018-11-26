@@ -20,7 +20,7 @@ public class LectioInfoHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) { //맨처음 테이블을 생성한다.
         // TODO Auto-generated method stub
-        String query ="CREATE TABLE lectio (_id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, bg1 TEXT, bg2 TEXT, bg3 TEXT, sum1 TEXT, sum2 TEXT, js1 TEXT, js2 TEXT, onesentence TEXT)"; //코멘트, 날짜, 주제성구이다.
+        String query ="CREATE TABLE lectio (_id INTEGER PRIMARY KEY AUTOINCREMENT, uid TEXT, date TEXT, bg1 TEXT, bg2 TEXT, bg3 TEXT, sum1 TEXT, sum2 TEXT, js1 TEXT, js2 TEXT, onesentence TEXT)"; //코멘트, 날짜, 주제성구이다.
         db.execSQL(query);
     }
 
