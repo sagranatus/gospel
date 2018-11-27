@@ -94,7 +94,8 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         ImageView img2 = (ImageView) cellView.findViewById(R.id.img2);
         Resources resources = context.getResources();
         final DateTime dateTime = this.datetimeList.get(position);
-        // exp : 배경 하얀색 / 글씨 검정색으로 세팅 및 날짜 삽입
+
+        // 배경 하얀색 / 글씨 검정색으로 세팅 및 날짜 삽입
         cellView.setBackgroundColor(resources
                 .getColor(com.caldroid.R.color.caldroid_white));
         tv1.setTextColor(Color.parseColor("#999999"));
@@ -106,79 +107,9 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         date2.setVisibility(View.GONE);
         sentence2.setVisibility(View.GONE);
         bg1.setVisibility(View.GONE);
-    // exp : 이는 오늘의 경우에 가져오는 것
-       /* if(dateTime.equals(getToday())) {
-                if(events2.get(dateTime)!=null) {
-                today.setVisibility(today.GONE);
-                date2.setVisibility(date2.VISIBLE);
-                sentence2.setVisibility(sentence2.VISIBLE);
-                bg1.setVisibility(bg1.VISIBLE);
-                bg2.setVisibility(bg2.VISIBLE);
-                bg3.setVisibility(bg3.VISIBLE);
-                sum1.setVisibility(sum1.VISIBLE);
-                sum2.setVisibility(sum2.VISIBLE);
-                js1.setVisibility(js1.VISIBLE);
-                js2.setVisibility(js2.VISIBLE);
-                bg1.setText("이 복음의 등장인물은 " + events2.get(dateTime).getBg1());
-                bg2.setText("장소는 " + events2.get(dateTime).getBg2());
-                bg3.setText("시간은 " + events2.get(dateTime).getBg3());
-                sum1.setText("이 복음의 내용을 간추리면 " + events2.get(dateTime).getSum1());
-                sum2.setText("특별히 눈에 띄는 부분은 " + events2.get(dateTime).getSum2());
-                js1.setText("이 복음에서 보여지는 예수님은 " + events2.get(dateTime).getJs1());
-                js2.setText("결과적으로 이 복음을 통해 예수님께서 내게 해주시는 말씀은 \"" + events2.get(dateTime).getJs2()+"\"");
 
-                if (events.get(dateTime) != null) {
-                    date2.setText("");
-                    sentence2.setText("렉시오 디비나");
-                } else {
-                    date2.setText(events2.get(dateTime).getDate());
-                    sentence2.setText(events2.get(dateTime).getOneSentence());
-                }
-            }else{
-                date2.setVisibility(date2.GONE);
-                sentence2.setVisibility(sentence2.GONE);
-                bg1.setVisibility(bg1.GONE);
-                bg2.setVisibility(bg2.GONE);
-                bg3.setVisibility(bg3.GONE);
-                sum1.setVisibility(sum1.GONE);
-                sum2.setVisibility(sum2.GONE);
-                js1.setVisibility(js1.GONE);
-                js2.setVisibility(js2.GONE);
-            }
-
-            if(events.get(dateTime)!=null) {
-                today.setVisibility(today.GONE);
-              //  date.setVisibility(date.VISIBLE);
-              //  oneSentence.setVisibility(oneSentence.VISIBLE);
-              //  comment.setVisibility(comment.VISIBLE);
-                date.setText(events.get(dateTime).getDate());
-                oneSentence.setText(events.get(dateTime).getOneSentence()); //here
-                comment.setText(events.get(dateTime).getComment());
-            }else{
-                date.setVisibility(date.GONE);
-                oneSentence.setVisibility(oneSentence.GONE);
-                comment.setVisibility(comment.GONE);
-                }
-
-            if(events.get(dateTime) == null && events2.get(dateTime) == null){
-                today.setVisibility(today.VISIBLE);
-                today.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // TODO Auto-generated method stub
-                        Calendar c1 = Calendar.getInstance();
-                        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                        String date_val2 = sdf2.format(c1.getTime());
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        intent.putExtra("date",date_val2);
-                        mContext.startActivity(intent);
-                    }
-                });
-            }
-            }
-            */
         today.setVisibility(today.VISIBLE);
-        // exp :  데이터값이 있는 경우 별이 보이게 하는 부분 - 렉시오 디비나 부분
+        // 데이터값이 있는 경우 별이 보이게 하는 부분 - 렉시오 디비나 부분
         if(events2.get(dateTime)!=null && events2.get(dateTime).getOneSentence()!=null) {
 
            // img.getLayoutParams().height = 50;
@@ -233,7 +164,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
         }
 
-        // exp :  데이터값이 있는 경우 별이 보이게 하는 부분 - 코멘트 부분
+        // 데이터값이 있는 경우 별이 보이게 하는 부분 - 코멘트 부분
         if(events.get(dateTime)!=null && events.get(dateTime).getOneSentence()!=null){
             img.setVisibility(View.VISIBLE);
             date.setOnClickListener(new View.OnClickListener()
@@ -255,24 +186,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 }
             });
 
-         /*   oneSentence.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    String _date = date.getText().toString();
-                    int y1 = _date.indexOf("년");
-                    int m1 = _date.indexOf("월 ");
-                    int d1 = _date.indexOf("일 ");
-                    String year = _date.substring(0,y1);
-                    String month = _date.substring(6,m1);
-                    String day = _date.substring(m1+2, d1);
-                    String thisdate = year+"-"+month+"-"+day;
-                    intent.putExtra("date",thisdate);
-                    mContext.startActivity(intent);
-                }
-            }); */
+
             comment.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -294,7 +208,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
         }
 
-        // exp : 별이 보이는 경우에 클릭 이벤트
+        // 별이 보이는 경우에 클릭 이벤트
         if (img.getVisibility() == View.VISIBLE || img2.getVisibility() == View.VISIBLE)  {
             if(events.get(dateTime)!=null && events2.get(dateTime)!=null){
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(img.getLayoutParams());
@@ -313,9 +227,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 public void onClick(View v) {
                     today.setVisibility(today.GONE);
                     // TODO Auto-generated method stub
-                    //Toast.makeText(context, "oh..", Toast.LENGTH_SHORT).show();
-                    //text.setText(events.get(dateTime).getPlus());
-
 
                     if(events.get(dateTime)!=null) {
                         date.setVisibility(date.VISIBLE);
@@ -340,6 +251,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                             date2.setText(events2.get(dateTime).getDate());
                             sentence2.setText(events2.get(dateTime).getOneSentence());
                         }
+                        // 한주복음 묵상일 경우
                         if(events3.get(dateTime) != null){
                             bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
                                     +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
@@ -361,14 +273,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                                     +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""));
                         }
 
-
-               //         bg1.setText(Html.fromHtml("sss"+ "<font color=\"#000000\">" +"ss"+ "</font><br><br>"));
-                      /*  bg2.setText("장소는\n" + events2.get(dateTime).getBg2());
-                        bg3.setText("시간은\n" + events2.get(dateTime).getBg3());
-                        sum1.setText("이 복음의 내용을 간추리면\n" + events2.get(dateTime).getSum1());
-                        sum2.setText("특별히 눈에 띄는 부분은\n" + events2.get(dateTime).getSum2());
-                        js1.setText("이 복음에서 보여지는 예수님은\n" + events2.get(dateTime).getJs1());
-                        js2.setText("결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은 \n\"" + events2.get(dateTime).getJs2()+"\""); */
                     }else{
                         date2.setVisibility(date2.GONE);
                         sentence2.setVisibility(sentence2.GONE);
@@ -379,7 +283,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
 
             });
-        //exp : 별이 없는 경우에 클릭이벤트
+        // 별이 없는 경우에 클릭이벤트
         } else {
 
             tv1.setOnClickListener(new View.OnClickListener()

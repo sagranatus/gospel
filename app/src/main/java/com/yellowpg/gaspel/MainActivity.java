@@ -2,9 +2,7 @@ package com.yellowpg.gaspel;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,14 +20,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.PowerManager;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
@@ -42,12 +36,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,9 +54,7 @@ import com.yellowpg.gaspel.DB.DBManager_Comment;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
-import com.yellowpg.gaspel.etc.BaseActivity;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
-import com.yellowpg.gaspel.etc.Fonttype;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.SessionManager;
 import com.yellowpg.gaspel.server.Server_CommentData;
@@ -76,11 +66,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
 	private SessionManager session;
 	String uid = null;
 
-	int already = 0;
 	private static MediaPlayer mMediaPlayer;
 	InputMethodManager imm;
 	LinearLayout ll, ll_date;
@@ -121,46 +108,22 @@ public class MainActivity extends AppCompatActivity {
 	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 	String date_val2 = sdf2.format(c1.getTime());
 
-	/*
-        // exp : 묵상하기 부분
-        private CountDownTimer countDownTimer;
-        CountDownTimer countDownTimer2;
-        final int MILLISINFUTURE = 11*1000;
-        final int COUNT_DOWN_INTERVAL = 1000;
-        final int MILLISINFUTURE2 = 21*1000;
-        Toast unlockMessage;
-        Toast unlockMessage2;
-        Toast last;
-        MediaPlayer mediaPlayer;
-        ViewGroup group;
-        TextView messageTextView;
-        */
 	// exp : 알람 연관된 부분
 	private static PowerManager.WakeLock myWakeLock;
-
-	//	private TextView mOutputText;
-	//	ProgressDialog mProgress;
-
-	//	static final int REQUEST_ACCOUNT_PICKER = 1000;
-	//	static final int REQUEST_AUTHORIZATION = 1001;
-	//	static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-	//	static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
 
 	@SuppressLint("InvalidWakeLockTag")
 	protected void onCreate(Bundle savedInstanceState){
+		//session 정보 가져오기
 		session = new SessionManager(getApplicationContext());
-
 		uid = session.getUid();
 
 		c1 = Calendar.getInstance();
-		//현재 해 + 달 구하기
 
 		// exp : 인터넷연결 확인
 		ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
 
 		super.onCreate(savedInstanceState);
 		date_val = sdf.format(c1.getTime());
@@ -168,25 +131,25 @@ public class MainActivity extends AppCompatActivity {
 		date_val2 = sdf2.format(c1.getTime());
 
 		setContentView(R.layout.activity_main);
-		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 
-//actionbar setting
+		//actionbar setting
+		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		actionbar.setCustomView(R.layout.actionbar);
-		TextView mytext = (TextView) findViewById(R.id.mytext);
 		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
 		actionbar.setElevation(0);
+
 		// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
 		actionbar.setDisplayHomeAsUpEnabled(true);
 		actionbar.setHomeAsUpIndicator(R.drawable.list);
+
+
 		ll = (LinearLayout) findViewById(R.id.ll);
 		ll_date = (LinearLayout) findViewById(R.id.ll_date);
-
 		// date
 		date = (Button) findViewById(R.id.bt_date);
 		before = (ImageButton) findViewById(R.id.bt_beforedate);
 		after = (ImageButton) findViewById(R.id.bt_afterdate);
-
 
 		// 복음 제목, 내용
 		tv = (TextView) findViewById(R.id.tv_01);
@@ -201,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 		comment.setVisibility(comment.GONE);
 		comment_save.setVisibility(comment_save.GONE);
 
-		//exp : 요일 앞뒤로 변경하는 소스
+		// 요일 앞뒤로 변경하는 소스
 		date.setText(date_val1+getDay()+"요일"); // "yyyy년 MM월 dd일 "
 		before.setOnClickListener(listener_date);
 		after.setOnClickListener(listener_date);
@@ -210,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 		BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 		BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
-
 		Menu menu = bottomNavigationView.getMenu();
 		MenuItem menuItem_1 = menu.getItem(0);
 		MenuItem menuItem_2 = menu.getItem(1);
@@ -220,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
 		menuItem_2.setChecked(false);
 		menuItem_3.setChecked(false);
 		menuItem_4.setChecked(false);
-
 		MenuItem menuItem = menu.getItem(0);
 		menuItem.setChecked(true);
 		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -249,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
 		});
 
-		// 새로 추가한 부분 화면 클릭시 soft keyboard hide
+		// 화면 클릭시 soft keyboard hide
 		findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -266,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
 				return true;
 			}
 		});
+
 		// exp : textsize 설정
 		SharedPreferences sp = getSharedPreferences("setting",0);
 		textsize = sp.getString("textsize", "");
@@ -276,39 +238,36 @@ public class MainActivity extends AppCompatActivity {
 			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-			// start.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			//end.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 		}else{
 
 		}
-		// exp : 다른 activity에서 다른 날짜에 복음 내용을 얻기 위해 전달된 date intent값을 받아 출력하기 위한 부분
+		// 다른 activity에서 다른 날짜에 복음 내용을 얻기 위해 전달된 date intent값을 받아 출력
 		Intent intent = getIntent();
 		daydate = intent.getStringExtra("date");
 
 
-		// exp : 인터넷연결된 상태에서만 데이터 가져오기
+		// 인터넷연결된 상태에서만 데이터 가져오기
 		if ((wifi.isConnected() || mobile.isConnected())) {
-			// exp : 이는 비동기적 방식으로 데이터를 가져오는 부분이다.
-			//	start.setVisibility(start.VISIBLE);
-			//	start.setOnClickListener(startlistener);
-			//	end.setOnClickListener(startlistener);
-			if(daydate != null){ // daydate가 null이 아니면 그때의 값을 가져온다
+
+			// intent로 들어온 daydate가 null이 아닌 경우
+			if(daydate != null){
 				comment.setText("");
 				String timeStr = daydate;
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 				Date date_ = null;
 				try {
-					date_ = formatter.parse(timeStr); // cf : 이는 String 날짜를 -> 다시 date format으로 변경하여 날짜를 년,월,일 형식으로 바꿔주기 위함이다.
+					date_ = formatter.parse(timeStr); // string yyyy-MM-dd => Date 형식
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 				c1 = Calendar.getInstance();
 				c1.setTime(date_);
-				String date_val1 = sdf1.format(c1.getTime());
-				date.setText(date_val1+getDay()+"요일");
+				String date_val1 = sdf1.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+				date.setText(date_val1+getDay()+"요일"); // c1으로 getday()함
 				getGaspel(timeStr);
 				getComments(timeStr);
 
+				//intent로 온 경우에 날짜 이동 없애고 actionbar 변경하기
 				before.setVisibility(View.GONE);
 				after.setVisibility(View.GONE);
 
@@ -316,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
 				actionbar.setCustomView(R.layout.actionbar_back);
 				actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
 				actionbar.setElevation(0);
+
 				// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
 				actionbar.setDisplayHomeAsUpEnabled(true);
 				actionbar.setHomeAsUpIndicator(R.drawable.back);
@@ -330,14 +290,13 @@ public class MainActivity extends AppCompatActivity {
 			tv.setGravity(Gravity.CENTER);
 		}
 
-		// exp : 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
+		// 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
 		comment_save.setOnClickListener(listener);
 		comment_save.setBackgroundResource(R.drawable.button_bg);
 
-		/// exp : 코멘트 데이터베이스를 생성 및 초기화
 		commentInfoHelper = new CommentInfoHelper(this);
 
-		// exp : 세팅에서 알람 설정
+		// 세팅에서 알람 설정
 		String alarm = intent.getStringExtra("str");
 		if(alarm!=null){
 			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -346,58 +305,17 @@ public class MainActivity extends AppCompatActivity {
 					PowerManager.ON_AFTER_RELEASE, TAG);
 			myWakeLock.acquire(); //실행후 리소스 반환 필수
 			releaseCpuLock();
-			playSound(MainActivity.this, "alarm"); //
+			playSound(MainActivity.this, "alarm");
 		}
 
-
-		// exp : 이는 현재날짜의 경우와 오늘의 복음을 클릭할때만 복음묵상 시작하기 버튼이 보이고 이벤트를 주기 위한 부분
-		Calendar c2 = Calendar.getInstance();
-		String date_val1 = sdf1.format(c2.getTime());
-
-		// custom dialog setting
+		// 왼쪽 list클릭시 이벤트 custom dialog setting
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
 		// custom dialog key, value 설정
 		listk_left = new String[] {"a", "b", "c"};
 		listv_left = new String[] { "설정", "나의 상태", "계정정보"};
 
-		CharSequence text = getIntent()
-				.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
-		//Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-		if(text != null){
-			highlightString((String) text);
-			tv.setText(text);
-			Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-		}
-
-		// process the text
-
 	} //onCreate 메소드 마침
-
-
-	private void highlightString(String input) {
-//Get the text from text view and create a spannable string
-		SpannableString spannableString = new SpannableString(tv.getText());
-//Get the previous spans and remove them
-		BackgroundColorSpan[] backgroundSpans = spannableString.getSpans(0, spannableString.length(), BackgroundColorSpan.class);
-
-		for (BackgroundColorSpan span: backgroundSpans) {
-			spannableString.removeSpan(span);
-		}
-
-//Search for all occurrences of the keyword in the string
-		int indexOfKeyword = spannableString.toString().indexOf(input);
-
-		while (indexOfKeyword > 0) {
-			//Create a background color span on the keyword
-			spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), indexOfKeyword, indexOfKeyword + input.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-			//Get the next index of the keyword
-			indexOfKeyword = spannableString.toString().indexOf(input, indexOfKeyword + input.length());
-		}
-
-//Set the final text on TextView
-		tv.setText(spannableString);}
 
 
 	// 커스텀 다이얼로그 선택시
@@ -408,8 +326,10 @@ public class MainActivity extends AppCompatActivity {
 				showPraying(item);
 				return true;
 			default:
+				// intent daydate가 null이 아닌 경우
 				if(daydate != null){
 					finish();
+				// mainactivity인 경우
 				}else{
 					// show the list dialog.
 					dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
@@ -442,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
 	}
 
+	// 오른쪽 종을 누르면 청원기도가 보인다
 	@SuppressLint("InvalidWakeLockTag")
 	public void showPraying(final MenuItem item)
 	{
@@ -451,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 				PowerManager.ON_AFTER_RELEASE, TAG);
 		myWakeLock.acquire(); //실행후 리소스 반환 필수
 		releaseCpuLock();
-		playSound(MainActivity.this, "pray"); //
+		playSound(MainActivity.this, "pray");
 		item.setIcon(getResources().getDrawable(R.drawable.notification));
 		// Create custom dialog object
 		final Dialog dialog = new Dialog(MainActivity.this);
@@ -492,6 +413,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		// 기도마침 누를때 이벤트
 		Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
 		// if decline button is clicked, close the custom dialog
 		declineButton.setOnClickListener(new OnClickListener() {
@@ -508,6 +430,7 @@ public class MainActivity extends AppCompatActivity {
 	String gaspel_date;
 	String gaspel_sentence;
 	String gaspel_contents;
+	// 그날 복음 내용 가져오기
 	public void getGaspel(final String date) {
 		Thread t = new Thread(new Runnable() {
 			@Override
@@ -519,18 +442,20 @@ public class MainActivity extends AppCompatActivity {
 					boolean error;
 					@Override
 					public void onResponse(String response) {
-						Log.d(TAG, "Login Response: " + response.toString());
+						Log.d(TAG, "getGaspel Response: " + response.toString());
 						try {
 							JSONObject jObj = new JSONObject(response);
 							error = jObj.getBoolean("error");
 
 							// Check for error node in json
-							if (!error) { // error가 false인 경우에 데이터가져오기 성공
+							if (!error) {
 								// Now store the user in SQLite
 								gaspel_date = jObj.getString("created_at");
-								Log.d(TAG,gaspel_date);
+								Log.d(TAG, gaspel_date);
 								gaspel_sentence = jObj.getString("sentence");
 								gaspel_contents = jObj.getString("contents");
+
+								// DB에서 가져온 복음내용 편집하기
 								String contents = gaspel_contents;
 								contents = contents.replaceAll("&gt;", ">");
 								contents = contents.replaceAll("&lt;", "<");
@@ -542,25 +467,22 @@ public class MainActivity extends AppCompatActivity {
 								contents = contents.replaceAll("\n", " ");
 								contents = contents.replaceAll("&hellip;", "…");
 								contents = contents.replaceAll("주님의 말씀입니다.", "\n"+"주님의 말씀입니다.");
-								//contents = contents.replaceAll("거룩한 복음입니다.", "거룩한 복음입니다."+"\n");
 
 								int idx = contents.indexOf("✠");
 								int idx2 = contents.indexOf("◎ 그리스도님 찬미합니다");
 								contents = contents.substring(idx, idx2);
 
+								// 줄넘김 편집
 								int idx3 = contents.indexOf("거룩한 복음입니다.");
 								int length = "거룩한 복음입니다.".length();
 								final String after = contents.substring(idx3+length+17);
-								//Log.d("s", after);
 
 								Pattern p = Pattern.compile(".\\d+");
 								Matcher m = p.matcher(after);
 								while (m.find()) {
-									Log.d("s", after);
+									Log.d("saea", after);
 									contents = contents.replaceAll(m.group(), "\n"+m.group());
-									//	Log.d("s", contents);
 								}
-
 								tv.setText(contents);
 								tv2.setText("주님께서 오늘 나에게 하시는 말씀이 무엇인지 생각해보며, 말씀을 살아가기 위하여 어떻게 해야할지 적어 봅시다.");
 
@@ -572,7 +494,6 @@ public class MainActivity extends AppCompatActivity {
 							} else {
 								// Error in login. Get the error message
 								String errorMsg = jObj.getString("error_msg");
-
 							}
 						} catch (JSONException e) {
 							// JSON error
@@ -594,43 +515,18 @@ public class MainActivity extends AppCompatActivity {
 						// Posting parameters to login url
 						Map<String, String> params = new HashMap<String, String>();
 						params.put("date", date);
-
 						return params;
 					}
-
 				};
-
-
 				// Adding request to request queue
 				AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 			}
 		});
 		t.start();
-		//	gaspel_date = "date";
-		//	Log.d(TAG,gaspel_date);
-
 	}
 
 	public void getComments(String date){
 
-// exp : 아래에는 date값에 해당하는 저장한 comment값을 가져오도록 하였다.
-	/*	CommentInfoHelper commentInfoHelper;
-		commentInfoHelper = new CommentInfoHelper(this);
-		SQLiteDatabase db;
-		//ContentValues values1;
-		try{
-			String comment_str = null;
-			Date origin_date = sdf2.parse(date);
-			String date_aft = sdf1.format(origin_date) + getDay() + "요일";
-			db = commentInfoHelper.getReadableDatabase();
-			String[] columns = {"comment_con", "date", "sentence"};
-			String whereClause = "date = ?";
-			String[] whereArgs = new String[] {
-					date_aft // cf : 날짜에 맞는 코멘트를 가져온다.
-			};
-			Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null); // cf : 그때의 코멘트를 가져온다.
-*/
-		String comment_str = null;
 		Date origin_date = null;
 		try {
 			origin_date = sdf2.parse(date);
@@ -645,20 +541,14 @@ public class MainActivity extends AppCompatActivity {
 		dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, date_str, aDataList);
 		dbMgr.dbClose();
 		if(!aDataList.isEmpty()){
-			already = 1;
-
 			Log.d("saea", aDataList.get(0).getComment());
 			comment.setText(aDataList.get(0).getComment(), TextView.BufferType.EDITABLE);
-			//	return aDataList.get(0).getDate();
 		}else{
-			already = 0;
-			//	return "none";
 		}
-
 	}
 
 
-	// exp : 날짜 전후를 클릭할때 진행되는 이벤트
+	// 날짜 전후를 클릭할때 이벤트
 	OnClickListener listener_date = new OnClickListener() {
 
 		public void onClick(View v) {
@@ -686,16 +576,13 @@ public class MainActivity extends AppCompatActivity {
 		}
 	};
 
-	// exp : 알람에서 사용되는 메소드 - 화면이 꺼져있을때 켜지게 하는
+	// 알람에서 사용되는 메소드 - 화면이 꺼져있을때 켜지게 하는
 	static void releaseCpuLock() {
-
 		Log.d(TAG,"Releasing cpu wake lock");
-
 		if (myWakeLock!= null) {
 			myWakeLock.release();
 			myWakeLock= null;
 		}
-
 	}
 	// exp : 알람시 ringtonePanager를 이용하며 uri를 설정한다. 알람 -> 없을경우에 noti -> 없을경우에 ringtone순서로
 	private Uri getAlarmUri() {
@@ -710,9 +597,8 @@ public class MainActivity extends AppCompatActivity {
 		return alert;
 	}
 
-	// exp : MediaPlayer객체를 생성 및 설정 하여 알람이 울리게 함
+	// MediaPlayer객체를 생성 및 설정 알람 울리도록 함
 	public static void playSound(Context mcontext, String sound) {
-
 		mMediaPlayer = new MediaPlayer();
 		try {
 			AssetFileDescriptor afd = null;
@@ -727,7 +613,7 @@ public class MainActivity extends AppCompatActivity {
 			mMediaPlayer.prepare();
 			mMediaPlayer.start();
 
-			// cf : 이때 setOnseekCompleteListener를 이용하여 알람이 한번만 울리고 멈추게 해 주었다.
+			// 이때 setOnseekCompleteListener를 이용하여 알람이 한번만 울리고 멈추게 해 주었다.
 			mMediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListener() {
 				public void onSeekComplete(MediaPlayer mMediaPlayer) {
 					mMediaPlayer.stop();
@@ -738,48 +624,11 @@ public class MainActivity extends AppCompatActivity {
 		} catch (IOException e) {
 			System.out.println("OOPS");
 		}
-
 	}
 
-
-	private void getlevelchange() {
-		try {
-			SQLiteDatabase db;
-			String date_str = null;
-			db = commentInfoHelper.getReadableDatabase();
-			String[] columns = {"comment_con", "date", "sentence"};
-			String query = "SELECT comment_con, date, sentence FROM comment";
-			Cursor cursor = db.rawQuery(query, null);
-			int i = 0;
-			while (cursor.moveToNext()) {
-				date_str = cursor.getString(1);
-				if (date_str!=null) {
-					i++;
-				}
-			}
-			// 레벨 자동 올리는 부분
-			if (i == 9) {
-				Intent i2 = new Intent(MainActivity.this, StatusActivity.class);
-				startActivity(i2);
-			} else if (i >= 10) { //레벨이 올라간 후에 최근 안쓰면 레벨 떨어지도록 하기 위해서 done으로 바꿔준다.
-				SharedPreferences sp_level;
-				sp_level = getSharedPreferences("setting",0);
-				SharedPreferences.Editor editor;
-				editor =  sp_level.edit();
-				editor.putString("first", "done");
-				editor.commit();
-				//	Toast.makeText(MainActivity.this, "10개", Toast.LENGTH_SHORT).show();
-			}
-
-		}catch (Exception e){
-
-		}
-	}
-
-	// exp : 요일 얻어오기
+	// 요일 얻어오기
 	public String getDay(){
-		int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
-
+		int dayNum = c1.get(Calendar.DAY_OF_WEEK);
 		switch(dayNum){
 			case 1:
 				day = "일";
@@ -807,28 +656,22 @@ public class MainActivity extends AppCompatActivity {
 		return day;
 	}
 
-
-
-
-	// exp : 저장버튼 누를때 진행되는 이벤트로 코멘트 내용을 저장하거나 수정한다.
+	// 저장버튼 누를때 진행되는 이벤트 - 코멘트 내용을 저장하거나 수정
 	OnClickListener listener = new OnClickListener() {
 
 		public void onClick(View v) {
-
-			//hideKeyboard();
-			SQLiteDatabase db;
+			SQLiteDatabase db = null;
 			ContentValues values;
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 				case R.id.bt_comment:
-					//getlevelchange();
 					String comment_con = comment.getText().toString();
 					String comment_date = (String) date.getText();
 					String sentence = (String) btnNetCon.getText();
 
-					// cf : 기존에 comment 값이 있는지 값이 있는지 확인하여 있는 경우, already값을 1로 준다.
+					// 기존에 comment 값이 있는지 값이 있는지 확인하여 있는 수정, 없는 경우 저장
+					String comment_str = null;
 					try{
-						String comment_str = null;
 						db = commentInfoHelper.getReadableDatabase();
 						String[] columns = {"comment_con", "date", "sentence"};
 						String whereClause = "date = ?";
@@ -839,96 +682,43 @@ public class MainActivity extends AppCompatActivity {
 
 						while(cursor.moveToNext()){
 							comment_str = cursor.getString(0);
+
 						}
-						if(comment_str!=null){
-							already = 1;
-						}
-
-					}catch(Exception e){
-
-					}
-
-			/*
-				String date_str = date.getText().toString();
-					ArrayList<Comment> aDataList =  new ArrayList<Comment>();
-					DBManager_Comment dbMgr = new DBManager_Comment(MainActivity.this);
-					dbMgr.dbOpen();
-					dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, date_str, aDataList);
-					dbMgr.dbClose();
-					if(!aDataList.isEmpty()){
-						already = 1;
-						Log.d("saea", aDataList.get(0).getComment() + "date"+aDataList.get(0).getDate()+"sentence"+aDataList.get(0).getOneSentence());
-					//	return aDataList.get(0).getDate();
-					}else{
-						already = 0;
-					//	return "none";
-					}
-				*/
-
-					// cf : comment가 없는 경우에는 삽입한다 -> already = 0
-					if(already==0){
-						try{
-							db=commentInfoHelper.getWritableDatabase();
-							values = new ContentValues();
-							values.put("comment_con", comment_con);
-							values.put("date", comment_date);
-							values.put("sentence", sentence);
-							db.insert("comment", null, values);
-							commentInfoHelper.close();
-						}catch(Exception e){
-							e.printStackTrace();
-						}
-						if(uid != null && uid != ""){
-							Server_CommentData.insertComment(MainActivity.this, uid, comment_date, sentence, comment_con);
-						}
-
-
-						Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
-
-					}else if(already ==1 ){ // cf : comment가 있는 경우에는 update 한다 -> already =1
-						try{
-							db=commentInfoHelper.getWritableDatabase();
-							values = new ContentValues();
-							values.put("comment_con", comment_con);
-							String where = "date=?";
-							String[] whereArgs = new String[] {date.getText().toString()};
-
-							db.update("comment", values, where, whereArgs);
-							commentInfoHelper.close();
-						}catch(Exception e){
-							e.printStackTrace();
-						}
-
+					// 기존 값이 있는 경우 수정하기
+					if(comment_str!=null){
+						values = new ContentValues();
+						values.put("comment_con", comment_con);
+						String where = "date=?";
+						db.update("comment", values, where, whereArgs);
+						Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
 						if(uid != null && uid != ""){
 							Server_CommentData.updateComment(MainActivity.this, uid, comment_date, sentence, comment_con);
 						}
-						Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+					// 기존 값이 없는 경우 추가 하기
+					}else{
+						values = new ContentValues();
+						values.put("comment_con", comment_con);
+						values.put("date", comment_date);
+						values.put("sentence", sentence);
+						db.insert("comment", null, values);
+						Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+						if(uid != null && uid != ""){
+							Server_CommentData.insertComment(MainActivity.this, uid, comment_date, sentence, comment_con);
+							}
+						}
+					}catch(Exception e){
+
 					}
-
-					break;
-
+				break;
 			}
 		}
 	};
 
-
-
-
-	@Override
-	public void onBackPressed() {
-		//Toast.makeText(this, "Back button pressed.", Toast.LENGTH_SHORT).show();
-
-	}
-
+	// actionbar 오른쪽 벨 추가
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.topmenu_main, menu);
-
-
-		//   DBManager dbMgr2 = new DBManager(this);
-		//   dbMgr2.dbOpen();
-
 		return true;
 	}
 

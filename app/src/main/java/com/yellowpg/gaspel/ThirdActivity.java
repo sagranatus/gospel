@@ -40,9 +40,13 @@ import android.widget.Toast;
 
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.DB.WeekendInfoHelper;
 import com.yellowpg.gaspel.data.Comment;
+import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.etc.SessionManager;
 import com.yellowpg.gaspel.server.Server_CommentData;
+import com.yellowpg.gaspel.server.Server_LectioData;
+import com.yellowpg.gaspel.server.Server_WeekendData;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -59,8 +63,7 @@ import hirondelle.date4j.DateTime;
 // setting 설정 페이지
 public class ThirdActivity extends AppCompatActivity {
 	CommentInfoHelper memberInfoHelper;
-	LectioInfoHelper lectioInfoHelper;
-	LinearLayout ll_step1, ll_step2;
+	LinearLayout ll_step1, ll_step2, ll_step3;
 	private SessionManager session;
 	String uid = null;
 
@@ -111,6 +114,7 @@ public class ThirdActivity extends AppCompatActivity {
 
 		ll_step1 = (LinearLayout) findViewById(R.id.ll_step1);
 		ll_step2 = (LinearLayout) findViewById(R.id.ll_step2);
+		ll_step3 = (LinearLayout) findViewById(R.id.ll_step3);
 		//ll_step0.setVisibility(View.VISIBLE);
 
 		//	mOutputText.setPadding(16, 16, 16, 16);
@@ -157,6 +161,10 @@ public class ThirdActivity extends AppCompatActivity {
 		timeset.setBackgroundResource(R.drawable.button_bg_white);
 		init();
 
+		if(uid == null || uid == ""){
+			ll_step3.setVisibility(View.GONE);
+
+		}
 		// exp : 텍스트크기 설정 부분
 		SharedPreferences sp = getSharedPreferences("setting", 0);
 		textsize = sp.getString("textsize", "");
@@ -320,6 +328,82 @@ public class ThirdActivity extends AppCompatActivity {
 					}catch(Exception e){
 						e.printStackTrace();
 					}
+
+					// 렉시오디비나
+					LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(ThirdActivity.this);
+					SQLiteDatabase db2;
+
+					try{
+						String bg1 = null;
+						String bg2 = null;
+						String bg3 = null;
+						String sum1 = null;
+						String sum2 = null;
+						String js1 = null;
+						String js2 = null;
+
+						String date = null;
+						String onesentence = null;
+						db2 = lectioInfoHelper.getReadableDatabase();
+						String query = "SELECT bg1, bg2, bg3, sum1, sum2, js1, js2, date, onesentence FROM lectio";
+						Cursor cursor = db2.rawQuery(query, null);
+
+						while(cursor.moveToNext()){
+							bg1 = cursor.getString(0);
+							bg2 = cursor.getString(1);
+							bg3 = cursor.getString(2);
+							sum1 = cursor.getString(3);
+							sum2 = cursor.getString(4);
+							js1 = cursor.getString(5);
+							js2 = cursor.getString(6);
+							date = cursor.getString(7);
+							onesentence = cursor.getString(8);
+							if(uid != null){
+								Log.d("saea", uid+date+onesentence+bg1);
+								Lectio lectio = new Lectio(date, onesentence, bg1, bg2, bg3, sum1, sum2, js1, js2);
+								Server_LectioData.insertLectio(ThirdActivity.this, uid, lectio);
+							}
+						}
+
+						cursor.close();
+						lectioInfoHelper.close();
+					}
+					catch(Exception e){
+
+					}
+					// weekend 데이터
+					WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(ThirdActivity.this);
+					ContentValues values3;
+					SQLiteDatabase db3;
+
+					try{
+						db3 = weekendInfoHelper.getReadableDatabase();
+						String query = "SELECT date, mysentence, mythought FROM weekend";
+						Cursor cursor = db3.rawQuery(query, null);
+						String weekend_str = null;
+						while(cursor.moveToNext()) {
+							weekend_str = cursor.getString(0);
+							String date = cursor.getString(0);
+							String mysentence = cursor.getString(1);
+							String mythought = cursor.getString(2);
+							if(uid != null){
+								if(mythought == null){
+									mythought = "";
+								}
+								Log.d("saea", uid+date+mysentence+mythought);
+								Server_WeekendData.insertWeekend(ThirdActivity.this, uid, date, mysentence, mythought);
+							}
+						}
+
+						cursor.close();
+						weekendInfoHelper.close();
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+
+
+
+
 					break;
 			}
 		}

@@ -17,7 +17,9 @@ import com.yellowpg.gaspel.DB.UserDBSqlData;
 import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.ProfileActivity;
 import com.yellowpg.gaspel.data.Comment;
+import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.UserData;
+import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.SessionManager;
@@ -71,6 +73,12 @@ public class Server_UserData {
                         // Launch main activity
                         ArrayList<Comment> comments = new  ArrayList<Comment>();
                         Server_CommentData.selectAll(context, uid, comments);
+
+                        ArrayList<Lectio> lectios = new  ArrayList<Lectio>();
+                        Server_LectioData.selectAll(context, uid, lectios);
+
+                        ArrayList<Weekend> weekends = new  ArrayList<Weekend>();
+                        Server_WeekendData.selectAll(context, uid, weekends);
                         Intent intent = new Intent(context, ProfileActivity.class);
                         context.startActivity(intent);
 

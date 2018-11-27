@@ -1,17 +1,13 @@
 package com.yellowpg.gaspel;
 
 import android.app.ActionBar;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -20,16 +16,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidFragment;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.CaldroidSampleCustomFragment;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 // calendar
 public class FourthActivity extends AppCompatActivity {
@@ -52,14 +43,14 @@ public class FourthActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fourth);
 
+		//actionbar setting
 		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-
-//actionbar setting
 		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		actionbar.setCustomView(R.layout.actionbar_record);
 		TextView mytext = (TextView) findViewById(R.id.mytext);
 		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
 		actionbar.setElevation(0);
+
 		// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
 		actionbar.setDisplayHomeAsUpEnabled(true);
 		actionbar.setHomeAsUpIndicator(R.drawable.list);
@@ -73,7 +64,7 @@ public class FourthActivity extends AppCompatActivity {
 		bg1 = (TextView) findViewById(R.id.tv_bg1);
 
 		today = (TextView)findViewById(R.id.tv_today);
-		// exp : bottombar 설정
+
 		// bottomnavigation 뷰 등록
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 		BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -117,7 +108,7 @@ public class FourthActivity extends AppCompatActivity {
 
 		});
 
-		// exp : 텍스트사이즈 설정
+		// 텍스트사이즈 설정
 		SharedPreferences sp2 = getSharedPreferences("setting",0);
 		textsize = sp2.getString("textsize", "");
 		if(textsize.equals("big")){
@@ -133,17 +124,11 @@ public class FourthActivity extends AppCompatActivity {
 
 		}
 
-
-
-		// custom dialog setting
+		// 왼쪽 list 클릭시 이벤트
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
-		// custom dialog key, value 설정
-	//	listk_left = new String[] {"a", "b", "c"};
-	//	listv_left = new String[] {"설정", "나의 상태" , "기록 삭제"};
 		listk_left = new String[] {"a", "b"};
 		listv_left = new String[] {"설정", "나의 상태" };
-
 	}
 
 
@@ -192,12 +177,13 @@ public class FourthActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		// 달력 내용 가져오기
 		getRecord();
 
 	}
 
+	// caldroid 달력 fragment를 생성 하고 설정함
 	public void getRecord(){
-		// exp : caldroid 달력 fragment를 생성 하고 설정함
 		CaldroidFragment caldroidFragment = new CaldroidFragment();
 
 		// cf : 이에 대해 설정하는 부분
@@ -214,11 +200,12 @@ public class FourthActivity extends AppCompatActivity {
 				TypedValue.COMPLEX_UNIT_DIP, sizeInDP, getResources()
 						.getDisplayMetrics());
 
-		// cf : 이 fragment를 커스터마이즈한다
-		caldroidFragment = new CaldroidSampleCustomFragment(); //changed 없었던 것임.
+		// fragment를 커스터마이즈한다
+		caldroidFragment = new CaldroidSampleCustomFragment();
 		// Refresh view
 		caldroidFragment.refreshView();
-		// cf : 이 fragment를 activity_fourth의 달력부분에 넣는다
+
+		// fragment를 이 activity의 달력부분에 넣는다
 		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
 		t.replace(R.id.calendar1, caldroidFragment);
 		t.commit();

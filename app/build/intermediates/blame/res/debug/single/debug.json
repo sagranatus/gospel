@@ -1272,6 +1272,10 @@
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\color-v23\\abc_tint_switch_track.xml"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_icon.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable-xxhdpi\\icon.png"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_notification_bg_low.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.0.aar\\b2c1625ac056332e33774bdc0135e7f3\\res\\drawable\\notification_bg_low.xml"
     },

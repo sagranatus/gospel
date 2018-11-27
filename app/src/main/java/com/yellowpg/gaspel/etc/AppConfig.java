@@ -14,7 +14,8 @@ public class AppConfig {
     public static String URL_USERUPDATE = "https://sssagranatus.cafe24.com/userData.php";
     public static String URL_REGISTER = "https://sssagranatus.cafe24.com/userData.php";
     public static String URL_COMMENTDATA = "https://sssagranatus.cafe24.com/commentData.php";
-
+    public static String URL_LECTIODATA = "https://sssagranatus.cafe24.com/lectioData.php";
+    public static String URL_WEEKENDDATA = "https://sssagranatus.cafe24.com/weekendData.php";
 
 // public static String URL_LOGIN = "http://192.168.116.1/android_login_api/login.php";
 }

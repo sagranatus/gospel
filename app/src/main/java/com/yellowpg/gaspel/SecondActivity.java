@@ -40,6 +40,8 @@ import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
+import com.yellowpg.gaspel.etc.SessionManager;
+import com.yellowpg.gaspel.server.Server_WeekendData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,10 +54,6 @@ import java.util.Map;
 
 public class SecondActivity extends AppCompatActivity implements View.OnClickListener {
 
-	private ArrayList<Daily> data = null;
-	private DailyAdapter adapter = null;
-	private ListView lv = null;
-	Button daily;
 	Calendar c1 = Calendar.getInstance();
 	BottomNavigationView bottomNavigationView;
 	String day;
@@ -63,8 +61,6 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 
 	ListSelectorDialog dlg_left;
 	String[] listk_left, listv_left;
-	InputMethodManager imm;
-
 
 	//현재 해 + 달 구하기
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
@@ -73,14 +69,20 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 	String textsize;
 	Button weekendGaspel,mySentence, saveThought;
 	EditText Thought;
+	private SessionManager session;
+	String uid = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_second);
 
-		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+		// session정보 가져오기
+		session = new SessionManager(getApplicationContext());
+		uid = session.getUid();
+
 		//actionbar setting
+		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		actionbar.setCustomView(R.layout.actionbar_second);
 		TextView mytext = (TextView) findViewById(R.id.mytext);
@@ -104,7 +106,9 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 		saveThought.setOnClickListener(listener);
 
 		saveThought.setBackgroundResource(R.drawable.button_bg);
+		// 한주복음묵상 데이터 있는지 확인
 		checkWeekendRecord();
+
 		// bottomnavigation 뷰 등록
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 		BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -149,14 +153,14 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 		});
 
 
-		// custom dialog setting
+		// 왼쪽 list클릭시 이벤트
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
 		// custom dialog key, value 설정
-		listk_left = new String[] {"a", "b"};
-		listv_left = new String[] {"설정", "나의 상태"};
+		listk_left = new String[] {"a", "b", "c"};
+		listv_left = new String[] {"설정", "나의 상태", "수정"};
 
-		// 새로 추가한 부분 화면 클릭시 soft keyboard hide
+		// 화면 클릭시 soft keyboard hide
 		findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -178,7 +182,8 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 				return true;
 			}
 		});
-		// exp : 텍스트사이즈 설정
+
+		// 텍스트사이즈 설정
 		SharedPreferences sp2 = getSharedPreferences("setting",0);
 		textsize = sp2.getString("textsize", "");
 		if(textsize.equals("big")){
@@ -202,7 +207,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 		date_val = sdf.format(c1.getTime());
 		date_detail = date_val+getDay()+"요일";
 		Log.d("saea", date_detail);
-		// cf : 기존에 값이 있는지 확인 후 있는 경우에는 already값을 1로 준다.
+
 		try{
 			String mysentence = null;
 			String mythought = null;
@@ -220,8 +225,9 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 				Log.d("saea", mysentence+mythought);
 
 			}
+			// 기존 값이 있는 경우 보여지기
             if(mysentence != null){
-                Log.d("saea", "there is");
+                Log.d("saea", "한주복음묵상 있음");
                 mySentence.setVisibility(View.VISIBLE);
                 saveThought.setVisibility(View.VISIBLE);
                 Thought.setVisibility(View.VISIBLE);
@@ -231,7 +237,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 				}
 
             }else{
-                Log.d("saea", "there is not");
+                Log.d("saea", "한주복음묵상 없음");
                 weekendGaspel.setVisibility(View.VISIBLE);
             }
 			cursor.close();
@@ -272,11 +278,10 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 		return day;
 	}
 
-	// exp : 다른 곳 터치시 키보드 안보이게 하기 및 날짜 이전 이후 선택시 값 변경 이벤트
+	// 날짜 이전 이후 선택시 값 변경 이벤트
 	View.OnClickListener listener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			//    hideKeyboard();
 			switch (v.getId()) {
 				case R.id.bt_weekend_gaspel:
 					Intent intent = new Intent(SecondActivity.this, LectioActivity.class);
@@ -290,17 +295,22 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 					ContentValues values;
 					WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(SecondActivity.this);
 					String weekend_date = date_detail;
-					String mysentence = Thought.getText().toString();
+					String mythought = Thought.getText().toString();
+					String mysentence = mySentence.getText().toString();
 					try{
 						db=weekendInfoHelper.getWritableDatabase();
 						values = new ContentValues();
-						values.put("mythought",  mysentence);
+						values.put("mythought",  mythought);
 						String where = "date=?";
 						String[] whereArgs = new String[] {weekend_date};
 						db.update("weekend", values, where, whereArgs);
 						weekendInfoHelper.close();
 					}catch(Exception e){
 						e.printStackTrace();
+					}
+
+					if(uid != null && uid != ""){
+						Server_WeekendData.updateWeekend(SecondActivity.this, uid, weekend_date, mysentence, mythought);
 					}
 
 					Toast.makeText(SecondActivity.this, "묵상내용이 저장되었습니다.", Toast.LENGTH_SHORT).show();
@@ -333,6 +343,14 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 							}else if(item.equals("나의 상태")){
 								Intent i = new Intent(SecondActivity.this, StatusActivity.class);
 								startActivity(i);
+							}else if(item.equals("수정")){
+								Intent intent = new Intent(SecondActivity.this, LectioActivity.class);
+								String thisweekend = sdf2.format(c1.getTime());
+								intent.putExtra("date",thisweekend);
+								intent.putExtra("date_detail",date_detail);
+								SecondActivity.this.startActivity(intent);
+
+
 							}
 						}
 					});

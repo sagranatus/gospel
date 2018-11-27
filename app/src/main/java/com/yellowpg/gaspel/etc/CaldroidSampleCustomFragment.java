@@ -41,10 +41,10 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
     protected HashMap<DateTime, Weekend> events3 = new HashMap<DateTime, Weekend>();
     TextView text;
     TextView today, date, oneSentence, comment;
-    TextView date2, sentence2, bg1, bg2, bg3, sum1, sum2, js1, js2;
+    TextView date2, sentence2, bg1;
 
 
-    // exp : gridadapter를 새로 불러와서 생성
+    // gridadapter를 새로 불러와서 생성
     public CaldroidGridAdapter getNewDatesGridAdapter(int month, int year) {
 
         today = (TextView) getActivity().findViewById(R.id.tv_today);
@@ -57,7 +57,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
         bg1 = (TextView) getActivity().findViewById(R.id.tv_bg1);
         // TODO Auto-generated method stub
 
-        // exp : 아래에는 custom adapter에 값을 전달하는 부분이다
+        //  custom adapter에 값을 전달
         return new CaldroidSampleCustomAdapter(getActivity(), month, year,
                 getCaldroidData(), extraData, events, events2, today, date, oneSentence, comment, date2, sentence2, bg1);
 
@@ -65,29 +65,23 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
 
 
     public void refreshView() {
-
-
         // If month and year is not yet initialized, refreshView doesn't do
         // anything
         if (month == -1 || year == -1) {
             return;
         }
-
-
         refreshMonthTitleTextView();
 
-        // cf : 아마도 위에서 커스터마이즈한 것을 refresh하는 것 같다
+        // 아마도 위에서 커스터마이즈한 것을 refresh한다
         // Refresh the date grid views
         for (CaldroidGridAdapter adapter : datePagerAdapters) {
             // Reset caldroid data
             adapter.setCaldroidData(getCaldroidData());
 
-         // exp : 여기서 데이터를 가져온다
-            // cf : 코멘트 부분
-
+         // 데이터를 가져온다
+            // 코멘트 부분
             dailyInfoHelper = new CommentInfoHelper(getActivity());
             SQLiteDatabase db;
-            ContentValues values;
 
             try{
                 db = dailyInfoHelper.getReadableDatabase();
@@ -115,7 +109,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
                     }else{
                         day = "0"+date.substring(monthsite+2, daysite);
                     }
-
+                    // hashmap에 값을 삽입
                     events.put(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000") , new Comment(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000"), date, comment_con, sentence));
                 }
                 cursor.close();
@@ -124,52 +118,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
                 e.printStackTrace();
             }
 
-
-
-        /*
-
-            ArrayList<Comment> aDataList =  new ArrayList<Comment>();
-            DBManager_Comment dbMgr = new DBManager_Comment(getContext());
-            dbMgr.dbOpen();
-            dbMgr.selectCommentAllData(CommentDBSqlData.SQL_DB_SELECT_DATA_ALL, aDataList);
-            dbMgr.dbClose();
-            if(!aDataList.isEmpty()){
-                //for-loop 통한 전체 조회
-                for(Object data : aDataList) {
-                    Comment comment =(Comment) data;
-                    String sentence = comment.getOneSentence();
-                    String date = comment.getDate();
-                    String comment_con = comment.getComment();
-
-                    int yearsite = date.indexOf("년");
-                    int monthsite = date.indexOf("월");
-                    int daysite = date.indexOf("일 ");
-                    String year= date.substring(0, yearsite);
-                    String month;
-                    String day;
-                    if(date.substring(yearsite+2, monthsite).length() > 1){
-                        month= date.substring(yearsite+2, monthsite);
-                    }else{
-                        month= "0"+date.substring(yearsite+2, monthsite);
-                    }
-                    if(date.substring(monthsite+2, daysite).length() > 1){
-                        day = date.substring(monthsite+2, daysite);
-                    }else{
-                        day = "0"+date.substring(monthsite+2, daysite);
-                    }
-
-                    events.put(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000") , new Comment(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000"), date, comment_con, sentence));
-                    Log.d("saea", comment.getComment() + "date"+comment.getDate()+"sentence"+comment.getOneSentence());
-                }
-
-
-
-                //	return aDataList.get(0).getDate();
-            }else{
-
-            }
- */
-            // cf : 렉시오 디비나 부분
+            // 렉시오 디비나 부분
             lectioInfoHelper = new LectioInfoHelper(getActivity());
             SQLiteDatabase db2;
             ContentValues values2;
@@ -219,7 +168,6 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
             }
 
             //weekend 값 가져오기
-
             WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(getActivity());
             SQLiteDatabase db3;
             ContentValues values3;
@@ -260,7 +208,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
             }
 
 
-            // exp : 이는 events와 events2인 hashmap을 adapter에서 불러올 수 있도록 설정해준 부분이다.
+            // 이는 events와 events2, events3 인 hashmap을 adapter에서 불러올 수 있도록 설정해준 부분
             // reset events
             ((CaldroidSampleCustomAdapter)adapter).setEvents(events);
             ((CaldroidSampleCustomAdapter)adapter).setEvents2(events2);
