@@ -52,7 +52,6 @@ import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
-import com.yellowpg.gaspel.etc.OnKeyboardVisibilityListener;
 import com.yellowpg.gaspel.etc.SessionManager;
 import com.yellowpg.gaspel.server.Server_LectioData;
 import com.yellowpg.gaspel.server.Server_WeekendData;
@@ -129,7 +128,6 @@ public class LectioActivity extends AppCompatActivity{
         // bottomnavigation 뷰 등록
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-        BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
 
         // intent값 가져오기 - 한주복음묵상에서 오는 경우
         Intent intent = getIntent();
@@ -276,11 +274,11 @@ public class LectioActivity extends AppCompatActivity{
                         startActivity(i2);
                         break;
                     case R.id.action_three:
-                        Intent i3 = new Intent(LectioActivity.this, SecondActivity.class);
+                        Intent i3 = new Intent(LectioActivity.this, WeekendActivity.class);
                         startActivity(i3);
                         break;
                     case R.id.action_four:
-                        Intent i4 = new Intent(LectioActivity.this, FourthActivity.class);
+                        Intent i4 = new Intent(LectioActivity.this, RecordActivity.class);
                         startActivity(i4);
                         break;
                 }
@@ -302,17 +300,17 @@ public class LectioActivity extends AppCompatActivity{
         if(textsize.equals("big")){
             date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             onesentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            firstSentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            firstSentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
             contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            weekend.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            weekend.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
             after_save_tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
         //    bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
         }else{
@@ -573,7 +571,7 @@ public class LectioActivity extends AppCompatActivity{
                         // procedure for when a user selects an item in the dialog.
                         public void selectedItem(String key, String item) {
                             if(item.equals("설정")){
-                                Intent i = new Intent(LectioActivity.this, ThirdActivity.class);
+                                Intent i = new Intent(LectioActivity.this, SettingActivity.class);
                                 startActivity(i);
                             }else if(item.equals("나의 상태")){
                                 Intent i = new Intent(LectioActivity.this, StatusActivity.class);
@@ -601,7 +599,9 @@ public class LectioActivity extends AppCompatActivity{
                 }else{
                     weekend_date = null;
                 }
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 String background1 = bg1.getText().toString();
                 String background2 = bg2.getText().toString();
                 String background3 = bg3.getText().toString();
@@ -718,7 +718,7 @@ public class LectioActivity extends AppCompatActivity{
                     }
                     // 한주복음묵상에서 온경우 다시 이동
                     if(date_intent != null) {
-                        Intent intent = new Intent(LectioActivity.this, SecondActivity.class);
+                        Intent intent = new Intent(LectioActivity.this, WeekendActivity.class);
                         LectioActivity.this.startActivity(intent);
                     }
                     checkRecord();

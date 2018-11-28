@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:typeface="sans"
+        tools:context="com.yellowpg.gaspel.ThirdActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_step1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/bt_text"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="#e0e0e0"
+                    android:fontFamily="@font/notosans_regular"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="글씨크기"
+                    android:textColor="#7f7f7f"
+                    android:textSize="15dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/bt_normal"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#16a085"
+                        android:fontFamily="@font/notosans_regular"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="일반"
+                        android:textColor="#ffffff"
+                        android:textSize="12dp" />
+
+                    <Button
+                        android:id="@+id/bt_big"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#16a085"
+                        android:fontFamily="@font/notosans_regular"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="크게"
+                        android:textColor="#ffffff"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_step2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/bt_time"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="#e0e0e0"
+                    android:fontFamily="@font/notosans_regular"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="알람설정"
+                    android:textColor="#7f7f7f"
+                    android:textSize="15dp" />
+
+                <TimePicker
+                    android:id="@+id/timePicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15dp"
+                    android:timePickerMode="spinner" />
+
+                <Button
+                    android:id="@+id/et_timeset"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:gravity="center_horizontal"
+                    android:hint=""
+                    android:textColor="#5e5e5e"
+                    android:textSize="15dp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/bt_timeset"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#16a085"
+                        android:fontFamily="@font/notosans_regular"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="시간설정"
+                        android:textColor="#ffffff"
+                        android:textSize="12dp" />
+
+                    <Button
+                        android:id="@+id/bt_stop"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#16a085"
+                        android:fontFamily="@font/notosans_regular"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="설정해제"
+                        android:textColor="#ffffff"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_step3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/bt_data"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="#e0e0e0"
+                    android:fontFamily="@font/notosans_regular"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="데이터삽입"
+                    android:textColor="#7f7f7f"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_regular"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="기존의 모바일 기록을 서버로 전송합니다"
+                    android:textColor="#5e5e5e"
+                    android:textSize="14dp" />
+
+                <Button
+                    android:id="@+id/bt_setdata"
+                    android:layout_width="120dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="#16a085"
+                    android:fontFamily="@font/notosans_regular"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="데이터 전송하기"
+                    android:textColor="#ffffff"
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    </RelativeLayout>

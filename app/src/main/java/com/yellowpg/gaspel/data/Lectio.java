@@ -2,17 +2,12 @@ package com.yellowpg.gaspel.data;
 
 import hirondelle.date4j.DateTime;
 
-/**
- * Created by Saea on 2017-08-07.
- */
-
-// exp : 이는 fourthActivity에서 데이터를 가져오기 위해 필요한 클래스이다
-
 public class Lectio {
     private String date;
     private String oneSentence;
     private String bg1, bg2, bg3, sum1, sum2, js1, js2;
     DateTime date_time;
+
     public Lectio(String date, String sentence, String bg1, String bg2, String bg3, String sum1, String sum2, String js1, String js2){
         this.date = date;
         this.oneSentence = sentence;
@@ -23,7 +18,6 @@ public class Lectio {
         this.sum2 = sum2;
         this.js1 = js1;
         this.js2 = js2;
-
     }
 
     public Lectio(DateTime date_time, String date, String sentence, String bg1, String bg2, String bg3, String sum1, String sum2, String js1, String js2){

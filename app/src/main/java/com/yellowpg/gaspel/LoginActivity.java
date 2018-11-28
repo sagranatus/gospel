@@ -22,7 +22,7 @@ import com.yellowpg.gaspel.etc.SessionManager;
 import com.yellowpg.gaspel.server.Server_UserData;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "saea";
+
     private Button btnLogin;
     private Button btnLinkToRegister;
     private EditText inputEmail;
@@ -36,14 +36,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //actionbar setting
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-
-//actionbar setting
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_login);
-        TextView mytext = (TextView) findViewById(R.id.mytext);
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
         actionbar.setElevation(0);
+
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.back);
@@ -66,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         // Session manager
         session = new SessionManager(getApplicationContext());
 
-        // Check if user is already logged in or not
+        // 로그인한 경우 profileactivity로 보낸다.
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
             Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
@@ -85,8 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Check for empty data in the form
                 if (!email.isEmpty() && !password.isEmpty()) {
                     // login user
-                    Server_UserData.checkLogin(LoginActivity.this, session, pDialog, email, password); // ex : 여기서 로그인 확인
-
+                    Server_UserData.checkLogin(LoginActivity.this, session, pDialog, email, password);
 
                 } else {
                     // Prompt user to enter credentials
@@ -98,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
-        // Link to Register Screen
+        // 회원가입으로 이동
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {

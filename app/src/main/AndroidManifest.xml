@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yellowpg.gaspel"
-    android:versionCode="69"
-    android:versionName="1.8.1">
+    android:versionCode="70"
+    android:versionName="1.8.2">
 
     <uses-sdk android:targetSdkVersion="21" />
 
@@ -52,17 +52,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SecondActivity"
+            android:name=".WeekendActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:label="오늘의복음"
             android:screenOrientation="sensor" />
         <activity
-            android:name=".ThirdActivity"
+            android:name=".SettingActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:label="오늘의복음"
             android:screenOrientation="sensor" />
         <activity
-            android:name=".FourthActivity"
+            android:name=".RecordActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:label="오늘의복음"
             android:screenOrientation="sensor"

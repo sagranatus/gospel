@@ -43,21 +43,19 @@ public class RegisterActivity extends AppCompatActivity{
     private EditText inputCathedral;
     private ProgressDialog pDialog;
     private SessionManager session;
-    String gender;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //actionbar setting
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-
-//actionbar setting
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_register);
-        TextView mytext = (TextView) findViewById(R.id.mytext);
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
         actionbar.setElevation(0);
+
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.back);
@@ -76,14 +74,13 @@ public class RegisterActivity extends AppCompatActivity{
         btnRegister.setBackgroundResource(R.drawable.button_bg);
         inputChristName.setBackgroundResource(R.drawable.edit_bg);
         inputCathedral.setBackgroundResource(R.drawable.edit_bg);
-        LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
 
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        // Session manager // 여기서 sharedpreference에 값 생성
+        // Session manager
         session = new SessionManager(getApplicationContext());
 
         // Check if user is already logged in or not
@@ -107,10 +104,7 @@ public class RegisterActivity extends AppCompatActivity{
                 String password = inputPassword.getText().toString().trim();
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()  && !christ_name.isEmpty() && !cathedral.isEmpty()) {
-                    String[] info = {name, email, password, id};
-
-                    Server_UserData.registerUser(RegisterActivity.this, session, pDialog, id, email, password,  name, christ_name, cathedral); // cf : 여기서 등록함
-
+                    Server_UserData.registerUser(RegisterActivity.this, session, pDialog, id, email, password,  name, christ_name, cathedral);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please enter your details!", Toast.LENGTH_LONG)
@@ -130,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity{
             }
         });
 
-        // 새로 추가한 부분 화면 클릭시 soft keyboard hide
+        // 화면 클릭시 soft keyboard hide
         findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

@@ -48,9 +48,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
-import com.yellowpg.gaspel.DB.DBManager_Comment;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -172,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
 		// bottomnavigation 뷰 등록
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 		BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-		BottomNavigationViewHelper.disableShiftMode2(bottomNavigationView);
 		Menu menu = bottomNavigationView.getMenu();
 		MenuItem menuItem_1 = menu.getItem(0);
 		MenuItem menuItem_2 = menu.getItem(1);
@@ -197,11 +194,11 @@ public class MainActivity extends AppCompatActivity {
 						startActivity(i2);
 						break;
 					case R.id.action_three:
-						Intent i3 = new Intent(MainActivity.this, SecondActivity.class);
+						Intent i3 = new Intent(MainActivity.this, WeekendActivity.class);
 						startActivity(i3);
 						break;
 					case R.id.action_four:
-						Intent i4 = new Intent(MainActivity.this, FourthActivity.class);
+						Intent i4 = new Intent(MainActivity.this, RecordActivity.class);
 						startActivity(i4);
 						break;
 				}
@@ -228,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
-		// exp : textsize 설정
+		// textsize 설정
 		SharedPreferences sp = getSharedPreferences("setting",0);
 		textsize = sp.getString("textsize", "");
 		if(textsize.equals("big")){
@@ -236,8 +233,8 @@ public class MainActivity extends AppCompatActivity {
 			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 		}else{
 
 		}
@@ -340,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
 						// procedure for when a user selects an item in the dialog.
 						public void selectedItem(String key, String item) {
 							if(item.equals("설정")){
-								Intent i = new Intent(MainActivity.this, ThirdActivity.class);
+								Intent i = new Intent(MainActivity.this, SettingActivity.class);
 								startActivity(i);
 							}else if(item.equals("나의 상태")){
 								Intent i = new Intent(MainActivity.this, StatusActivity.class);
@@ -359,7 +356,6 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 	}
 
 	// 오른쪽 종을 누르면 청원기도가 보인다
@@ -484,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
 									contents = contents.replaceAll(m.group(), "\n"+m.group());
 								}
 								tv.setText(contents);
-								tv2.setText("주님께서 오늘 나에게 하시는 말씀이 무엇인지 생각해보며, 말씀을 살아가기 위하여 어떻게 해야할지 적어 봅시다.");
+								tv2.setText("주님께서 오늘 나에게 하고자 하시는 말씀이 무엇인지 생각해 봅시다.");
 
 								btnNetCon.setText(gaspel_sentence);
 								btnNetCon2.setText("말씀새기기");
@@ -525,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
 		t.start();
 	}
 
-	public void getComments(String date){
+	public void getComments(String date) {
 
 		Date origin_date = null;
 		try {
@@ -534,19 +530,35 @@ public class MainActivity extends AppCompatActivity {
 			e1.printStackTrace();
 		}
 		String date_aft = sdf1.format(origin_date) + getDay() + "요일";
-		String date_str =  date_aft;
-		ArrayList<Comment> aDataList =  new ArrayList<Comment>();
-		DBManager_Comment dbMgr = new DBManager_Comment(MainActivity.this);
-		dbMgr.dbOpen();
-		dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, date_str, aDataList);
-		dbMgr.dbClose();
-		if(!aDataList.isEmpty()){
-			Log.d("saea", aDataList.get(0).getComment());
-			comment.setText(aDataList.get(0).getComment(), TextView.BufferType.EDITABLE);
-		}else{
-		}
-	}
 
+		String comment_str = null;
+		commentInfoHelper = new CommentInfoHelper(this);
+		SQLiteDatabase db = null;
+		try {
+			db = commentInfoHelper.getReadableDatabase();
+			String[] columns = {"comment_con", "date", "sentence"};
+			String whereClause = "date = ?";
+			String[] whereArgs = new String[]{
+					date_aft
+			};
+			Cursor cursor = db.query("comment", columns, whereClause, whereArgs, null, null, null);
+
+			while (cursor.moveToNext()) {
+				comment_str = cursor.getString(0);
+
+			}
+			// 기존 값이 있는 경우 수정하기
+			if (comment_str != null) {
+				Log.d("saea", comment_str);
+				comment.setText(comment_str, TextView.BufferType.EDITABLE);
+			}else{
+
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+	}
 
 	// 날짜 전후를 클릭할때 이벤트
 	OnClickListener listener_date = new OnClickListener() {

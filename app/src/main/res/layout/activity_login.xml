@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosans_regular"
             android:layout_marginBottom="10dp"
-            android:textSize="12dp"
+            android:textSize="14dp"
             android:hint="이메일"
             android:padding="10dp"
             android:inputType="textEmailAddress"
@@ -36,7 +36,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textSize="12dp"
+            android:textSize="14dp"
             android:hint="비밀번호"
             android:padding="10dp"
             android:singleLine="true"
@@ -65,13 +65,13 @@
             android:id="@+id/btnLinkToRegisterScreen"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
+            android:layout_marginTop="20dp"
             android:background="@null"
             android:fontFamily="@font/notosans_regular"
             android:text="계정이 없으신가요? 가입하기"
             android:textAllCaps="false"
             android:textColor="@color/grey2"
-            android:textSize="12dp" />
+            android:textSize="14dp" />
 
 
 

@@ -9,6 +9,7 @@ public class UserData {
     private String mChristName = null;
     private String mCathedral = null;
     private String mCreated = null;
+
     public UserData(String aUid, String aUserId, String aEmail, String aName, String aChristName, String aCathedral, String aCreated){
         this.mUid = aUid;
         this.mUserId = aUserId;

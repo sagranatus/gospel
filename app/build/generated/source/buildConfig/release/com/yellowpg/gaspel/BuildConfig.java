@@ -8,6 +8,6 @@ public final class BuildConfig {
   public static final String APPLICATION_ID = "com.yellowpg.gaspel";
   public static final String BUILD_TYPE = "release";
   public static final String FLAVOR = "";
-  public static final int VERSION_CODE = 69;
-  public static final String VERSION_NAME = "1.8.1";
+  public static final int VERSION_CODE = 70;
+  public static final String VERSION_NAME = "1.8.2";
 }

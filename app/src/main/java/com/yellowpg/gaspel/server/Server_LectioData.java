@@ -36,8 +36,6 @@ public class Server_LectioData {
                 Log.i("saea", "Starting Upload...");
                 Lectio lectiodata = lectio;
                 insertLectio_Connect(context, uid, lectiodata);
-
-
             }
         });
         t.start();
@@ -54,27 +52,20 @@ public class Server_LectioData {
                 Log.i("saea", "Starting Upload...");
 
                 selectAll_Connect(context, uid, mAppItem);
-                // status = "select_cloth_season_type_detail";
 
             }
         });
         t.start();
-        //     try {
-        //        t.join();
-        //        Log.d("js", String.valueOf(mAppItem.size()));
-        //   } catch (InterruptedException e) {
-        //       e.printStackTrace();
-        //   }
     }
 
 
     public static void insertLectio_Connect(Context context, final String uid, final Lectio lectio) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_lectio";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_LECTIODATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_LECTIODATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -82,7 +73,6 @@ public class Server_LectioData {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
-                    Log.d("saea", error+"saea");
                     if (!error) {
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
@@ -99,8 +89,6 @@ public class Server_LectioData {
                         String js1 = lectio.getString("js1");
                         String js2 = lectio.getString("js2");
                         Log.d("saea", "result:"+ uid + date + onesentence + bg1 + bg2 +bg3 + sum1 + sum2 + js1 + js2);
-
-
                     } else {
 
                         // Error occurred in registration. Get the error
@@ -116,7 +104,7 @@ public class Server_LectioData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "InsertLectio Error: " + error.getMessage());
 
             }
         }) {
@@ -149,11 +137,11 @@ public class Server_LectioData {
 
     public static void selectAll_Connect(final Context context, final String uid, final ArrayList<Lectio> mAppItem) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_lectio";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_LECTIODATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_LECTIODATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -180,7 +168,7 @@ public class Server_LectioData {
                                 SQLiteDatabase db;
                                 LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(context);
                                 ContentValues values;
-                                // cf : 기존에 값이 있는지 확인 후 있는 경우에는 already값을 1로 준다.
+
                                 try{
                                     String bg1_str = null;
                                     db = lectioInfoHelper.getReadableDatabase();
@@ -221,7 +209,6 @@ public class Server_LectioData {
                                 Log.d("saea", "lectios size:"+String.valueOf(lectioItems.size()));
                             }
 
-                            Log.d("saea", "resultfirst");
 
                         }else{
                             Log.d("saea", "noval");
@@ -243,7 +230,7 @@ public class Server_LectioData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "GetLectio Error: " + error.getMessage());
 
             }
         }) {
@@ -269,21 +256,19 @@ public class Server_LectioData {
 
     public static void updateLectio(final Context context, final String uid, final Lectio lectio) {
 
-
         Log.i("saea", "Starting Upload...");
         updateLectio_Connect(context, uid, lectio);
-
 
     }
 
 
     public static void updateLectio_Connect(final Context context, final String uid, final Lectio lectio) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_lectio";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_LECTIODATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_LECTIODATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -309,7 +294,6 @@ public class Server_LectioData {
                         String js2 = lectio.getString("js2");
                         Log.d("saea", "update_result:"+ uid + date + onesentence + bg1 + bg2 +bg3 + sum1 + sum2 + js1 + js2);
 
-
                     } else {
 
                         // Error occurred in registration. Get the error
@@ -325,7 +309,7 @@ public class Server_LectioData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "UpdateLectio Error: " + error.getMessage());
 
             }
         }) {

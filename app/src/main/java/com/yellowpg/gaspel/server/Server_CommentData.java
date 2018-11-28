@@ -54,17 +54,10 @@ public class Server_CommentData {
                 Log.i("saea", "Starting Upload...");
 
                 selectAll_Connect(context, uid, mAppItem);
-                // status = "select_cloth_season_type_detail";
 
             }
         });
         t.start();
-   //     try {
-    //        t.join();
-    //        Log.d("js", String.valueOf(mAppItem.size()));
-     //   } catch (InterruptedException e) {
-     //       e.printStackTrace();
-     //   }
     }
 
 
@@ -73,8 +66,8 @@ public class Server_CommentData {
         String tag_string_req = "req_cloth";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_COMMENTDATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_COMMENTDATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -84,8 +77,6 @@ public class Server_CommentData {
                     boolean error = jObj.getBoolean("error");
                     Log.d("saea", error+"saea");
                     if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
                         String uid = jObj.getString("uid");
 
                         JSONObject comments = jObj.getJSONObject("comment");
@@ -96,7 +87,6 @@ public class Server_CommentData {
 
 
                     } else {
-
                         // Error occurred in registration. Get the error
                         // message
                         String errorMsg = jObj.getString("error_msg");
@@ -110,7 +100,7 @@ public class Server_CommentData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "InsertComment Error: " + error.getMessage());
 
             }
         }) {
@@ -137,11 +127,11 @@ public class Server_CommentData {
 
     public static void selectAll_Connect(final Context context, final String uid, final ArrayList<Comment> mAppItem) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_comments";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_COMMENTDATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_COMMENTDATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -164,10 +154,12 @@ public class Server_CommentData {
                                 }
                                 Comment comment = new Comment(arr[3], arr[1], arr[2]);
                                 Log.d("saea", arr[3]+arr[1]+arr[2]);
-                                    SQLiteDatabase db;
+
+                                // 기존에 값이 있는지 확인하고 없는 경우에 모바일 DB에 삽입
+                                SQLiteDatabase db;
                                     CommentInfoHelper commentInfoHelper = new CommentInfoHelper(context);
                                     ContentValues values;
-                                    // cf : 기존에 comment 값이 있는지 값이 있는지 확인하여 있는 경우, already값을 1로 준다.
+
                                     try{
                                         String comment_str = null;
                                         db = commentInfoHelper.getReadableDatabase();
@@ -191,24 +183,13 @@ public class Server_CommentData {
                                             values.put("date", arr[1]);
                                             values.put("sentence", arr[2]);
                                             db.insert("comment", null, values);
-                                         //   commentInfoHelper.close();
+
                                         }
+                                        commentInfoHelper.close();
 
                                     }catch(Exception e){
 
                                     }
-
-
-                                 /*   SQLiteDatabase db;
-                                    CommentInfoHelper commentInfoHelper = new CommentInfoHelper(context);
-                                    db=commentInfoHelper.getWritableDatabase();
-                                    ContentValues values = new ContentValues();
-                                    values.put("comment_con", comment.getComment());
-                                    values.put("date", comment.getDate());
-                                    values.put("sentence", comment.getOneSentence());
-                                    db.insert("comment", null, values);
-                                    commentInfoHelper.close();
-                                    db.close(); */
 
                                 commentItems.add(comment);
                                 Log.d("saea", "comments size:"+String.valueOf(commentItems.size()));
@@ -236,7 +217,7 @@ public class Server_CommentData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "GetComments Error: " + error.getMessage());
 
             }
         }) {
@@ -255,28 +236,22 @@ public class Server_CommentData {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        Log.d("saea", "third"+String.valueOf(mAppItem.size()));
-
     }
 
 
     public static void updateComment(final Context context, final String uid, final String aDate, final String aOnesentence, final String aComment) {
-
-
         Log.i("saea", "Starting Upload...");
         updateComment_Connect(context, uid, aDate, aOnesentence, aComment);
-
-
     }
 
 
     public static void updateComment_Connect(final Context context, final String uid, final String date, final String oneSentence, final String comment) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_comment";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_COMMENTDATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_COMMENTDATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -310,7 +285,7 @@ public class Server_CommentData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "UpdateComment Error: " + error.getMessage());
 
             }
         }) {

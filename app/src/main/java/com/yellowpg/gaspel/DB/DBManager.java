@@ -78,8 +78,6 @@ public class DBManager {
         results.close();
     }
     public void updateUserData(String aSql, String[] info) {
-        //    mDbController.execSQL("DROP TABLE IF EXISTS user");
-        //   mDbController.execSQL("delete from user");
         String[] sqlData = info;
         this.mDbController.execSQL(aSql, sqlData);
     }

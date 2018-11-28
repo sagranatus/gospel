@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -33,8 +34,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.DBManager;
+import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.UserDBSqlData;
+import com.yellowpg.gaspel.DB.WeekendInfoHelper;
 import com.yellowpg.gaspel.data.UserData;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -54,21 +58,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
-    private static final String TAG = "saea";
     private Button btnLogout;
-    public ImageView profileImg;
     private SessionManager session;
 
 
     Context mContext;
     EditText name_et, userId_et, email_et, christ_name_et, cathedral_et;
     String uid;
-    String title;
-
     String name, user_id, email, christ_name, cathedral, password;
-    Button changeImg;
-    Spinner genderSpinner;
-    ArrayAdapter<String> spinnerArrayAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -77,18 +75,16 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
 
+        //actionbar setting
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-
-//actionbar setting
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_mypage);
-        TextView mytext = (TextView) findViewById(R.id.mytext);
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
         actionbar.setElevation(0);
+
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.back);
-
 
         name_et = (EditText) findViewById(R.id.name);
         userId_et = (EditText) findViewById(R.id.userid);
@@ -107,15 +103,11 @@ public class ProfileActivity extends AppCompatActivity {
         userId_et.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         email_et.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
-
         // session manager
         session = new SessionManager(getApplicationContext());
-
         if (!session.isLoggedIn()) {
             logoutUser();
         }
-        session = new SessionManager(getApplicationContext());
-
         uid = session.getUid();
         Log.d("saea", uid);
 
@@ -126,8 +118,8 @@ public class ProfileActivity extends AppCompatActivity {
         dbMgr.selectUserData(UserDBSqlData.SQL_DB_SELECT_DATA, uid, userdata);
         dbMgr.dbClose();
         if(userdata.isEmpty()){
+            // 서버에서 user 정보를 가져와서 user database에 삽입
             getUser(ProfileActivity.this, uid);
-
         }else{
             UserData udata = userdata.get(0);
             name = udata.getName();
@@ -143,8 +135,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         }
 
-
-
         // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
 
@@ -152,10 +142,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 logoutUser();
             }
-        }); // 로그아웃 클릭
+        });
 
 
-        // 새로 추가한 부분 화면 클릭시 soft keyboard hide
+        // 화면 클릭시 soft keyboard hide
         findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -188,7 +178,6 @@ public class ProfileActivity extends AppCompatActivity {
                 christ_name = christ_name_et.getText().toString();
                 cathedral = cathedral_et.getText().toString();
                 Log.d("saea", name+email+user_id+" "+uid);
-
                 Server_UserData.updateUser(ProfileActivity.this, uid, email, name, christ_name, cathedral);
                 return true;
             default:
@@ -199,16 +188,37 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
-    /**
-     * Logging out the user. Will set isLoggedIn flag to false in shared
-     * preferences Clears the user data from sqlite users table
-     * */
     // 로그아웃할때
     private void logoutUser() {
-
         session.setLogin(false, "");
 
+        SQLiteDatabase db = null;
+        CommentInfoHelper commentInfoHelper = new CommentInfoHelper(this);
+        try {
+            db = commentInfoHelper.getReadableDatabase();
+            db.delete("comment", null, null);
+            db.close();
+        }catch(Exception e){
+
+        }
+
+        LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(this);
+        try {
+            db = lectioInfoHelper.getReadableDatabase();
+            db.delete("lectio", null, null);
+            db.close();
+        }catch(Exception e){
+
+        }
+
+        WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(this);
+        try {
+            db = weekendInfoHelper.getReadableDatabase();
+            db.delete("weekend", null, null);
+            db.close();
+        }catch(Exception e){
+
+        }
         // Launching the login activity
         Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -222,8 +232,8 @@ public class ProfileActivity extends AppCompatActivity {
         String tag_string_req = "req_register";
         final ArrayList<UserData>  userData =  new ArrayList<UserData>();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_USERUPDATE, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_USERUPDATE, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -233,8 +243,6 @@ public class ProfileActivity extends AppCompatActivity {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
                         String uid = jObj.getString("uid");
 
                         JSONObject user = jObj.getJSONObject("user");
@@ -243,15 +251,15 @@ public class ProfileActivity extends AppCompatActivity {
                         email = user.getString("email");
                         christ_name = user.getString("christ_name");
                         cathedral = user.getString("cathedral");
-                        String created_at = user.getString("created_at"); // 보내는 값이 json형식의 response 이다
-                        Log.d("saea", uid+"add user into DB");
+                        String created_at = user.getString("created_at");
 
-
+                        // userdatabase에 user 정보 삽입
                         UserData cData = new UserData(uid, user_id, email, name,  christ_name, cathedral, created_at);
                         DBManager dbMgr = new DBManager(context);
                         dbMgr.dbOpen();
                         dbMgr.insertUserData(UserDBSqlData.SQL_DB_INSERT_DATA, cData);
                         dbMgr.dbClose();
+                        Log.d("saea", uid+"add user into DB");
 
                         // Displaying the user details on the screen
                         name_et.setText(name, TextView.BufferType.EDITABLE);
@@ -264,8 +272,7 @@ public class ProfileActivity extends AppCompatActivity {
                         // Error occurred in registration. Get the error
                         // message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(context,
-                                errorMsg+"1111", Toast.LENGTH_LONG).show();
+                   //     Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -276,15 +283,14 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
-                Toast.makeText(context,
-                        error.getMessage()+"2222", Toast.LENGTH_LONG).show();
+                Log.e("saea", "GetUser Error: " + error.getMessage());
+             //   Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         }) {
 
             @Override
-            protected Map<String, String> getParams() { // StringRequest에 대한 메소드
+            protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("status", "get");

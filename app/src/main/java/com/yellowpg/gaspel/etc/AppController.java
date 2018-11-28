@@ -1,16 +1,12 @@
 package com.yellowpg.gaspel.etc;
 
-/**
- * Created by Saea on 2017-11-28.
- */
-
 import android.app.Application;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-//exp : 앱이 시작될때 실행되는 코드로 객체를 만들어 둔다
+// 앱이 시작될때 실행되는 코드로 객체를 만들어 둔다
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
@@ -24,7 +20,6 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-
     }
 
     public static synchronized AppController getInstance() {
@@ -35,7 +30,6 @@ public class AppController extends Application {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
-
         return mRequestQueue;
     }
 

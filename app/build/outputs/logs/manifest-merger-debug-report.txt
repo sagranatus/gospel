@@ -198,7 +198,7 @@ data
 ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:51:17-55
 	android:mimeType
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:51:23-52
-activity#com.yellowpg.gaspel.SecondActivity
+activity#com.yellowpg.gaspel.WeekendActivity
 ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:54:9-58:50
 	android:screenOrientation
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:58:13-47
@@ -207,8 +207,8 @@ ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:
 	android:configChanges
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:56:13-75
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:55:13-43
-activity#com.yellowpg.gaspel.ThirdActivity
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:55:13-44
+activity#com.yellowpg.gaspel.SettingActivity
 ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:59:9-63:50
 	android:screenOrientation
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:63:13-47
@@ -217,8 +217,8 @@ ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:
 	android:configChanges
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:61:13-75
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:60:13-42
-activity#com.yellowpg.gaspel.FourthActivity
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:60:13-44
+activity#com.yellowpg.gaspel.RecordActivity
 ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:64:9-69:55
 	android:screenOrientation
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:68:13-47

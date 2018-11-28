@@ -74,7 +74,7 @@
                     android:fontFamily="@font/notosans_semibold"
                     android:textSize="17dp"
                     android:paddingTop="2dp"
-                    android:paddingBottom="5dp"
+                    android:paddingBottom="10dp"
                     android:lineSpacingExtra="3dp"
                     android:background="#ffffff"
                     style="?android:attr/borderlessButtonStyle" />
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_gravity="center_vertical"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:fontFamily="@font/notosans_regular"
                     android:lineSpacingExtra="5dp"
                     android:paddingBottom="5dp"
@@ -133,7 +133,7 @@
                         android:textSize="16dp"
                         android:textColor="#16a085"
                         android:fontFamily="@font/notosans_regular"
-                        android:lineSpacingExtra="5dp"
+                        android:lineSpacingExtra="3dp"
                         android:text="복음의 배경은 무엇인가요?" />
                     <Button
                         android:id="@+id/bt_next"
@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dp"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="등장인물은.."
                     android:textColor="#16a085" />
                 <EditText
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dp"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="배경 장소는.."
                     android:textColor="#16a085" />
                 <EditText
@@ -185,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dp"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="배경시간 혹은 상황은.."
                     android:textColor="#16a085" />
 
@@ -198,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="복음의 내용을 간추리면.."
                     android:textColor="#16a085" />
                 <EditText
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/notosans_regular"
                     android:lineSpacingExtra="5dip"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="특별히 눈에 띄는 부분은.."
                     android:textColor="#16a085" />
 
@@ -223,7 +223,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="복음에서 보여지는 예수님의 모습은.."
                     android:textColor="#16a085" />
                 <EditText
@@ -235,7 +235,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="복음을 통해 예수님께서 내게 해주시는 말씀은.."
                     android:textColor="#16a085" />
                 <EditText
@@ -247,7 +247,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:hint="특별히 와닿는 구절을 선택하여 한주동안 묵상해 봅시다."
                     android:textColor="#16a085" />
 
@@ -279,10 +279,10 @@
                 android:textColor="#16a085"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="10dp"
+                android:lineSpacingExtra="5dp"
                 android:textSize="15dp"
                 android:inputType="textMultiLine"
-                android:layout_marginBottom="100dp"/>
+                android:layout_marginBottom="50dp"/>
 
             </ScrollView>
             <Button

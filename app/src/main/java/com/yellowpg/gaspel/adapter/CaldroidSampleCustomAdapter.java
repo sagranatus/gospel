@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidGridAdapter;
+import com.roomorama.caldroid.CellView;
 import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.R;
 import com.yellowpg.gaspel.data.Comment;
@@ -27,9 +28,6 @@ import java.util.HashMap;
 
 import hirondelle.date4j.DateTime;
 
-/**
- * Created by Saea on 2017-08-02.
- */
 public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
     int month;
     int year;

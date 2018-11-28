@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,13 +19,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.adapter.StatusSaveAdapter;
+import com.yellowpg.gaspel.data.MonthRecord;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class StatusActivity extends AppCompatActivity {
@@ -52,12 +57,10 @@ public class StatusActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
 
+        //actionbar setting
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-
-//actionbar setting
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_status);
-        TextView mytext = (TextView) findViewById(R.id.mytext);
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
         actionbar.setElevation(0);
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
@@ -78,18 +81,16 @@ public class StatusActivity extends AppCompatActivity {
 
 
 
-        // exp : 텍스트 사이즈 설정
+        // 텍스트 사이즈 설정
         SharedPreferences sp2 = getSharedPreferences("setting",0);
         String textsize = sp2.getString("textsize", "");
         if(textsize.equals("big")){
-          //  thismonth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-          //  status.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         }else{
 
         }
       //  init();
         
-              // exp : 이 부분은 코멘트 데이터를 가져와서 레벨 업 시켜주는 부분
+        // 코멘트 기록을 가져온다
         commentInfoHelper = new CommentInfoHelper(this);
         SQLiteDatabase db;
         ContentValues values;
@@ -102,19 +103,12 @@ public class StatusActivity extends AppCompatActivity {
                 String query = "SELECT comment_con, date, sentence FROM comment WHERE date LIKE '%"+date_val+"%'"; // WHERE date BETWEEN '2018-11-01' and '2018-11-31'
                 Cursor cursor = db.rawQuery(query, null);
                 while(cursor.moveToNext()){
-                //    comment_str = cursor.getString(0);
                     date_str = cursor.getString(1);
-                 //   sentence_str = cursor.getString(2);
 
-                 //   if(date_str.contains(date_val)){
                     if(date_str != null){
-                      //  status.setText(date_str);
                         i++;
                     }
                 }
-
-
-
 
             }catch(Exception e){
 
@@ -122,37 +116,22 @@ public class StatusActivity extends AppCompatActivity {
 
 
 
-        // exp : 이 아래부분은 렉시오디비나에 대한 데이터를 가져와서 레벨업 시켜주는 부분이다.
+        // 렉시오디비나 기록을 가져온다
         lectioInfoHelper = new LectioInfoHelper(this);
 
         try{
         db = lectioInfoHelper.getReadableDatabase();
         String query = "SELECT bg1, bg2, bg3, sum1, sum2, js1, js2, date, onesentence FROM lectio WHERE date LIKE '%"+date_val+"%'";
         Cursor cursor = db.rawQuery(query, null);
-    //   String bg1_str = null;
-    //    String bg2_str= null;
-    //    String bg3_str= null;
-    //    String sum1_str= null;
-     //   String sum2_str= null;
-     //   String js1_str= null;
-    //    String js2_str= null;
+
         String date_str = null;
-     //   String onesentence_str = null;
 
         while(cursor.moveToNext()){
-     //       bg1_str = cursor.getString(0);
-     //       bg2_str = cursor.getString(1);
-      //      bg3_str = cursor.getString(2);
-      //      sum1_str = cursor.getString(3);
-      //      sum2_str = cursor.getString(4);
-      //      js1_str = cursor.getString(5);
-      //      js2_str = cursor.getString(6);
             date_str = cursor.getString(7);
-     //       onesentence_str = cursor.getString(8);
-         //   if(date_str.contains(date_val)){
             if(date_str!=null){
                 j++;
             }
+            Log.d("saea",j+date_str);
         }
 
             cursor.close();
@@ -200,6 +179,26 @@ public class StatusActivity extends AppCompatActivity {
         arrive_person.setVisibility(View.VISIBLE);
         walking_person.setVisibility(View.GONE);
     }
+
+        ArrayList<MonthRecord> data = new ArrayList<MonthRecord>();
+        for(int k=1; k<13; k++){
+            if(date_val.contains(" "+k+"월")){
+                continue;
+            }
+            int[] records = getData(" "+k+"월");
+            String comments =  Integer.toString(records[0]);
+            String lectios =  Integer.toString(records[1]);
+            if(!comments.equals("0") || !lectios.equals("0") ){
+                data.add(new MonthRecord(k+"월", comments, lectios ));
+            }
+
+        }
+
+
+
+        StatusSaveAdapter adapter = new StatusSaveAdapter(StatusActivity.this, R.layout.custom_status, data, textsize);
+        ListView lv = (ListView) findViewById(R.id.lv_month);
+        lv.setAdapter(adapter);
 }
     // 커스텀 다이얼로그 선택시
     @Override
@@ -210,6 +209,62 @@ public class StatusActivity extends AppCompatActivity {
                 finish();
                 return true;
         }
+    }
+
+    public int[] getData(String month){
+        int i = 0;
+        int j = 0;
+        // 코멘트 기록을 가져온다
+        commentInfoHelper = new CommentInfoHelper(this);
+        SQLiteDatabase db;
+        ContentValues values;
+        try{
+            // String comment_str = null;
+            String date_str = null;
+            //  String sentence_str = null;
+            db = commentInfoHelper.getReadableDatabase();
+            String[] columns = {"comment_con", "date", "sentence"};
+            String query = "SELECT comment_con, date, sentence FROM comment WHERE date LIKE '%"+month+"%'"; // WHERE date BETWEEN '2018-11-01' and '2018-11-31'
+            Cursor cursor = db.rawQuery(query, null);
+            while(cursor.moveToNext()){
+                date_str = cursor.getString(1);
+
+                if(date_str != null){
+                    i++;
+                }
+            }
+
+        }catch(Exception e){
+
+        }
+
+
+
+        // 렉시오디비나 기록을 가져온다
+        lectioInfoHelper = new LectioInfoHelper(this);
+
+        try{
+            db = lectioInfoHelper.getReadableDatabase();
+            String query = "SELECT bg1, bg2, bg3, sum1, sum2, js1, js2, date, onesentence FROM lectio WHERE date LIKE '%"+month+"%'";
+            Cursor cursor = db.rawQuery(query, null);
+
+            String date_str = null;
+
+            while(cursor.moveToNext()){
+                date_str = cursor.getString(7);
+                if(date_str!=null){
+                    j++;
+                }
+                Log.d("saea",j+date_str);
+            }
+
+            cursor.close();
+            lectioInfoHelper.close();
+        }
+        catch(Exception e){
+            Toast.makeText(StatusActivity.this, "실패", Toast.LENGTH_SHORT).show();
+        }
+        return new int[]{i,j};
     }
 
 

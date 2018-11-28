@@ -39,13 +39,11 @@ public class Server_WeekendData {
                 Log.i("saea", "Starting Upload...");
                 insertWeekend_Connect(context, uid, date, mysentence, mythought);
 
-
             }
         });
         t.start();
 
     }
-
 
     public static void selectAll(final Context context, final String uid, final ArrayList<Weekend> mAppItem) {
 
@@ -56,27 +54,22 @@ public class Server_WeekendData {
                 Log.i("saea", "Starting Upload...");
 
                 selectAll_Connect(context, uid, mAppItem);
-                // status = "select_cloth_season_type_detail";
+
 
             }
         });
         t.start();
-        //     try {
-        //        t.join();
-        //        Log.d("js", String.valueOf(mAppItem.size()));
-        //   } catch (InterruptedException e) {
-        //       e.printStackTrace();
-        //   }
+
     }
 
 
     public static void insertWeekend_Connect(Context context, final String uid, final String date, final String mySentence, final String myThought) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_weekend";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_WEEKENDDATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_WEEKENDDATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -84,7 +77,6 @@ public class Server_WeekendData {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
-                    Log.d("saea", error+"saea");
                     if (!error) {
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
@@ -110,7 +102,7 @@ public class Server_WeekendData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "InsertWeekend Error: " + error.getMessage());
 
             }
         }) {
@@ -137,11 +129,11 @@ public class Server_WeekendData {
 
     public static void selectAll_Connect(final Context context, final String uid, final ArrayList<Weekend> mAppItem) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_weekend";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_WEEKENDDATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_WEEKENDDATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -202,18 +194,6 @@ public class Server_WeekendData {
                                     e.printStackTrace();
                                 }
 
-
-                                 /*   SQLiteDatabase db;
-                                    CommentInfoHelper commentInfoHelper = new CommentInfoHelper(context);
-                                    db=commentInfoHelper.getWritableDatabase();
-                                    ContentValues values = new ContentValues();
-                                    values.put("comment_con", comment.getComment());
-                                    values.put("date", comment.getDate());
-                                    values.put("sentence", comment.getOneSentence());
-                                    db.insert("comment", null, values);
-                                    commentInfoHelper.close();
-                                    db.close(); */
-
                                 weekendItems.add(weekend);
                                 Log.d("saea", "weekends size:"+String.valueOf(weekendItems.size()));
                             }
@@ -240,7 +220,7 @@ public class Server_WeekendData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "GetWeekends Error: " + error.getMessage());
 
             }
         }) {
@@ -276,11 +256,11 @@ public class Server_WeekendData {
 
     public static void updateWeekend_Connect(final Context context, final String uid, final String date, final String mySentence, final String myThought) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_weekend";
 
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, // 여기서 데이터를 POST로 서버로 보내는 것 같다
-                AppConfig.URL_WEEKENDDATA, new Response.Listener<String>() { // URL_REGISTER = "http://192.168.116.1/android_login_api/register.php";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_WEEKENDDATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -315,7 +295,7 @@ public class Server_WeekendData {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("saea", "Registration Error: " + error.getMessage());
+                Log.e("saea", "UpdateWeekend Error: " + error.getMessage());
 
             }
         }) {

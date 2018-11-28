@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+// 현재 사용 안함
 public class ExplainActivity extends Activity {
     Button title, con1,con2, con3, step1, step2, step3;
     TextView explain1, explain2, explain3;
@@ -99,36 +99,6 @@ public class ExplainActivity extends Activity {
             }
         }
     };
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.second, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch(item.getItemId()){
-            case R.id.action_menu_home:
-                Intent i0 = new Intent(ExplainActivity.this, MainActivity.class);
-                startActivity(i0);
-                break;
-            case R.id.action_menu_01:
-                Intent i = new Intent(ExplainActivity.this, ExplainActivity.class);
-                startActivity(i);
-                break;
-            case R.id.action_menu_02:
-                Intent i2 = new Intent(ExplainActivity.this, ThirdActivity.class);
-                startActivity(i2);
-                break;
-            case R.id.action_menu_03:
-                Intent i3 = new Intent(ExplainActivity.this, StatusActivity.class);
-                startActivity(i3);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 }

@@ -1,6 +1,7 @@
 package com.yellowpg.gaspel.etc;
 
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -16,8 +17,6 @@ import android.widget.TextView;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
 import com.roomorama.caldroid.WeekdayArrayAdapter;
-import com.yellowpg.gaspel.DB.CommentDBSqlData;
-import com.yellowpg.gaspel.DB.DBManager_Comment;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.CommentInfoHelper;
 import com.yellowpg.gaspel.DB.WeekendInfoHelper;
@@ -70,7 +69,21 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
         if (month == -1 || year == -1) {
             return;
         }
+        // For the monthTitleTextView
+
+
         refreshMonthTitleTextView();
+
+        // monthtitle textview를 가져온다
+        TextView tv = getMonthTitleTextView();
+        // textsize 설정
+        SharedPreferences sp = getContext().getSharedPreferences("setting",0);
+        String textsize = sp.getString("textsize", "");
+        if(textsize.equals("big")){
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        }else{
+
+        }
 
         // 아마도 위에서 커스터마이즈한 것을 refresh한다
         // Refresh the date grid views

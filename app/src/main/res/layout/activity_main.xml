@@ -69,7 +69,7 @@
         android:fontFamily="@font/notosans_semibold"
         android:textSize="17dp"
         android:paddingTop="2dp"
-        android:paddingBottom="5dp"
+        android:paddingBottom="10dp"
         android:lineSpacingExtra="3dp"
         android:background="#ffffff"
         style="?android:attr/borderlessButtonStyle" />
@@ -107,7 +107,7 @@
         android:layout_height="wrap_content"
         android:lineSpacingExtra="5dp"
         android:paddingBottom="5dp"
-        android:textSize="14dp"
+        android:textSize="15dp"
         android:textColor="#5e5e5e" />
 
     <LinearLayout
@@ -128,7 +128,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:lineSpacingExtra="5dp"
-        android:textSize="14dp"
+        android:textSize="15dp"
         android:hint="오늘 가장 마음이 와닿는 구절은.."
          android:textColor="#16a085" />
 

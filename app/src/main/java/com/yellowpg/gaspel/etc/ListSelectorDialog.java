@@ -5,6 +5,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 
+// 클릭시 화면에 list로 나타나는 dialog
 public class ListSelectorDialog {
     Context context;
     Builder adb;
