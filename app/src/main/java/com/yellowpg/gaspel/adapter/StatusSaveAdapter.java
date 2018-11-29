@@ -2,6 +2,7 @@ package com.yellowpg.gaspel.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,16 +26,16 @@ import java.util.Date;
 public class StatusSaveAdapter extends BaseAdapter{
     private Context mContext = null;
     private int layout = 0;
-    private ArrayList<MonthRecord> data = null;
+    private ArrayList<MonthRecord> data = new ArrayList<MonthRecord>();
     private LayoutInflater inflater = null;
     private String textsize;
     static Calendar c1 = Calendar.getInstance();
     static String day;
+
     public StatusSaveAdapter(Context c, int l, ArrayList<MonthRecord> d, String ts){
         this.mContext = c;
         this.layout = l;
         this.data = d;
-        this.inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.textsize = ts;
     }
 
@@ -57,21 +58,24 @@ public class StatusSaveAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
+
+
         // TODO Auto-generated method stub
         if(convertView == null){
-            convertView = inflater.inflate(this.layout, parent, false);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(layout, parent, false);
         }
-        TextView status = (TextView) convertView.findViewById(R.id.tv_status);
-        ImageView walk1 = (ImageView) convertView.findViewById(R.id.walking1);
-        ImageView walk2 = (ImageView) convertView.findViewById(R.id.walking2);
-        ImageView walk3 = (ImageView) convertView.findViewById(R.id.walking3);
-        ImageView walk4 = (ImageView) convertView.findViewById(R.id.walking4);
-        ImageView walk5 = (ImageView) convertView.findViewById(R.id.walking5);
-        ImageView walk6 = (ImageView) convertView.findViewById(R.id.walking6);
-        ImageView walking_person = (ImageView) convertView.findViewById(R.id.walking_person);
-        ImageView arrive_person = (ImageView) convertView.findViewById(R.id.arrive_person);
-        Button thismonth = (Button) convertView.findViewById(R.id.bt_thismonth) ;
+        TextView status = (TextView) convertView.findViewById(R.id.tv_status_custom);
+        ImageView walk1 = (ImageView) convertView.findViewById(R.id.walking1_custom);
+        ImageView walk2 = (ImageView) convertView.findViewById(R.id.walking2_custom);
+        ImageView walk3 = (ImageView) convertView.findViewById(R.id.walking3_custom);
+        ImageView walk4 = (ImageView) convertView.findViewById(R.id.walking4_custom);
+        ImageView walk5 = (ImageView) convertView.findViewById(R.id.walking5_custom);
+        ImageView walk6 = (ImageView) convertView.findViewById(R.id.walking6_custom);
+        ImageView walking_person = (ImageView) convertView.findViewById(R.id.walking_person_custom);
+        ImageView arrive_person = (ImageView) convertView.findViewById(R.id.arrive_person_custom);
+        Button thismonth = (Button) convertView.findViewById(R.id.bt_thismonth_custom) ;
 
         if(textsize.equals("big")){
 
@@ -85,8 +89,10 @@ public class StatusSaveAdapter extends BaseAdapter{
         Date origin_date = null;
         String date_aft = null;
         thismonth.setText(data.get(position).getMonth());
-        int point = Integer.parseInt(data.get(position).getComments())+Integer.parseInt(data.get(position).getLectios())*5;
+        int point = 0;
+        point = data.get(position).getPoint();
         status.setText("복음 묵상 "+data.get(position).getComments()+"일\n렉시오디비나 "+data.get(position).getLectios()+"일");
+        Log.d("saea", position+data.get(position).getMonth()+"복음 묵상 "+data.get(position).getComments()+"일\n렉시오디비나 "+data.get(position).getLectios()+"일"+"point"+point);
         if(1<= point && point < 5){
             walk1.setVisibility(View.VISIBLE);
         }else if(5<= point && point < 10){
@@ -125,12 +131,6 @@ public class StatusSaveAdapter extends BaseAdapter{
             walking_person.setVisibility(View.GONE);
         }
 
-
-        if((position%2)==1){
-            convertView.setBackgroundColor(0xc0c0c0);
-        }else{
-            convertView.setBackgroundColor(0xa9a9a9);
-        }
 
         return convertView;
 

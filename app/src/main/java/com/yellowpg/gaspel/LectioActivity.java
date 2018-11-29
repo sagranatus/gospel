@@ -291,8 +291,8 @@ public class LectioActivity extends AppCompatActivity{
         dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
         // custom dialog key, value 설정
-        listk_left = new String[] {"a", "b"};
-        listv_left = new String[] {"설정", "나의 상태"};
+        listk_left = new String[] {"a", "b", "c"};
+        listv_left = new String[] { "설정", "나의 상태", "계정정보"};
 
         // exp : 텍스트사이즈 설정
         SharedPreferences sp = getSharedPreferences("setting",0);
@@ -509,7 +509,12 @@ public class LectioActivity extends AppCompatActivity{
                 if(mysentence == null){
                     mysentence = "";
                 }
-                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + bg1_str
+                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""
+                        +"<br><font color=\"#999999\">· 주일 복음에서 내가 묵상하기로 선택한 구절은 </font> " + mysentence
+                        +"<br><font color=\"#999999\">· 내가 묵상한 내용은 </font> " + mythought));
+                /*
+                *
+                *  after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + bg1_str
                         +"<br><font color=\"#999999\">· 장소는</font> " + bg2_str
                         +"<br><font color=\"#999999\">· 시간은</font> " + bg3_str
                         +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + sum1_str
@@ -518,14 +523,10 @@ public class LectioActivity extends AppCompatActivity{
                         +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""
                         +"<br><font color=\"#999999\">· 주일 복음에서 내가 묵상하기로 선택한 구절은 </font> " + mysentence
                         +"<br><font color=\"#999999\">· 내가 묵상한 내용은 </font> " + mythought));
+                *
+                * */
             }else{
-                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + bg1_str
-                        +"<br><font color=\"#999999\">· 장소는</font> " + bg2_str
-                        +"<br><font color=\"#999999\">· 시간은</font> " + bg3_str
-                        +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + sum1_str
-                        +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + sum2_str
-                        +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + js1_str
-                        +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""));
+                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""));
             }
 
         }else{
@@ -575,6 +576,9 @@ public class LectioActivity extends AppCompatActivity{
                                 startActivity(i);
                             }else if(item.equals("나의 상태")){
                                 Intent i = new Intent(LectioActivity.this, StatusActivity.class);
+                                startActivity(i);
+                            }else if(item.equals("계정정보")){
+                                Intent i = new Intent(LectioActivity.this, LoginActivity.class);
                                 startActivity(i);
                             }
                         }

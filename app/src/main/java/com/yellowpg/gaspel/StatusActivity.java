@@ -109,6 +109,8 @@ public class StatusActivity extends AppCompatActivity {
                         i++;
                     }
                 }
+                cursor.close();
+                commentInfoHelper.close();
 
             }catch(Exception e){
 
@@ -181,24 +183,41 @@ public class StatusActivity extends AppCompatActivity {
     }
 
         ArrayList<MonthRecord> data = new ArrayList<MonthRecord>();
-        for(int k=1; k<13; k++){
-            if(date_val.contains(" "+k+"월")){
-                continue;
-            }
-            int[] records = getData(" "+k+"월");
-            String comments =  Integer.toString(records[0]);
-            String lectios =  Integer.toString(records[1]);
-            if(!comments.equals("0") || !lectios.equals("0") ){
-                data.add(new MonthRecord(k+"월", comments, lectios ));
-            }
-
-        }
-
 
 
         StatusSaveAdapter adapter = new StatusSaveAdapter(StatusActivity.this, R.layout.custom_status, data, textsize);
         ListView lv = (ListView) findViewById(R.id.lv_month);
         lv.setAdapter(adapter);
+
+        for(int k=1; k<10; k++){
+            if(date_val.contains("0"+k+"월")){
+                continue;
+            }
+            int[] records = getData("0"+k+"월");
+            int points = records[0] + records[1]*5;
+            String comments =  Integer.toString(records[0]);
+            String lectios =  Integer.toString(records[1]);
+            if(!comments.equals("0") || !lectios.equals("0") ){
+                data.add(new MonthRecord("0"+k+"월", comments, lectios, points ));
+                Log.d("saea", comments+lectios+points);
+            }
+
+        }
+        for(int k=10; k<13; k++){
+            if(date_val.contains(" "+k+"월")){
+                continue;
+            }
+            int[] records = getData(" "+k+"월");
+            int points = records[0] + records[1]*5;
+            String comments =  Integer.toString(records[0]);
+            String lectios =  Integer.toString(records[1]);
+            if(!comments.equals("0") || !lectios.equals("0") ){
+                data.add(new MonthRecord(k+"월", comments, lectios, points ));
+                Log.d("saea", comments+lectios+points);
+            }
+
+        }
+        Log.d("saea", data.size()+"size");
 }
     // 커스텀 다이얼로그 선택시
     @Override
@@ -233,6 +252,8 @@ public class StatusActivity extends AppCompatActivity {
                     i++;
                 }
             }
+            cursor.close();
+            commentInfoHelper.close();
 
         }catch(Exception e){
 

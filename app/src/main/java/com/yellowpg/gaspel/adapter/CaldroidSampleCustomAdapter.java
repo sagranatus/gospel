@@ -56,9 +56,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         this.date2 = date2;
         this.sentence2  = sentence2;
         this.bg1 = bg1;
-
     }
-
 
     public void setEvents(HashMap<DateTime, Comment> events) {
         // TODO Auto-generated method stub
@@ -81,6 +79,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View cellView = convertView;
+
         if (convertView == null) {
             cellView = inflater.inflate(R.layout.custom_cell, null);
         }

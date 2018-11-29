@@ -53,23 +53,23 @@ public final class R {
         public static final int cell_bg_dark = 0x7f08006c;
         public static final int disable_cell = 0x7f080075;
         public static final int disabled_cell_dark = 0x7f080076;
-        public static final int left_arrow = 0x7f08007f;
-        public static final int red_border = 0x7f080092;
-        public static final int red_border_dark = 0x7f080093;
-        public static final int red_border_gray_bg = 0x7f080094;
-        public static final int right_arrow = 0x7f080096;
+        public static final int left_arrow = 0x7f080080;
+        public static final int red_border = 0x7f080093;
+        public static final int red_border_dark = 0x7f080094;
+        public static final int red_border_gray_bg = 0x7f080095;
+        public static final int right_arrow = 0x7f080097;
     }
     public static final class id {
         private id() {}
 
-        public static final int calendar_gridview = 0x7f0a0054;
-        public static final int calendar_left_arrow = 0x7f0a0055;
-        public static final int calendar_month_year_textview = 0x7f0a0056;
-        public static final int calendar_right_arrow = 0x7f0a0057;
-        public static final int calendar_title_view = 0x7f0a0058;
-        public static final int calendar_tv = 0x7f0a0059;
-        public static final int months_infinite_pager = 0x7f0a00af;
-        public static final int weekday_gridview = 0x7f0a0128;
+        public static final int calendar_gridview = 0x7f0a0056;
+        public static final int calendar_left_arrow = 0x7f0a0057;
+        public static final int calendar_month_year_textview = 0x7f0a0058;
+        public static final int calendar_right_arrow = 0x7f0a0059;
+        public static final int calendar_title_view = 0x7f0a005a;
+        public static final int calendar_tv = 0x7f0a005b;
+        public static final int months_infinite_pager = 0x7f0a00b2;
+        public static final int weekday_gridview = 0x7f0a0133;
     }
     public static final class layout {
         private layout() {}

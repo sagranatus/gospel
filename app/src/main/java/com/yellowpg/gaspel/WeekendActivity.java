@@ -155,7 +155,7 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 
 		// custom dialog key, value 설정
 		listk_left = new String[] {"a", "b", "c"};
-		listv_left = new String[] {"설정", "나의 상태", "수정"};
+		listv_left = new String[] { "설정", "나의 상태", "계정정보"};
 
 		// 화면 클릭시 soft keyboard hide
 		findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
@@ -325,6 +325,13 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.edit:
+				Intent intent = new Intent(WeekendActivity.this, LectioActivity.class);
+				String thisweekend = sdf2.format(c1.getTime());
+				intent.putExtra("date",thisweekend);
+				intent.putExtra("date_detail",date_detail);
+				WeekendActivity.this.startActivity(intent);
+				return true;
 			default:
 					// show the list dialog.
 					dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
@@ -340,14 +347,9 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 							}else if(item.equals("나의 상태")){
 								Intent i = new Intent(WeekendActivity.this, StatusActivity.class);
 								startActivity(i);
-							}else if(item.equals("수정")){
-								Intent intent = new Intent(WeekendActivity.this, LectioActivity.class);
-								String thisweekend = sdf2.format(c1.getTime());
-								intent.putExtra("date",thisweekend);
-								intent.putExtra("date_detail",date_detail);
-								WeekendActivity.this.startActivity(intent);
-
-
+							}else if(item.equals("계정정보")){
+								Intent i = new Intent(WeekendActivity.this, LoginActivity.class);
+								startActivity(i);
 							}
 						}
 					});
@@ -356,6 +358,15 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 				return true;
 		}
 	}
+
+	// actionbar 오른쪽 edit 추가
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.topmenu_weekend, menu);
+		return true;
+	}
+
 }
 
 

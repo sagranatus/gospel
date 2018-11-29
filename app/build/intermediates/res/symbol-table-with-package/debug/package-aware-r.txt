@@ -850,6 +850,7 @@ drawable design_password_eye
 drawable design_snackbar_background
 drawable disable_cell
 drawable disabled_cell_dark
+drawable edit
 drawable edit_bg
 drawable footprint
 drawable ic_info_black_24dp
@@ -929,6 +930,7 @@ id alertTitle
 id all
 id always
 id arrive_person
+id arrive_person_custom
 id async
 id auto
 id basic
@@ -965,6 +967,7 @@ id bt_step3
 id bt_stop
 id bt_text
 id bt_thismonth
+id bt_thismonth_custom
 id bt_time
 id bt_timeset
 id bt_title
@@ -1009,6 +1012,7 @@ id design_menu_item_action_area_stub
 id design_menu_item_text
 id design_navigation_view
 id disableHome
+id edit
 id edit_query
 id email
 id end
@@ -1174,6 +1178,7 @@ id tv_first
 id tv_oneSentence
 id tv_oneSentence2
 id tv_status
+id tv_status_custom
 id tv_today
 id uniform
 id up
@@ -1182,12 +1187,19 @@ id userid
 id view_offset_helper
 id visible
 id walking1
+id walking1_custom
 id walking2
+id walking2_custom
 id walking3
+id walking3_custom
 id walking4
+id walking4_custom
 id walking5
+id walking5_custom
 id walking6
+id walking6_custom
 id walking_person
+id walking_person_custom
 id weekday_gridview
 id withText
 id wrap
@@ -1294,6 +1306,7 @@ layout weekday_textview
 menu menu
 menu topmenu_main
 menu topmenu_profile
+menu topmenu_weekend
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description

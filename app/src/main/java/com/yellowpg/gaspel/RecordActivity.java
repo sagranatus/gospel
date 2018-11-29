@@ -124,11 +124,11 @@ public class RecordActivity extends AppCompatActivity {
 
 		}
 
-		// 왼쪽 list 클릭시 이벤트
+		// 왼쪽 list클릭시 이벤트 custom dialog setting
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
-
-		listk_left = new String[] {"a", "b"};
-		listv_left = new String[] {"설정", "나의 상태" };
+		// custom dialog key, value 설정
+		listk_left = new String[] {"a", "b", "c"};
+		listv_left = new String[] { "설정", "나의 상태", "계정정보"};
 	}
 
 
@@ -151,6 +151,9 @@ public class RecordActivity extends AppCompatActivity {
 							 startActivity(i);
 						 }else if(item.equals("나의 상태")){
 							 Intent i = new Intent(RecordActivity.this, StatusActivity.class);
+							 startActivity(i);
+						 }else if(item.equals("계정정보")){
+							 Intent i = new Intent(RecordActivity.this, LoginActivity.class);
 							 startActivity(i);
 						 }/*else if(item.equals("기록 삭제")){
 							 try{
