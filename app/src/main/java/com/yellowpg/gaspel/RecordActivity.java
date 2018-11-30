@@ -75,17 +75,22 @@ public class RecordActivity extends AppCompatActivity {
 		MenuItem menuItem_2 = menu.getItem(1);
 		MenuItem menuItem_3 = menu.getItem(2);
 		MenuItem menuItem_4 = menu.getItem(3);
+		MenuItem menuItem_5 = menu.getItem(4);
 		menuItem_1.setChecked(false);
 		menuItem_2.setChecked(false);
 		menuItem_3.setChecked(false);
 		menuItem_4.setChecked(false);
-
-		MenuItem menuItem = menu.getItem(3);
+		menuItem_5.setChecked(false);
+		MenuItem menuItem = menu.getItem(4);
 		menuItem.setChecked(true);
 		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 				switch (item.getItemId()) {
+					case R.id.action_zero:
+						Intent i0 = new Intent(RecordActivity.this, FirstActivity.class);
+						startActivity(i0);
+						break;
 					case R.id.action_one:
 						Intent i = new Intent(RecordActivity.this, MainActivity.class);
 						startActivity(i);

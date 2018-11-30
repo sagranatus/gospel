@@ -24,7 +24,7 @@
 				android:paddingBottom="2dp"
 				android:lineSpacingExtra="7dp"
 				android:background="#ffffff"
-				android:text="이번주 주일 렉시오 디비나 하러 가기 →"
+				android:text="이번주 복음묵상 하기"
 				style="?android:attr/borderlessButtonStyle" />
 			<Button
 				android:id="@+id/mySentence"

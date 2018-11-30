@@ -1,9 +1,11 @@
 package com.yellowpg.gaspel;
 
 import android.app.ActionBar;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,11 +41,15 @@ import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.LectioInfoHelper;
 import com.yellowpg.gaspel.DB.UserDBSqlData;
 import com.yellowpg.gaspel.DB.WeekendInfoHelper;
+import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.UserData;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.SessionManager;
+import com.yellowpg.gaspel.server.Server_CommentData;
+import com.yellowpg.gaspel.server.Server_LectioData;
 import com.yellowpg.gaspel.server.Server_UserData;
+import com.yellowpg.gaspel.server.Server_WeekendData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -118,8 +124,106 @@ public class ProfileActivity extends AppCompatActivity {
         dbMgr.selectUserData(UserDBSqlData.SQL_DB_SELECT_DATA, uid, userdata);
         dbMgr.dbClose();
         if(userdata.isEmpty()){
+            Log.d("saea", "getuser and insertdatato Server DB");
             // 서버에서 user 정보를 가져와서 user database에 삽입
             getUser(ProfileActivity.this, uid);
+
+            // 모바일 데이터가 있는 경우, 그리고 uid값이 없는 경우
+            CommentInfoHelper commentInfoHelper = new CommentInfoHelper(ProfileActivity.this);
+            SQLiteDatabase db;
+            ContentValues values;
+
+            try{
+                db = commentInfoHelper.getReadableDatabase();
+                String query = "SELECT comment_con, date, sentence FROM comment";
+                Cursor cursor = db.rawQuery(query, null);
+
+                while(cursor.moveToNext()){
+                    String comment_con = cursor.getString(0);
+                    String date = cursor.getString(1);
+                    String sentence = cursor.getString(2);
+                    if(uid != null){
+                        Log.d("saea", uid+date+sentence+comment_con);
+                        Server_CommentData.insertComment(ProfileActivity.this, uid, date, sentence, comment_con);
+                    }
+                }
+                cursor.close();
+                commentInfoHelper.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+            // 렉시오디비나
+            LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(ProfileActivity.this);
+            SQLiteDatabase db2;
+
+            try{
+                String bg1 = null;
+                String bg2 = null;
+                String bg3 = null;
+                String sum1 = null;
+                String sum2 = null;
+                String js1 = null;
+                String js2 = null;
+
+                String date = null;
+                String onesentence = null;
+                db2 = lectioInfoHelper.getReadableDatabase();
+                String query = "SELECT bg1, bg2, bg3, sum1, sum2, js1, js2, date, onesentence FROM lectio";
+                Cursor cursor = db2.rawQuery(query, null);
+
+                while(cursor.moveToNext()){
+                    bg1 = cursor.getString(0);
+                    bg2 = cursor.getString(1);
+                    bg3 = cursor.getString(2);
+                    sum1 = cursor.getString(3);
+                    sum2 = cursor.getString(4);
+                    js1 = cursor.getString(5);
+                    js2 = cursor.getString(6);
+                    date = cursor.getString(7);
+                    onesentence = cursor.getString(8);
+                    if(uid != null){
+                        Log.d("saea", uid+date+onesentence+bg1);
+                        Lectio lectio = new Lectio(date, onesentence, bg1, bg2, bg3, sum1, sum2, js1, js2);
+                        Server_LectioData.insertLectio(ProfileActivity.this, uid, lectio);
+                    }
+                }
+
+                cursor.close();
+                lectioInfoHelper.close();
+            }
+            catch(Exception e){
+
+            }
+            // weekend 데이터
+            WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(ProfileActivity.this);
+            ContentValues values3;
+            SQLiteDatabase db3;
+
+            try{
+                db3 = weekendInfoHelper.getReadableDatabase();
+                String query = "SELECT date, mysentence, mythought FROM weekend";
+                Cursor cursor = db3.rawQuery(query, null);
+                String weekend_str = null;
+                while(cursor.moveToNext()) {
+                    weekend_str = cursor.getString(0);
+                    String date = cursor.getString(0);
+                    String mysentence = cursor.getString(1);
+                    String mythought = cursor.getString(2);
+                    if(uid != null){
+                        if(mythought == null){
+                            mythought = "";
+                        }
+                        Log.d("saea", uid+date+mysentence+mythought);
+                        Server_WeekendData.insertWeekend(ProfileActivity.this, uid, date, mysentence, mythought);
+                    }
+                }
+
+                cursor.close();
+                weekendInfoHelper.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }else{
             UserData udata = userdata.get(0);
             name = udata.getName();
@@ -181,7 +285,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Server_UserData.updateUser(ProfileActivity.this, uid, email, name, christ_name, cathedral);
                 return true;
             default:
-                Intent i = new Intent(ProfileActivity.this, MainActivity.class);
+                Intent i = new Intent(ProfileActivity.this, FirstActivity.class);
                 startActivity(i);
                 return true;
         }

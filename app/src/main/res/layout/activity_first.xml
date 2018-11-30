@@ -1,0 +1,207 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:id="@+id/root"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="#e0e0e0"
+                android:fontFamily="@font/notosans_regular"
+                android:text="오늘의 복음"
+                android:textColor="#7f7f7f"
+                android:paddingLeft="10dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="15dp" />
+            <Button
+                android:id="@+id/bt_today"
+                android:paddingLeft="25px"
+                android:paddingRight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/actionbar"
+                android:fontFamily="@font/notosans_semibold"
+                android:textSize="17dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:lineSpacingExtra="3dp"
+                android:text="saea"
+                android:background="#ffffff"
+                style="?android:attr/borderlessButtonStyle" />
+
+            <TextView
+            android:id="@+id/tv_comment"
+            android:paddingLeft="25px"
+            android:paddingRight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="15dp"
+            android:fontFamily="@font/notosans_regular"
+            android:lineSpacingExtra="5dp"
+            android:paddingBottom="10dp"
+            android:textColor="#16a085"
+            android:bufferType="spannable"
+            android:textIsSelectable="true"/>
+            <TextView
+                android:id="@+id/tv_lectio"
+                android:paddingLeft="25px"
+                android:paddingRight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:fontFamily="@font/notosans_regular"
+                android:lineSpacingExtra="5dp"
+                android:gravity="center_horizontal"
+                android:paddingBottom="20dp"
+                android:textColor="#16a085"
+                android:bufferType="spannable"
+                android:textIsSelectable="true"/>
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="#e0e0e0"
+                android:fontFamily="@font/notosans_regular"
+                android:text="이번주 주일 복음"
+                android:textColor="#7f7f7f"
+                android:paddingLeft="10dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="15dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingBottom="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/bt_weekend"
+                    android:paddingLeft="25px"
+                    android:paddingRight="25px"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#16a085"
+                    android:fontFamily="@font/notosans_semibold"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="0dp"
+                    android:background="#ffffff"
+                    android:textSize="17dp"
+                    style="?android:attr/borderlessButtonStyle" />
+                <TextView
+                    android:id="@+id/tv_weekend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:fontFamily="@font/notosans_regular"
+                    android:lineSpacingExtra="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#5e5e5e"
+                    android:bufferType="spannable"
+                    android:textIsSelectable="true"/>
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="25px"
+                android:paddingRight="25px">
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/walking_person"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="150dp"
+                    android:src="@drawable/walking" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/exhausted_person"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="left"
+                    android:src="@drawable/exhausted" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/happy_person"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_toLeftOf="@+id/church"
+                    android:src="@drawable/happy" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/walking_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/walking_person"
+                    android:text="\당신은 누구? \n로그인하기" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/happy_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/happy_person"
+                    android:text="\당신은 누구? \n로그인하기" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/exhausted_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/exhausted_person"
+                    android:text="\당신은 누구? \n로그인하기" />
+
+                <ImageView
+                    android:id="@+id/church"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:src="@drawable/church2" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:itemBackground="@color/colorPrimary_bottom"
+            app:itemIconTint="@drawable/bottom_section_color"
+            app:itemTextColor="@drawable/bottom_section_color"
+            app:menu="@menu/menu" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

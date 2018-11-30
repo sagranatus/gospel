@@ -1,8 +1,12 @@
 package com.yellowpg.gaspel;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,10 +14,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -24,7 +30,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +59,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WeekendActivity extends AppCompatActivity implements View.OnClickListener {
-
+	final static String TAG = "weekendActivity";
 	Calendar c1 = Calendar.getInstance();
 	BottomNavigationView bottomNavigationView;
 	String day;
@@ -116,17 +124,23 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		MenuItem menuItem_2 = menu.getItem(1);
 		MenuItem menuItem_3 = menu.getItem(2);
 		MenuItem menuItem_4 = menu.getItem(3);
+		MenuItem menuItem_5 = menu.getItem(4);
 		menuItem_1.setChecked(false);
 		menuItem_2.setChecked(false);
 		menuItem_3.setChecked(false);
 		menuItem_4.setChecked(false);
-
-		MenuItem menuItem = menu.getItem(2);
+		menuItem_5.setChecked(false);
+		MenuItem menuItem = menu.getItem(3);
+		menuItem.setChecked(true);
 		menuItem.setChecked(true);
 		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 				switch (item.getItemId()) {
+					case R.id.action_zero:
+						Intent i0 = new Intent(WeekendActivity.this, FirstActivity.class);
+						startActivity(i0);
+						break;
 					case R.id.action_one:
 						Intent i = new Intent(WeekendActivity.this, MainActivity.class);
 						startActivity(i);
@@ -197,7 +211,7 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		SQLiteDatabase db;
 		ContentValues values;
 		WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(WeekendActivity.this);
-		c1.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+		c1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
 		c1.add(c1.DATE,7);
 
@@ -325,13 +339,18 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.edit:
-				Intent intent = new Intent(WeekendActivity.this, LectioActivity.class);
+			case R.id.praying:
+				if(mySentence.getVisibility() == View.VISIBLE){
+					String text = mySentence.getText().toString();
+					showPraying2(text);
+				}
+
+				return true;
+				/*Intent intent = new Intent(WeekendActivity.this, LectioActivity.class);
 				String thisweekend = sdf2.format(c1.getTime());
 				intent.putExtra("date",thisweekend);
 				intent.putExtra("date_detail",date_detail);
-				WeekendActivity.this.startActivity(intent);
-				return true;
+				WeekendActivity.this.startActivity(intent); */
 			default:
 					// show the list dialog.
 					dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
@@ -359,12 +378,87 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		}
 	}
 
-	// actionbar 오른쪽 edit 추가
+	// actionbar 오른쪽 praying 추가
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.topmenu_weekend, menu);
 		return true;
+	}
+
+	Thread t;
+	TextView text_ttl;
+	TextView text;
+	Button declineButton;
+	public void showPraying2(String mysentence)
+	{
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		@SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+				PowerManager.ACQUIRE_CAUSES_WAKEUP |
+				PowerManager.ON_AFTER_RELEASE, TAG);
+		myWakeLock.acquire(); //실행후 리소스 반환 필수
+		MainActivity.releaseCpuLock();
+		MainActivity.playSound(WeekendActivity.this, "pray");
+
+		// Create custom dialog object
+		final Dialog dialog = new Dialog(WeekendActivity.this);
+		// Include dialog.xml file
+		dialog.setContentView(R.layout.dialog);
+		// Set dialog title
+		dialog.setTitle("Custom Dialog");
+		final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
+
+		t = new Thread(new Runnable() {
+			@Override
+			public void run(){
+				int progress=0;
+				while(progress<100){
+					++progress;
+					progressbar.setProgress(progress);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(t.isInterrupted()) { break; }
+				}
+			}
+		});
+		t.start();
+
+		text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
+		//text_ttl.setText("성령 청원 기도");
+		text_ttl.setText("\n한주간 묵상하기로 다짐한 구절을 반복해서 되뇌이며 주님께서 내게 하시는 말씀을 귀기울여 들어 봅시다.\n");
+		// set values for custom dialog components - text, image and button
+		text = (TextView) dialog.findViewById(R.id.textDialog);
+		text.setText(Html.fromHtml("<font color=\"#16a085\">"+mysentence+"\n</font>"));
+
+
+		dialog.show();
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				//  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
+			}
+		});
+
+		// 기도마침 클릭시 이벤트
+		declineButton = (Button) dialog.findViewById(R.id.declineButton);
+		declineButton.setText("[기도 마침]");
+		final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
+		// if decline button is clicked, close the custom dialog
+		declineButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MainActivity.mMediaPlayer.stop();
+				t.interrupt();
+				bottomNavigationView.setVisibility(View.VISIBLE);
+				// Close dialog
+				dialog.dismiss();
+
+			}
+		});
 	}
 
 }

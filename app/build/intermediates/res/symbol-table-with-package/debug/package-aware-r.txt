@@ -824,6 +824,7 @@ drawable arrive
 drawable avd_hide_password
 drawable avd_show_password
 drawable back
+drawable bottom0
 drawable bottom1
 drawable bottom2
 drawable bottom3
@@ -838,6 +839,7 @@ drawable button_bg_grey
 drawable button_bg_white
 drawable calendar_next_arrow
 drawable calendar_prev_arrow
+drawable candle
 drawable cell_bg
 drawable cell_bg_dark
 drawable church
@@ -852,7 +854,9 @@ drawable disable_cell
 drawable disabled_cell_dark
 drawable edit
 drawable edit_bg
+drawable exhausted
 drawable footprint
+drawable happy
 drawable ic_info_black_24dp
 drawable ic_launcher
 drawable ic_notifications_black_24dp
@@ -876,6 +880,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable praying
 drawable record1
 drawable record2
 drawable red_border
@@ -921,6 +926,7 @@ id action_one
 id action_text
 id action_three
 id action_two
+id action_zero
 id actions
 id activity_chooser_view_content
 id add
@@ -971,6 +977,8 @@ id bt_thismonth_custom
 id bt_time
 id bt_timeset
 id bt_title
+id bt_today
+id bt_weekend
 id bt_weekend_gaspel
 id btnLinkToLoginScreen
 id btnLinkToRegisterScreen
@@ -994,6 +1002,7 @@ id chains
 id checkbox
 id christ_name
 id chronometer
+id church
 id clip_horizontal
 id clip_vertical
 id collapseActionView
@@ -1011,8 +1020,8 @@ id design_menu_item_action_area
 id design_menu_item_action_area_stub
 id design_menu_item_text
 id design_navigation_view
+id dialog_image
 id disableHome
-id edit
 id edit_query
 id email
 id end
@@ -1030,6 +1039,8 @@ id et_summary1
 id et_summary2
 id et_timeset
 id et_weekend
+id exhausted_name
+id exhausted_person
 id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
@@ -1039,6 +1050,8 @@ id fill_vertical
 id fixed
 id forever
 id ghost_view
+id happy_name
+id happy_person
 id home
 id homeAsUp
 id icon
@@ -1091,6 +1104,8 @@ id parent_matrix
 id password
 id pin
 id pray
+id praying
+id progress
 id progress_circular
 id progress_horizontal
 id question1
@@ -1175,11 +1190,13 @@ id tv_explain11
 id tv_explain22
 id tv_explain33
 id tv_first
+id tv_lectio
 id tv_oneSentence
 id tv_oneSentence2
 id tv_status
 id tv_status_custom
 id tv_today
+id tv_weekend
 id uniform
 id up
 id useLogo
@@ -1198,6 +1215,7 @@ id walking5
 id walking5_custom
 id walking6
 id walking6_custom
+id walking_name
 id walking_person
 id walking_person_custom
 id weekday_gridview
@@ -1243,6 +1261,7 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout actionbar
 layout actionbar_back
+layout actionbar_back_lectio
 layout actionbar_back_weekend
 layout actionbar_lectio
 layout actionbar_login
@@ -1253,6 +1272,7 @@ layout actionbar_setting
 layout actionbar_status
 layout actionbar_weekend
 layout activity_explain
+layout activity_first
 layout activity_lectio
 layout activity_login
 layout activity_main
@@ -1304,6 +1324,7 @@ layout square_date_cell
 layout support_simple_spinner_dropdown_item
 layout weekday_textview
 menu menu
+menu topmenu_lectio
 menu topmenu_main
 menu topmenu_profile
 menu topmenu_weekend

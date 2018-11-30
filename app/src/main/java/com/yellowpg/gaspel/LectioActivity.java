@@ -36,7 +36,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,7 +96,7 @@ public class LectioActivity extends AppCompatActivity{
 
     LectioInfoHelper lectioInfoHelper;
     int already;
-    Boolean edit_now;
+    Boolean edit_now, start_now;
 
     ListSelectorDialog dlg_left;
     String[] listk_left, listv_left;
@@ -104,7 +106,8 @@ public class LectioActivity extends AppCompatActivity{
     private SessionManager session;
     String uid = null;
     String weekend_date = null;
-
+    Button declineButton;
+    MenuInflater inflater;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -122,6 +125,7 @@ public class LectioActivity extends AppCompatActivity{
 
         // edit 일단 false 설정
         edit_now = false;
+        start_now = false;
 
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 
@@ -242,29 +246,30 @@ public class LectioActivity extends AppCompatActivity{
             checkRecord();
         }
 
-
-
-        // exp : 맨처음에는 복음 내용이 보이지 않는다
-      //  ll_upper.setVisibility(ll_upper.GONE);
-
-
+        // 맨처음에는 복음 내용이 보이지 않는다
+        ll_upper.setVisibility(ll_upper.GONE);
 
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem_1 = menu.getItem(0);
         MenuItem menuItem_2 = menu.getItem(1);
         MenuItem menuItem_3 = menu.getItem(2);
         MenuItem menuItem_4 = menu.getItem(3);
+        MenuItem menuItem_5 = menu.getItem(4);
         menuItem_1.setChecked(false);
         menuItem_2.setChecked(false);
         menuItem_3.setChecked(false);
         menuItem_4.setChecked(false);
-
-        MenuItem menuItem = menu.getItem(1);
+        menuItem_5.setChecked(false);
+        MenuItem menuItem = menu.getItem(2);
         menuItem.setChecked(true);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.action_zero:
+                        Intent i0 = new Intent(LectioActivity.this, FirstActivity.class);
+                        startActivity(i0);
+                        break;
                     case R.id.action_one:
                         Intent i = new Intent(LectioActivity.this, MainActivity.class);
                         startActivity(i);
@@ -359,23 +364,14 @@ public class LectioActivity extends AppCompatActivity{
             }
         });
 
-       // setKeyboardVisibilityListener(this);
-
-        // exp : 다른 부분 터치시 키보드 사라지게 하기 이벤트
-
-        // exp : 복음 보이기, 복음 가리기 이벤트
-//        stopgaspel.setVisibility(stopgaspel.GONE);
-   //     showgaspel.setOnClickListener(showlistener);
-    //    stopgaspel.setOnClickListener(showlistener);
-
-        // exp : 날짜 앞뒤로 이동 이벤트
+        // 날짜 앞뒤로 이동 이벤트
         before.setOnClickListener(listener);
         after.setOnClickListener(listener);
 
-        // exp : 저장을 누르면 실행되는 이벤트
+        // 저장을 누르면 실행되는 이벤트
         save.setOnClickListener(listener_save);
 
-        // exp : 인터넷 연결 확인하는 부분
+        // 인터넷 연결 확인하는 부분
             if (wifi.isConnected() || mobile.isConnected()) {
             // exp : 복음 내용 데이터 가져오기
                 getGaspel(date_val2);
@@ -509,7 +505,8 @@ public class LectioActivity extends AppCompatActivity{
                 if(mysentence == null){
                     mysentence = "";
                 }
-                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""
+                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 특별히 눈에 띄는 부분은 </font>" + sum2_str
+                        +"<br><font color=\"#999999\">· 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""
                         +"<br><font color=\"#999999\">· 주일 복음에서 내가 묵상하기로 선택한 구절은 </font> " + mysentence
                         +"<br><font color=\"#999999\">· 내가 묵상한 내용은 </font> " + mythought));
                 /*
@@ -526,7 +523,8 @@ public class LectioActivity extends AppCompatActivity{
                 *
                 * */
             }else{
-                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""));
+                after_save_tv.setText(Html.fromHtml("<font color=\"#999999\">· 특별히 눈에 띄는 부분은 </font>" + sum2_str
+                        +"<br><font color=\"#999999\">· 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + js2_str+"\""));
             }
 
         }else{
@@ -556,12 +554,85 @@ public class LectioActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.pray:
-                showPraying(item);
+            case R.id.praying:
+                if(edit.getVisibility() == View.VISIBLE) {
+                    String text = after_save_tv.getText().toString();
+                    // 줄넘김 편집
+                    int idx1 = text.indexOf("· 특별히 눈에 띄는 부분은 ");
+                    int length = "· 특별히 눈에 띄는 부분은 ".length();
+                    int idx2 = text.indexOf("· 이 복음을 통해 예수님께서 내게 해주시는 말씀은");
+                    int length2 = "· 이 복음을 통해 예수님께서 내게 해주시는 말씀은".length();
+                    String first = text.substring(idx1 + length, idx2);
+                    int idx3 = text.indexOf("· 주일 복음에서 내가 묵상하기로 선택한 구절은 ");
+                    int idx4 = text.indexOf("· 내가 묵상한 내용은 ");
+                    String second;
+                    String third;
+                    if (text.contains("· 주일 복음에서 내가 묵상하기로 선택한 구절은 ")) {
+                        int length3 = "· 주일 복음에서 내가 묵상하기로 선택한 구절은 ".length();
+                        second = text.substring(idx2 + length2, idx3);
+                        third = text.substring(idx3 + length3, idx4);
+                    } else {
+                        second = text.substring(idx2 + length2);
+                        third = "";
+                    }
+                    showPraying2(first, second, third);
+                }else{
+                    showPraying();
+                }
                 return true;
             default:
                 if(date_intent != null){
                     finish();
+                // 시작버튼 누른 경우 뒤로가기 클릭시 이벤트
+                }else if(start_now){
+                    start_now = false;
+                    q1.setVisibility(View.GONE);
+                    bg1.setVisibility(View.GONE);
+                    bg2.setVisibility(View.GONE);
+                    bg3.setVisibility(View.GONE);
+                    bg3.setVisibility(View.GONE);
+                    sum1.setVisibility(View.GONE);
+                    sum2.setVisibility(View.GONE);
+                    js1.setVisibility(View.GONE);
+                    js2.setVisibility(View.GONE);
+                    weekend.setVisibility(View.GONE);
+                    save.setVisibility(View.GONE);
+                    edit.setVisibility(View.GONE);
+                    after_save.setVisibility(View.GONE);
+                    prev.setVisibility(View.GONE);
+                    next.setVisibility(View.GONE);
+                    onesentence.setVisibility(View.VISIBLE);
+                    firstSentence.setVisibility(View.VISIBLE);
+                    start.setVisibility(View.VISIBLE);
+                    ll_upper.setVisibility(View.GONE);
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                    firstSentence.setText("당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?");
+
+                    android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+                    actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                    actionbar.setCustomView(R.layout.actionbar_lectio);
+                    actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+                    actionbar.setElevation(0);
+
+                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    actionbar.setHomeAsUpIndicator(R.drawable.list);
+
+                    // edit 누른 후 뒤로가기 누를때 이벤트
+                }else if(edit_now){
+
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                    android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+                    actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                    actionbar.setCustomView(R.layout.actionbar_lectio);
+                    actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+                    actionbar.setElevation(0);
+
+                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    actionbar.setHomeAsUpIndicator(R.drawable.list);
+
+                    checkRecord();
                 }else{
                     // show the list dialog.
                     dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
@@ -598,11 +669,17 @@ public class LectioActivity extends AppCompatActivity{
             ContentValues values;
             // TODO Auto-generated method stub
             if(v.getId()==R.id.bt_save){
+                android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+                // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                actionbar.setDisplayHomeAsUpEnabled(true);
+                actionbar.setHomeAsUpIndicator(R.drawable.list);
+
                 if(date.getText().toString().contains("일요일")){
                     weekend_date = "일요일";
                 }else{
                     weekend_date = null;
                 }
+
                 if (getCurrentFocus() != null) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
@@ -671,12 +748,12 @@ public class LectioActivity extends AppCompatActivity{
                 }catch(Exception e){
 
                 }
-
+                String mysentence = null;
                 // 일요일의 경우에
                 if(date_intent != null || weekend_date != null){
                     WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(LectioActivity.this);
                     String weekend_date = date.getText().toString();
-                    String mysentence = weekend.getText().toString();
+                    mysentence = weekend.getText().toString();
                     try{
                         String mysentence_str = null;
                         db = weekendInfoHelper.getReadableDatabase();
@@ -720,13 +797,11 @@ public class LectioActivity extends AppCompatActivity{
                     }catch(Exception e){
 
                     }
-                    // 한주복음묵상에서 온경우 다시 이동
-                    if(date_intent != null) {
-                        Intent intent = new Intent(LectioActivity.this, WeekendActivity.class);
-                        LectioActivity.this.startActivity(intent);
-                    }
+                    // 저장 후에 기도하는 dialog 보이기
+                    showPraying2(summary2, jesus2, mysentence);
                     checkRecord();
                 }else{
+                    showPraying2(summary2, jesus2, mysentence);
                     checkRecord();
                 }
             }
@@ -830,22 +905,36 @@ public class LectioActivity extends AppCompatActivity{
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            android.support.v7.app.ActionBar actionbar = getSupportActionBar();
             switch (v.getId()) {
                 case R.id.bt_prev:
-                    if(lectio_order == 1){
+                    if(lectio_order == 0){
+                        bottomNavigationView.setVisibility(View.VISIBLE);
+                        // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                        actionbar.setDisplayHomeAsUpEnabled(true);
+                        actionbar.setHomeAsUpIndicator(R.drawable.list);
+
                         // edit 버튼 클릭후에 다시 돌아가는 경우
                         if(edit_now){
                             checkRecord();
                         }else{
                             onesentence.setVisibility(View.VISIBLE);
-                            firstSentence.setVisibility(View.VISIBLE);
+                            firstSentence.setText("당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?");
                             start.setVisibility(View.VISIBLE);
                             prev.setVisibility(View.GONE);
                             next.setVisibility(View.GONE);
                             q1.setVisibility(View.GONE);
+                            ll_upper.setVisibility(View.GONE);
                             lectio_order = 0;
                             bg1.setVisibility(View.GONE);
                         }
+
+                    }else if(lectio_order == 1){
+                            q1.setText("말씀 듣기");
+                            firstSentence.setVisibility(View.VISIBLE);
+                            lectio_order = 0;
+                            bg1.setVisibility(View.GONE);
 
                     }else if(lectio_order == 2){
                         lectio_order = 1;
@@ -912,7 +1001,12 @@ public class LectioActivity extends AppCompatActivity{
                     }
                     break;
                 case R.id.bt_next:
-                    if(lectio_order == 1){
+                    if(lectio_order == 0){
+                        lectio_order = 1;
+                        q1.setText("복음의 배경은 무엇인가요?");
+                        firstSentence.setVisibility(View.GONE);
+                        bg1.setVisibility(View.VISIBLE);
+                    }else if(lectio_order == 1){
                         lectio_order = 2;
                         prev.setVisibility(View.VISIBLE);
                         bg1.setVisibility(View.GONE);
@@ -977,31 +1071,58 @@ public class LectioActivity extends AppCompatActivity{
 
 
                     break;
-
+                // start 클릭시 이벤트
                 case R.id.bt_start:
-                    lectio_order = 1;
+                    // actionbar change
+                    start_now = true;
+                    actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                    actionbar.setCustomView(R.layout.actionbar_back_lectio);
+                    actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+                    actionbar.setElevation(0);
+
+                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    actionbar.setHomeAsUpIndicator(R.drawable.back);
+
+                    showPraying();
+                    bottomNavigationView.setVisibility(View.GONE);
+                    lectio_order = 0;
                     prev.setVisibility(View.VISIBLE);
                     next.setVisibility(View.VISIBLE);
                     q1.setVisibility(View.VISIBLE);
-                    bg1.setVisibility(View.VISIBLE);
-
+                    q1.setText("말씀 듣기");
                     onesentence.setVisibility(View.GONE);
-                    firstSentence.setVisibility(View.GONE);
+                    firstSentence.setText("복음을 소리내어 읽어 봅시다. 가슴속에서 말씀을 느끼고 체험할 수 있도록 마음을 다하여 읽어 봅시다.");
                     start.setVisibility(View.GONE);
+                    ll_upper.setVisibility(View.VISIBLE);
                     break;
 
                 case R.id.bt_edit:
+                    // actionbar change
+                    start_now = false;
+                    actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                    actionbar.setCustomView(R.layout.actionbar_back_lectio);
+                    actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+                    actionbar.setElevation(0);
+
+                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    actionbar.setHomeAsUpIndicator(R.drawable.back);
+
                     edit.setVisibility(View.GONE);
+                    bottomNavigationView.setVisibility(View.GONE);
                     edit_now = true;
-                    lectio_order = 1;
+                    lectio_order = 0;
                     onesentence.setVisibility(View.GONE);
-                    firstSentence.setVisibility(View.GONE);
+                    firstSentence.setVisibility(View.VISIBLE);
+                    firstSentence.setText("복음을 소리내어 읽어 봅시다. 가슴속에서 말씀을 느끼고 체험할 수 있도록 마음을 다하여 읽어 봅시다.");
                     after_save.setVisibility(View.GONE);
                     scrollView.setVisibility(View.VISIBLE);
+                    ll_upper.setVisibility(View.VISIBLE);
                     prev.setVisibility(View.VISIBLE);
                     next.setVisibility(View.VISIBLE);
+                    q1.setText("말씀 듣기");
                     q1.setVisibility(View.VISIBLE);
-                    bg1.setVisibility(View.VISIBLE);
                     break;
 
                 case R.id.bt_before:
@@ -1011,7 +1132,19 @@ public class LectioActivity extends AppCompatActivity{
                     date_val2 = sdf2.format(c1.getTime());
                     checkRecord();
                     getGaspel(date_val2);
-                    q1.setText("복음의 배경은 무엇인가요?");
+                    q1.setText("말씀 듣기");
+                    firstSentence.setText("당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?");
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                    ll_upper.setVisibility(View.GONE);
+
+                    actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                    actionbar.setCustomView(R.layout.actionbar_lectio);
+                    actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+                    actionbar.setElevation(0);
+
+                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    actionbar.setHomeAsUpIndicator(R.drawable.list);
 
                     break;
                 case R.id.bt_after:
@@ -1021,7 +1154,19 @@ public class LectioActivity extends AppCompatActivity{
                     date_val2 = sdf2.format(c1.getTime());
                     checkRecord();
                     getGaspel(date_val2);
-                    q1.setText("복음의 배경은 무엇인가요?");
+                    q1.setText("말씀 듣기");
+                    firstSentence.setText("당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?");
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                    ll_upper.setVisibility(View.GONE);
+
+                    actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                    actionbar.setCustomView(R.layout.actionbar_lectio);
+                    actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+                    actionbar.setElevation(0);
+
+                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    actionbar.setHomeAsUpIndicator(R.drawable.list);
                     break;
             }
         }
@@ -1057,17 +1202,12 @@ public class LectioActivity extends AppCompatActivity{
         }
         return day;
     }
-    // actionbar 오른쪽 벨 추가
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.topmenu_main, menu);
 
-        return true;
-    }
-
+    Thread t;
+    TextView text_ttl;
+    TextView text;
     // 벨 클릭시 성령청원기도 보이기
-    public void showPraying(final MenuItem item)
+    public void showPraying()
     {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
@@ -1077,7 +1217,6 @@ public class LectioActivity extends AppCompatActivity{
         MainActivity.releaseCpuLock();
         MainActivity.playSound(LectioActivity.this, "pray");
 
-        item.setIcon(getResources().getDrawable(R.drawable.notification));
         // Create custom dialog object
         final Dialog dialog = new Dialog(LectioActivity.this);
         // Include dialog.xml file
@@ -1085,12 +1224,36 @@ public class LectioActivity extends AppCompatActivity{
         // Set dialog title
         dialog.setTitle("Custom Dialog");
 
-        TextView text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
-        text_ttl.setText("성령 청원 기도");
+        // progressbar show
+        final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
 
+        t = new Thread(new Runnable() {
+            @Override
+            public void run(){
+                int progress=0;
+                while(progress<100){
+                    ++progress;
+                    progressbar.setProgress(progress);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    if(t.isInterrupted()) { break; }
+                }
+            }
+        });
+        t.start();
+
+        text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
+        //text_ttl.setText("성령 청원 기도");
+        text_ttl.setText("\n침묵에 들어가는 단계\n");
         // set values for custom dialog components - text, image and button
-        TextView text = (TextView) dialog.findViewById(R.id.textDialog);
-        text.setText("오소서, 성령님\n" +
+        text = (TextView) dialog.findViewById(R.id.textDialog);
+        text.setText("하느님의 현존을 느껴 봅시다. 하느님께서 주시는 새 마음으로 들어가도록 노력하며 \n" +
+                "일상을 떠나 잠시지만 하느님 세계로 차원을 바꿔 봅시다.\n");
+     /*   text.setText("오소서, 성령님\n" +
                 "당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
                 "가난한 이 아버지, 은총 주님\n" +
                 "오소서 마음에 빛을 주소서.\n" +
@@ -1109,27 +1272,153 @@ public class LectioActivity extends AppCompatActivity{
                 "칠은을 베푸소서.\n" +
                 "공덕을 쌓게  하고 구원의 문을 넘어\n" +
                 "영복을 얻게 하소서.아멘"); //saea
+                */
         dialog.show();
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                item.setIcon(getResources().getDrawable(R.drawable.notification_base));
+              //  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
             }
         });
+
         // 기도마침 클릭시 이벤트
-        Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
+        declineButton = (Button) dialog.findViewById(R.id.declineButton);
+        declineButton.setText("[다음 단계]");
+        final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
         // if decline button is clicked, close the custom dialog
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Close dialog
-                item.setIcon(getResources().getDrawable(R.drawable.notification_base));
-                dialog.dismiss();
+                MainActivity.mMediaPlayer.stop();
+                t.interrupt();
+                if(declineButton.getText().equals("[다음 단계]")){
+                    dialog_image.setVisibility(View.GONE);
+                    progressbar.setVisibility(View.GONE);
+                    declineButton.setText("[기도 마침]");
+                    text_ttl.setText("성령 청원 기도");
+                    text.setText("오소서, 성령님\n" +
+                            "당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
+                            "가난한 이 아버지, 은총 주님\n" +
+                            "오소서 마음에 빛을 주소서.\n" +
+                            "가장 좋은 위로자, 영혼의 기쁜 손님,\n" +
+                            "생기 돋워 주소서.\n" +
+                            "일할 때에 휴식을, 무더울 때 바람을,\n" +
+                            "슬플 때에 위로를, 지복의 빛이시여,\n" +
+                            "저희 맘 깊은 곳을 가득히 채우소서.\n" +
+                            "주님 도움 없으면 저희 삶 그 모든 것\n" +
+                            "이로운 것 없으리.\n" +
+                            "허물은 씻어 주고 마른 땅 물 주시고\n" +
+                            "병든 것 고치소서.\n" +
+                            "굳은 맘 풀어 주고 찬 마음 데우시고\n" +
+                            "바른길 이끄소서.\n" +
+                            "성령님을 믿으며 의지하는 이에게\n" +
+                            "칠은을 베푸소서.\n" +
+                            "공덕을 쌓게  하고 구원의 문을 넘어\n" +
+                            "영복을 얻게 하소서.아멘");
+                }else{
+                    // Close dialog
+                    dialog.dismiss();
+
+                }
 
             }
         });
     }
 
 
+    public void showPraying2(String summary2, String jesus2, String mysentence)
+    {
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                PowerManager.ON_AFTER_RELEASE, TAG);
+        myWakeLock.acquire(); //실행후 리소스 반환 필수
+        MainActivity.releaseCpuLock();
+        MainActivity.playSound(LectioActivity.this, "pray");
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(LectioActivity.this);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.dialog);
+        // Set dialog title
+        dialog.setTitle("Custom Dialog");
+        final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
+
+        t = new Thread(new Runnable() {
+            @Override
+            public void run(){
+                int progress=0;
+                while(progress<100){
+                    ++progress;
+                    progressbar.setProgress(progress);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    if(t.isInterrupted()) { break; }
+                }
+            }
+        });
+        t.start();
+
+        text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
+        //text_ttl.setText("성령 청원 기도");
+        text_ttl.setText("\n주님께서 내게 주신 깨달음에 대해 감사하며 이를 실천할 수 있는 힘을 달라고 주님께 기도해 봅시다.\n");
+        // set values for custom dialog components - text, image and button
+        text = (TextView) dialog.findViewById(R.id.textDialog);
+        if(mysentence == null){
+            if(summary2 == null){
+                summary2 = "";
+            }
+            if(jesus2 == null){
+                jesus2 = "";
+            }
+            text.setText(Html.fromHtml("<font color=\"#16a085\">"+summary2+"</font><br><font color=\"#16a085\">"+jesus2+"</font>"));
+        }else{
+            text.setText(Html.fromHtml("<font color=\"#16a085\">"+mysentence+"</font><br><font color=\"#16a085\">"+summary2+"\n</font><br><font color=\"#16a085\">"+jesus2+"</font>"));
+        }
+
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                //  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
+            }
+        });
+
+        // 기도마침 클릭시 이벤트
+        declineButton = (Button) dialog.findViewById(R.id.declineButton);
+        declineButton.setText("[기도 마침]");
+        final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
+        // if decline button is clicked, close the custom dialog
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.mMediaPlayer.stop();
+                t.interrupt();
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                // Close dialog
+                dialog.dismiss();
+
+                // 한주복음묵상에서 온경우 다시 이동
+                if(date_intent != null) {
+                    Intent intent = new Intent(LectioActivity.this, WeekendActivity.class);
+                    LectioActivity.this.startActivity(intent);
+                }
+
+            }
+        });
+    }
+
+    // actionbar 오른쪽 기도하기 추가
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        inflater = getMenuInflater();
+        inflater.inflate(R.menu.topmenu_lectio, menu);
+
+        return true;
+    }
 
 }

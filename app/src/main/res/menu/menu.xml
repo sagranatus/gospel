@@ -2,10 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_zero"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/bottom0"
+        android:title="오늘의복음" />
+    <item
         android:id="@+id/action_one"
         app:showAsAction="ifRoom"
         android:icon="@drawable/bottom1"
-        android:title="오늘의복음" />
+        android:title="말씀새기기" />
     <item
         android:id="@+id/action_two"
         app:showAsAction="ifRoom"
@@ -15,7 +20,7 @@
         android:id="@+id/action_three"
         app:showAsAction="ifRoom"
         android:enabled="true"
-        android:icon="@drawable/bottom3_2"
+        android:icon="@drawable/bottom3"
         android:title="한주복음묵상"/>
     <item
         android:id="@+id/action_four"

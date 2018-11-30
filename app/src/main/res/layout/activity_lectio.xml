@@ -73,11 +73,59 @@
                     android:textColor="@color/actionbar"
                     android:fontFamily="@font/notosans_semibold"
                     android:textSize="17dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="30dp"
                     android:lineSpacingExtra="3dp"
                     android:background="#ffffff"
                     style="?android:attr/borderlessButtonStyle" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal" >
+                    <Button
+                        android:id="@+id/bt_prev"
+                        android:background="#e6e6e6"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="55dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginRight="10dp"
+                        android:textSize="11dp"
+                        android:text="prev"
+                        android:fontFamily="@font/notosans_regular"
+                        android:textColor="#838383"
+                        android:textAllCaps="false"
+                        style="?android:attr/borderlessButtonStyle" />
+                    <TextView
+                        android:id="@+id/question1"
+                        android:layout_width="200dp"
+                        android:layout_height="60dp"
+                        android:gravity="center"
+                        android:textSize="16dp"
+                        android:textColor="#16a085"
+                        android:fontFamily="@font/notosans_regular"
+                        android:lineSpacingExtra="3dp"
+                        android:text="복음의 배경은 무엇인가요?" />
+                    <Button
+                        android:id="@+id/bt_next"
+                        android:background="#e6e6e6"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="55dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="11dp"
+                        android:text="next"
+                        android:fontFamily="@font/notosans_regular"
+                        android:textColor="#838383"
+                        android:textAllCaps="false"
+                        style="?android:attr/borderlessButtonStyle" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tv_first"
                     android:layout_width="match_parent"
@@ -104,54 +152,6 @@
                     android:text="START"
                     android:textColor="#ffffff"
                     android:textSize="11dp" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="-10dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal" >
-                    <Button
-                        android:id="@+id/bt_prev"
-                        android:background="#e6e6e6"
-                        android:gravity="center"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="55dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginRight="10dp"
-                        android:textSize="11dp"
-                        android:text="prev"
-                        android:fontFamily="@font/notosans_regular"
-                        android:textColor="#838383"
-                        android:textAllCaps="false"
-                        style="?android:attr/borderlessButtonStyle" />
-                    <TextView
-                        android:id="@+id/question1"
-                        android:layout_width="200dp"
-                        android:layout_height="90dp"
-                        android:gravity="center"
-                        android:textSize="16dp"
-                        android:textColor="#16a085"
-                        android:fontFamily="@font/notosans_regular"
-                        android:lineSpacingExtra="3dp"
-                        android:text="복음의 배경은 무엇인가요?" />
-                    <Button
-                        android:id="@+id/bt_next"
-                        android:background="#e6e6e6"
-                        android:gravity="center"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="55dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="11dp"
-                        android:text="next"
-                        android:fontFamily="@font/notosans_regular"
-                        android:textColor="#838383"
-                        android:textAllCaps="false"
-                        style="?android:attr/borderlessButtonStyle" />
-                </LinearLayout>
-
                 <EditText
                     android:id="@+id/et_background1"
                     android:paddingLeft="5dp"
@@ -271,7 +271,7 @@
                 android:layout_width="match_parent"
                 android:typeface="sans"
                 android:background="#ffffff"
-                android:layout_height="310dp"
+                android:layout_height="250dp"
                 >
             <TextView
                 android:id="@+id/after_save_tv"
@@ -282,7 +282,7 @@
                 android:lineSpacingExtra="5dp"
                 android:textSize="15dp"
                 android:inputType="textMultiLine"
-                android:layout_marginBottom="50dp"/>
+                android:layout_marginBottom="20dp"/>
 
             </ScrollView>
             <Button
@@ -299,6 +299,7 @@
                 android:text="EDIT"
                 android:textColor="#ffffff"
                 android:textSize="11dp" />
+
             <!-- This could be your fragment container, or something -->
             <ScrollView
                 android:id="@+id/scrollView"
@@ -328,7 +329,7 @@
                         android:textColor="#5e5e5e"
                         android:bufferType="spannable"
                         android:textIsSelectable="true"
-                        android:layout_marginBottom="300dp"/>
+                        android:layout_marginBottom="250dp"/>
 
                 </LinearLayout>
             </ScrollView>

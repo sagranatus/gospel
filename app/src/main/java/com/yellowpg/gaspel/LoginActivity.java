@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             default:
-                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                Intent i = new Intent(LoginActivity.this, FirstActivity.class);
                 startActivity(i);
                 return true;
         }

@@ -159,12 +159,12 @@ public class SettingActivity extends AppCompatActivity {
 		timeset.setClickable(false);
 		timeset.setBackgroundResource(R.drawable.button_bg_white);
 		init();
-
-		if(uid == null || uid == ""){
+		ll_step3.setVisibility(View.GONE);
+	/*	if(uid == null || uid == ""){
 			ll_step3.setVisibility(View.GONE);
 
-		}
-		// exp : 텍스트크기 설정 부분
+		} */
+		// 텍스트크기 설정 부분
 		SharedPreferences sp = getSharedPreferences("setting", 0);
 		textsize = sp.getString("textsize", "");
 		if (textsize.equals("big")) {
@@ -399,7 +399,7 @@ public class SettingActivity extends AppCompatActivity {
 					}catch(Exception e){
 						e.printStackTrace();
 					}
-
+					Toast.makeText(SettingActivity.this, "데이터가 성공적으로 전송되었습니다.", Toast.LENGTH_SHORT).show();
 
 
 

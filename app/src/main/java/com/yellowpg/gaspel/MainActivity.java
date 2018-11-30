@@ -40,7 +40,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 	private SessionManager session;
 	String uid = null;
 
-	private static MediaPlayer mMediaPlayer;
+	public static MediaPlayer mMediaPlayer;
 	InputMethodManager imm;
 	LinearLayout ll, ll_date;
 	CommentInfoHelper commentInfoHelper;
@@ -175,16 +177,22 @@ public class MainActivity extends AppCompatActivity {
 		MenuItem menuItem_2 = menu.getItem(1);
 		MenuItem menuItem_3 = menu.getItem(2);
 		MenuItem menuItem_4 = menu.getItem(3);
+		MenuItem menuItem_5 = menu.getItem(4);
 		menuItem_1.setChecked(false);
 		menuItem_2.setChecked(false);
 		menuItem_3.setChecked(false);
 		menuItem_4.setChecked(false);
-		MenuItem menuItem = menu.getItem(0);
+		menuItem_5.setChecked(false);
+		MenuItem menuItem = menu.getItem(1);
 		menuItem.setChecked(true);
 		bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 				switch (item.getItemId()) {
+					case R.id.action_zero:
+						Intent i0 = new Intent(MainActivity.this, FirstActivity.class);
+						startActivity(i0);
+						break;
 					case R.id.action_one:
 						Intent i = new Intent(MainActivity.this, MainActivity.class);
 						startActivity(i);
@@ -357,19 +365,24 @@ public class MainActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 	}
+	Thread t;
+	TextView text_ttl;
+	TextView text;
+	Button declineButton;
 
 	// 오른쪽 종을 누르면 청원기도가 보인다
 	@SuppressLint("InvalidWakeLockTag")
 	public void showPraying(final MenuItem item)
 	{
+
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		myWakeLock= pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+		@SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
 				PowerManager.ACQUIRE_CAUSES_WAKEUP |
 				PowerManager.ON_AFTER_RELEASE, TAG);
 		myWakeLock.acquire(); //실행후 리소스 반환 필수
-		releaseCpuLock();
-		playSound(MainActivity.this, "pray");
-		item.setIcon(getResources().getDrawable(R.drawable.notification));
+		MainActivity.releaseCpuLock();
+		MainActivity.playSound(MainActivity.this, "pray");
+
 		// Create custom dialog object
 		final Dialog dialog = new Dialog(MainActivity.this);
 		// Include dialog.xml file
@@ -377,47 +390,82 @@ public class MainActivity extends AppCompatActivity {
 		// Set dialog title
 		dialog.setTitle("Custom Dialog");
 
-		TextView text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
-		text_ttl.setText("성령 청원 기도");
+		final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
 
+		t = new Thread(new Runnable() {
+			@Override
+			public void run(){
+				int progress=0;
+				while(progress<100){
+					++progress;
+					progressbar.setProgress(progress);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(t.isInterrupted()) { break; }
+				}
+			}
+		});
+		t.start();
+
+		text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
+		//text_ttl.setText("성령 청원 기도");
+		text_ttl.setText("\n침묵에 들어가는 단계\n");
 		// set values for custom dialog components - text, image and button
-		TextView text = (TextView) dialog.findViewById(R.id.textDialog);
-		text.setText("오소서, 성령님\n" +
-				"당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
-				"가난한 이 아버지, 은총 주님\n" +
-				"오소서 마음에 빛을 주소서.\n" +
-				"가장 좋은 위로자, 영혼의 기쁜 손님,\n" +
-				"생기 돋워 주소서.\n" +
-				"일할 때에 휴식을, 무더울 때 바람을,\n" +
-				"슬플 때에 위로를, 지복의 빛이시여,\n" +
-				"저희 맘 깊은 곳을 가득히 채우소서.\n" +
-				"주님 도움 없으면 저희 삶 그 모든 것\n" +
-				"이로운 것 없으리.\n" +
-				"허물은 씻어 주고 마른 땅 물 주시고\n" +
-				"병든 것 고치소서.\n" +
-				"굳은 맘 풀어 주고 찬 마음 데우시고\n" +
-				"바른길 이끄소서.\n" +
-				"성령님을 믿으며 의지하는 이에게\n" +
-				"칠은을 베푸소서.\n" +
-				"공덕을 쌓게  하고 구원의 문을 넘어\n" +
-				"영복을 얻게 하소서.아멘"); //saea
+		text = (TextView) dialog.findViewById(R.id.textDialog);
+		text.setText("하느님의 현존을 느껴 봅시다. 하느님께서 주시는 새 마음으로 들어가도록 노력하며 \n" +
+				"일상을 떠나 잠시지만 하느님 세계로 차원을 바꿔 봅시다.\n");
+
 		dialog.show();
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				item.setIcon(getResources().getDrawable(R.drawable.notification_base));
+				//  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
 			}
 		});
 
-		// 기도마침 누를때 이벤트
-		Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
+		// 기도마침 클릭시 이벤트
+		declineButton = (Button) dialog.findViewById(R.id.declineButton);
+		declineButton.setText("[다음 단계]");
+		final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
 		// if decline button is clicked, close the custom dialog
-		declineButton.setOnClickListener(new OnClickListener() {
+		declineButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Close dialog
-				item.setIcon(getResources().getDrawable(R.drawable.notification_base));
-				dialog.dismiss();
+				mMediaPlayer.stop();
+				t.interrupt();
+				if(declineButton.getText().equals("[다음 단계]")){
+					dialog_image.setVisibility(View.GONE);
+					progressbar.setVisibility(View.GONE);
+					declineButton.setText("[기도 마침]");
+					text_ttl.setText("성령 청원 기도");
+					text.setText("오소서, 성령님\n" +
+							"당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
+							"가난한 이 아버지, 은총 주님\n" +
+							"오소서 마음에 빛을 주소서.\n" +
+							"가장 좋은 위로자, 영혼의 기쁜 손님,\n" +
+							"생기 돋워 주소서.\n" +
+							"일할 때에 휴식을, 무더울 때 바람을,\n" +
+							"슬플 때에 위로를, 지복의 빛이시여,\n" +
+							"저희 맘 깊은 곳을 가득히 채우소서.\n" +
+							"주님 도움 없으면 저희 삶 그 모든 것\n" +
+							"이로운 것 없으리.\n" +
+							"허물은 씻어 주고 마른 땅 물 주시고\n" +
+							"병든 것 고치소서.\n" +
+							"굳은 맘 풀어 주고 찬 마음 데우시고\n" +
+							"바른길 이끄소서.\n" +
+							"성령님을 믿으며 의지하는 이에게\n" +
+							"칠은을 베푸소서.\n" +
+							"공덕을 쌓게  하고 구원의 문을 넘어\n" +
+							"영복을 얻게 하소서.아멘");
+				}else{
+					// Close dialog
+					dialog.dismiss();
+
+				}
 
 			}
 		});
@@ -617,7 +665,7 @@ public class MainActivity extends AppCompatActivity {
 			if(sound.equals("alarm")){
 				afd = mcontext.getAssets().openFd("bell.mp3"); // cf : 파일을 여는 부분
 			}else if(sound.equals("pray")){
-				afd = mcontext.getAssets().openFd("pray.mp3"); // cf : 파일을 여는 부분
+				afd = mcontext.getAssets().openFd("church_bell.mp3"); // cf : 파일을 여는 부분
 			}
 
 			mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
