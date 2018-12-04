@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yellowpg.gaspel"
-    android:versionCode="73"
-    android:versionName="1.8.5">
+    android:versionCode="74"
+    android:versionName="1.8.6">
 
     <uses-sdk android:targetSdkVersion="21" />
 
@@ -32,7 +32,10 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FirstActivity">
+        <activity android:name=".FirstActivity"
+            android:configChanges="screenSize|orientation|layoutDirection"
+            android:screenOrientation="sensor"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

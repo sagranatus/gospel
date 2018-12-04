@@ -54,10 +54,10 @@ public final class R {
         public static final int disable_cell = 0x7f080077;
         public static final int disabled_cell_dark = 0x7f080078;
         public static final int left_arrow = 0x7f080084;
-        public static final int red_border = 0x7f080097;
-        public static final int red_border_dark = 0x7f080098;
-        public static final int red_border_gray_bg = 0x7f080099;
-        public static final int right_arrow = 0x7f08009b;
+        public static final int red_border = 0x7f080098;
+        public static final int red_border_dark = 0x7f080099;
+        public static final int red_border_gray_bg = 0x7f08009a;
+        public static final int right_arrow = 0x7f08009c;
     }
     public static final class id {
         private id() {}
@@ -68,7 +68,7 @@ public final class R {
         public static final int calendar_right_arrow = 0x7f0a005c;
         public static final int calendar_title_view = 0x7f0a005d;
         public static final int calendar_tv = 0x7f0a005e;
-        public static final int months_infinite_pager = 0x7f0a00bb;
+        public static final int months_infinite_pager = 0x7f0a00ba;
         public static final int weekday_gridview = 0x7f0a0140;
     }
     public static final class layout {

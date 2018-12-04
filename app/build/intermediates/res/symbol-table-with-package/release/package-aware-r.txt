@@ -880,6 +880,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable praying
 drawable record1
 drawable record2
 drawable red_border
@@ -1021,7 +1022,6 @@ id design_menu_item_text
 id design_navigation_view
 id dialog_image
 id disableHome
-id edit
 id edit_query
 id email
 id end
@@ -1104,6 +1104,7 @@ id parent_matrix
 id password
 id pin
 id pray
+id praying
 id progress
 id progress_circular
 id progress_horizontal
@@ -1323,6 +1324,7 @@ layout square_date_cell
 layout support_simple_spinner_dropdown_item
 layout weekday_textview
 menu menu
+menu topmenu_lectio
 menu topmenu_main
 menu topmenu_profile
 menu topmenu_weekend
