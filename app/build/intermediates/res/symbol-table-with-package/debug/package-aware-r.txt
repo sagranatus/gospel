@@ -865,6 +865,7 @@ drawable icon
 drawable left
 drawable left_arrow
 drawable list
+drawable main_bible
 drawable navigation_empty_icon
 drawable notification
 drawable notification_action_background
@@ -1276,6 +1277,7 @@ layout activity_first
 layout activity_lectio
 layout activity_login
 layout activity_main
+layout activity_previous
 layout activity_profile
 layout activity_record
 layout activity_register

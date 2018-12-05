@@ -32,7 +32,8 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FirstActivity"
+        <activity
+            android:name=".FirstActivity"
             android:configChanges="screenSize|orientation|layoutDirection"
             android:screenOrientation="sensor"
             android:windowSoftInputMode="adjustPan">
@@ -47,7 +48,6 @@
             android:configChanges="screenSize|orientation|layoutDirection"
             android:screenOrientation="sensor"
             android:windowSoftInputMode="adjustPan">
-
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
 
@@ -99,7 +99,8 @@
             android:label="오늘의복음"
             android:screenOrientation="sensor" />
         <activity android:name=".ProfileActivity" />
-
+        <activity android:name=".PreviousActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

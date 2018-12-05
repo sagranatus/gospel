@@ -11,7 +11,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
+import com.yellowpg.gaspel.DB.DBManager;
+import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -152,11 +154,11 @@ public class Server_CommentData {
                                 for(int j=0; j<arr.length; j++) {
                                     arr[j]=eachstack.optString(j);
                                 }
-                                Comment comment = new Comment(arr[3], arr[1], arr[2]);
-                                Log.d("saea", arr[3]+arr[1]+arr[2]);
+                                Comment comment = new Comment(uid, arr[1], arr[2], arr[3]);
+                                Log.d("saea", arr[1]+arr[2]+arr[3]);
 
                                 // 기존에 값이 있는지 확인하고 없는 경우에 모바일 DB에 삽입
-                                SQLiteDatabase db;
+                          /*      SQLiteDatabase db;
                                     CommentInfoHelper commentInfoHelper = new CommentInfoHelper(context);
                                     ContentValues values;
 
@@ -169,27 +171,43 @@ public class Server_CommentData {
                                                 arr[1]
                                         };
                                         Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null);
+                                    */
 
-                                        while(cursor.moveToNext()){
-                                            comment_str = cursor.getString(0);
-                                        }
-                                        if(comment_str!=null){
-                                           Log.d("saea", "기존 값이 있음");
-                                        }else{
-                                            Log.d("saea", "기존 값이 없음");
-                                           // db=commentInfoHelper.getWritableDatabase();
-                                            values = new ContentValues();
-                                            values.put("comment_con", arr[3]);
-                                            values.put("date", arr[1]);
-                                            values.put("sentence", arr[2]);
-                                            db.insert("comment", null, values);
+                                ArrayList<Comment> comments = new ArrayList<Comment>();
+                                String comment_str = null;
+                                DBManager dbMgr = new DBManager(context);
+                                dbMgr.dbOpen();
+                                dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, arr[1] , comments);
+                                dbMgr.dbClose();
 
-                                        }
+                                if(!comments.isEmpty()){
+                                    comment_str = comments.get(0).getComment();
+                                }else{
+                                }
+
+                                if(comment_str!=null){
+                                   Log.d("saea", "기존 값이 있음");
+                                }else{
+
+                                    Log.d("saea", "기존 값이 없음");
+                                  /* // db=commentInfoHelper.getWritableDatabase();
+                                    values = new ContentValues();
+                                    values.put("comment_con", arr[3]);
+                                    values.put("date", arr[1]);
+                                    values.put("sentence", arr[2]);
+                                    db.insert("comment", null, values);
+                                    */
+                                    Comment commentData = new Comment(uid, arr[1],arr[2],arr[3]);
+                                    dbMgr.dbOpen();
+                                    dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, commentData);
+                                    dbMgr.dbClose();
+                                }
+                                        /*
                                         commentInfoHelper.close();
 
                                     }catch(Exception e){
 
-                                    }
+                                    } */
 
                                 commentItems.add(comment);
                                 Log.d("saea", "comments size:"+String.valueOf(commentItems.size()));

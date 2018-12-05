@@ -103,6 +103,9 @@
             android:label="오늘의복음"
             android:screenOrientation="sensor" />
         <activity android:name="com.yellowpg.gaspel.ProfileActivity" />
+        <activity
+            android:name="com.yellowpg.gaspel.PreviousActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

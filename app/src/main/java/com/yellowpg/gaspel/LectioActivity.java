@@ -47,9 +47,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.WeekendInfoHelper;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
+import com.yellowpg.gaspel.DB.DBManager;
+import com.yellowpg.gaspel.DB.LectioDBSqlData;
+import com.yellowpg.gaspel.DB.WeekendDBSqlData;
+import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
+import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
@@ -62,6 +66,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +99,6 @@ public class LectioActivity extends AppCompatActivity{
     SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
     String date_val2 = sdf2.format(c1.getTime());
 
-    LectioInfoHelper lectioInfoHelper;
     int already;
     Boolean edit_now, start_now;
 
@@ -242,7 +246,6 @@ public class LectioActivity extends AppCompatActivity{
             getGaspel(date_val2);
         }else{
             date.setText(date_val+getDay()+"요일");
-            lectioInfoHelper = new LectioInfoHelper(this);
             checkRecord();
         }
 
@@ -387,6 +390,13 @@ public class LectioActivity extends AppCompatActivity{
     // 저장된 값이 있는지 확인하고 있는경우 가져옴
     public void checkRecord(){
 
+        bg1.setText("");
+        bg2.setText("");
+        bg3.setText("");
+        sum1.setText("");
+        sum2.setText("");
+        js1.setText("");
+        js2.setText("");
         if(date.getText().toString().contains("일요일")){
             weekend_date = "일요일";
         }else{
@@ -398,7 +408,45 @@ public class LectioActivity extends AppCompatActivity{
         }
         edit_now = false;
         // cf : 렉시오 디비나 부분
-        lectioInfoHelper = new LectioInfoHelper(LectioActivity.this);
+
+        SQLiteDatabase db2;
+        String date_aft = (String) date.getText();
+        ArrayList<Lectio> lectios = new ArrayList<Lectio>();
+        String lectio_str = null;
+        DBManager dbMgr = new DBManager(LectioActivity.this);
+        dbMgr.dbOpen();
+        dbMgr.selectLectioData(LectioDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft, lectios);
+        dbMgr.dbClose();
+        String bg1_str = null;
+        String bg2_str = null;
+        String bg3_str = null;
+        String sum1_str = null;
+        String sum2_str = null;
+        String js1_str = null;
+        String js2_str = null;
+
+        if(!lectios.isEmpty()){
+            after_save.setVisibility(View.VISIBLE);
+            bg1_str = lectios.get(0).getBg1();
+            bg2_str = lectios.get(0).getBg2();
+            bg3_str = lectios.get(0).getBg3();
+            sum1_str = lectios.get(0).getSum1();
+            sum2_str = lectios.get(0).getSum2();
+            js1_str = lectios.get(0).getJs1();
+            js2_str = lectios.get(0).getJs2();
+
+            // edittext에 가져오기
+            bg1.setText(bg1_str);
+            bg2.setText(bg2_str);
+            bg3.setText(bg3_str);
+            sum1.setText(sum1_str);
+            sum2.setText(sum2_str);
+            js1.setText(js1_str);
+            js2.setText(js2_str);
+        }else{
+        }
+
+    /*    lectioInfoHelper = new LectioInfoHelper(LectioActivity.this);
         SQLiteDatabase db2;
         String bg1_str = null;
         String bg2_str= null;
@@ -451,7 +499,25 @@ public class LectioActivity extends AppCompatActivity{
 
         }
 
-        WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(LectioActivity.this);
+        */
+        String mysentence = null;
+        String mythought = "";
+        ArrayList<Weekend> weekends = new ArrayList<Weekend>();
+        String comment_str = null;
+        dbMgr.dbOpen();
+        dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, date.getText().toString(), weekends);
+        dbMgr.dbClose();
+
+        if(!weekends.isEmpty()){
+            Log.d("saea", "있음!!!!");
+            mysentence = weekends.get(0).getMySentence();
+            mythought = weekends.get(0).getMyThought();
+            // edittext에 가져오기
+            weekend.setText(mysentence);
+        }else{
+            Log.d("saea", "없음!!!!");
+        }
+       /* WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(LectioActivity.this);
         String weekend_date_ = date.getText().toString();
 
         String mysentence = null;
@@ -478,6 +544,7 @@ public class LectioActivity extends AppCompatActivity{
         }catch(Exception e){
 
         }
+        */
 
         if(bg1_str != null){
             start.setVisibility(View.GONE);
@@ -694,7 +761,7 @@ public class LectioActivity extends AppCompatActivity{
                 String onesentence1 = onesentence.getText().toString();
 
                 String bg1_str = null;
-                try{
+        /*        try{
                     db = lectioInfoHelper.getReadableDatabase();
                     String[] columns = {"bg1", "bg2", "bg3", "sum1", "sum2", "js1", "js2", "date", "onesentence"};
                     String whereClause = "date = ?";
@@ -708,8 +775,20 @@ public class LectioActivity extends AppCompatActivity{
                     }
 
                     cursor.close();
+    */
 
+                ArrayList<Lectio> lectios = new ArrayList<Lectio>();
+                String lectio_str = null;
+                DBManager dbMgr = new DBManager(LectioActivity.this);
+                dbMgr.dbOpen();
+                dbMgr.selectLectioData(LectioDBSqlData.SQL_DB_SELECT_DATA, uid, date.getText().toString() , lectios);
+                dbMgr.dbClose();
+
+                if(!lectios.isEmpty()){
+                    bg1_str = lectios.get(0).getBg1();
+                }
                     if(bg1_str!= null){
+                    /*
                         db=lectioInfoHelper.getWritableDatabase();
                         values = new ContentValues();
                         values.put("bg1",  background1);
@@ -721,13 +800,18 @@ public class LectioActivity extends AppCompatActivity{
                         values.put("js2", jesus2);
                         String where = "date=?";
                         db.update("lectio", values, where, whereArgs);
+                        */
+
+                        dbMgr.dbOpen();
+                        dbMgr.updateLectioData(LectioDBSqlData.SQL_DB_UPDATE_DATA, uid, date1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
+                        dbMgr.dbClose();
 
                         if(uid != null && uid != ""){
-                            Lectio lectio = new Lectio(date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
+                            Lectio lectio = new Lectio(uid, date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
                             Server_LectioData.updateLectio(LectioActivity.this, uid, lectio);
                         }
                     }else{
-                        db=lectioInfoHelper.getWritableDatabase();
+                     /*   db=lectioInfoHelper.getWritableDatabase();
                         values = new ContentValues();
                         values.put("bg1",  background1);
                         values.put("bg2",  background2);
@@ -739,19 +823,71 @@ public class LectioActivity extends AppCompatActivity{
                         values.put("date", date1);
                         values.put("onesentence", onesentence1);
                         db.insert("lectio", null, values);
+                        */
+                        Lectio lectioData = new Lectio(uid, date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
+                        dbMgr.dbOpen();
+                        dbMgr.insertLectioData(LectioDBSqlData.SQL_DB_INSERT_DATA, lectioData);
+                        dbMgr.dbClose();
                         if(uid != null && uid != ""){
-                            Lectio lectio = new Lectio(date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
+                            Lectio lectio = new Lectio(uid, date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
                             Server_LectioData.insertLectio(LectioActivity.this, uid, lectio);
                         }
                     }
-                    lectioInfoHelper.close();
+             /*       lectioInfoHelper.close();
                 }catch(Exception e){
 
-                }
-                String mysentence = null;
+                } */
+                String mysentence = weekend.getText().toString();
                 // 일요일의 경우에
                 if(date_intent != null || weekend_date != null){
-                    WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(LectioActivity.this);
+                    String weekend_date = date.getText().toString();
+
+                    String mysentence_str = null;
+                    String mythought = null;
+                    ArrayList<Weekend> weekends = new ArrayList<Weekend>();
+                    String comment_str = null;
+                    dbMgr.dbOpen();
+                    dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, date.getText().toString(), weekends);
+                    dbMgr.dbClose();
+
+                    if(!weekends.isEmpty()){
+                        mysentence_str = weekends.get(0).getMySentence();
+                        mythought = weekends.get(0).getMyThought();
+                    }else{
+                    }
+                    if(mythought == null){
+                        mythought = "";
+                    }
+                    if(mysentence_str!= null){
+                        Log.d("saea", "애초에 값이 있어");
+                      /*  values = new ContentValues();
+                        values.put("mysentence",  mysentence);
+                        String where = "date=?";
+                        String[] whereArgs_ = new String[] {weekend_date};
+                        db.update("weekend", values, where, whereArgs_);
+                        */
+
+                        dbMgr.dbOpen();
+                        dbMgr.updateWeekendData(WeekendDBSqlData.SQL_DB_INSERT_DATA, uid, weekend_date, mysentence, mythought);
+                        dbMgr.dbClose();
+                        if(uid != null && uid != ""){
+                            Server_WeekendData.updateWeekend(LectioActivity.this, uid, weekend_date, mysentence, mythought);
+                        }
+                    }else {
+                      /*   values = new ContentValues();
+                        values.put("date", weekend_date);
+                        values.put("mysentence", mysentence);
+                        db.insert("weekend", null, values);*/
+                        Weekend weekendData = new Weekend(uid, weekend_date, mysentence, mythought);
+                        dbMgr.dbOpen();
+                        dbMgr.insertWeekendData(WeekendDBSqlData.SQL_DB_INSERT_DATA, weekendData);
+                        dbMgr.dbClose();
+
+                        if (uid != null && uid != "") {
+                            Server_WeekendData.insertWeekend(LectioActivity.this, uid, weekend_date, mysentence, mythought);
+                        }
+                    }
+            /*        WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(LectioActivity.this);
                     String weekend_date = date.getText().toString();
                     mysentence = weekend.getText().toString();
                     try{
@@ -788,7 +924,6 @@ public class LectioActivity extends AppCompatActivity{
                             db.insert("weekend", null, values);
 
                             if(uid != null && uid != ""){
-                                Lectio lectio = new Lectio(date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
                                 Server_WeekendData.insertWeekend(LectioActivity.this, uid, weekend_date, mysentence, mythought);
                             }
                         }
@@ -797,6 +932,7 @@ public class LectioActivity extends AppCompatActivity{
                     }catch(Exception e){
 
                     }
+                    */
                     // 저장 후에 기도하는 dialog 보이기
                     showPraying2(summary2, jesus2, mysentence);
                     checkRecord();

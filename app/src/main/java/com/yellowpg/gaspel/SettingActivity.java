@@ -38,9 +38,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
-import com.yellowpg.gaspel.DB.WeekendInfoHelper;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.etc.SessionManager;
@@ -62,7 +59,6 @@ import hirondelle.date4j.DateTime;
 
 // setting 설정 페이지
 public class SettingActivity extends AppCompatActivity {
-	CommentInfoHelper memberInfoHelper;
 	LinearLayout ll_step1, ll_step2, ll_step3;
 	private SessionManager session;
 	String uid = null;
@@ -304,7 +300,7 @@ public class SettingActivity extends AppCompatActivity {
 					timeset.setHint("");
 					break;
 				case R.id.bt_setdata:
-					CommentInfoHelper commentInfoHelper = new CommentInfoHelper(SettingActivity.this);
+			/*		CommentInfoHelper commentInfoHelper = new CommentInfoHelper(SettingActivity.this);
 					SQLiteDatabase db;
 					ContentValues values;
 
@@ -400,7 +396,7 @@ public class SettingActivity extends AppCompatActivity {
 						e.printStackTrace();
 					}
 					Toast.makeText(SettingActivity.this, "데이터가 성공적으로 전송되었습니다.", Toast.LENGTH_SHORT).show();
-
+					*/
 
 
 					break;

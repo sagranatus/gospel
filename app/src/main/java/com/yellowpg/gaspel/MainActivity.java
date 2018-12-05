@@ -50,7 +50,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
+import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -95,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 	public static MediaPlayer mMediaPlayer;
 	InputMethodManager imm;
 	LinearLayout ll, ll_date;
-	CommentInfoHelper commentInfoHelper;
 
 	static Calendar c1 = Calendar.getInstance();
 	//현재 해 + 달 구하기
@@ -299,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
 		comment_save.setOnClickListener(listener);
 		comment_save.setBackgroundResource(R.drawable.button_bg);
 
-		commentInfoHelper = new CommentInfoHelper(this);
 
 		// 세팅에서 알람 설정
 		String alarm = intent.getStringExtra("str");
@@ -579,9 +578,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 		String date_aft = sdf1.format(origin_date) + getDay() + "요일";
 
-		String comment_str = null;
-		commentInfoHelper = new CommentInfoHelper(this);
-		SQLiteDatabase db = null;
+	/*	SQLiteDatabase db = null;
 		try {
 			db = commentInfoHelper.getReadableDatabase();
 			String[] columns = {"comment_con", "date", "sentence"};
@@ -595,16 +592,28 @@ public class MainActivity extends AppCompatActivity {
 				comment_str = cursor.getString(0);
 
 			}
-			// 기존 값이 있는 경우 수정하기
+			*/
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		String comment_str = null;
+		DBManager dbMgr = new DBManager(MainActivity.this);
+		dbMgr.dbOpen();
+		dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft , comments);
+		dbMgr.dbClose();
+
+		if(!comments.isEmpty()){
+			comment_str = comments.get(0).getComment();
+		}else{
+		}
+			// 기존 값이 있는 경우
 			if (comment_str != null) {
 				Log.d("saea", comment_str);
 				comment.setText(comment_str, TextView.BufferType.EDITABLE);
 			}else{
 
 			}
-		} catch (Exception e1) {
+	/*	} catch (Exception e1) {
 			e1.printStackTrace();
-		}
+		} */
 
 	}
 
@@ -730,7 +739,7 @@ public class MainActivity extends AppCompatActivity {
 					String sentence = (String) btnNetCon.getText();
 
 					// 기존에 comment 값이 있는지 값이 있는지 확인하여 있는 수정, 없는 경우 저장
-					String comment_str = null;
+				/*	String comment_str = null;
 					try{
 						db = commentInfoHelper.getReadableDatabase();
 						String[] columns = {"comment_con", "date", "sentence"};
@@ -744,31 +753,56 @@ public class MainActivity extends AppCompatActivity {
 							comment_str = cursor.getString(0);
 
 						}
+					*/
+					ArrayList<Comment> comments = new ArrayList<Comment>();
+					String comment_str = null;
+					DBManager dbMgr = new DBManager(MainActivity.this);
+					dbMgr.dbOpen();
+					dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, date.getText().toString() , comments);
+					dbMgr.dbClose();
+
+					if(!comments.isEmpty()){
+						comment_str = comments.get(0).getComment();
+					}else{
+					}
+
+
 					// 기존 값이 있는 경우 수정하기
 					if(comment_str!=null){
-						values = new ContentValues();
+					/*	values = new ContentValues();
 						values.put("comment_con", comment_con);
 						String where = "date=?";
-						db.update("comment", values, where, whereArgs);
+						db.update("comment", values, where, whereArgs); */
+						dbMgr.dbOpen();
+						dbMgr.updateCommentData(CommentDBSqlData.SQL_DB_UPDATE_DATA, uid, date.getText().toString(), comment_con);
+						dbMgr.dbClose();
+
 						Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+
 						if(uid != null && uid != ""){
 							Server_CommentData.updateComment(MainActivity.this, uid, comment_date, sentence, comment_con);
 						}
 					// 기존 값이 없는 경우 추가 하기
 					}else{
+						/*
 						values = new ContentValues();
 						values.put("comment_con", comment_con);
 						values.put("date", comment_date);
 						values.put("sentence", sentence);
 						db.insert("comment", null, values);
+						*/
+						Comment commentData = new Comment(uid, comment_date, sentence, comment_con);
+						dbMgr.dbOpen();
+						dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, commentData);
+						dbMgr.dbClose();
 						Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
 						if(uid != null && uid != ""){
 							Server_CommentData.insertComment(MainActivity.this, uid, comment_date, sentence, comment_con);
 							}
 						}
-					}catch(Exception e){
+				/*		}catch(Exception e){
 
-					}
+					} */
 				break;
 			}
 		}

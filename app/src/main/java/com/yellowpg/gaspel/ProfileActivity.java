@@ -36,11 +36,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
-import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.LectioDBSqlData;
 import com.yellowpg.gaspel.DB.UserDBSqlData;
-import com.yellowpg.gaspel.DB.WeekendInfoHelper;
+import com.yellowpg.gaspel.DB.WeekendDBSqlData;
+import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.UserData;
 import com.yellowpg.gaspel.etc.AppConfig;
@@ -60,6 +61,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -123,37 +125,37 @@ public class ProfileActivity extends AppCompatActivity {
         dbMgr.dbOpen();
         dbMgr.selectUserData(UserDBSqlData.SQL_DB_SELECT_DATA, uid, userdata);
         dbMgr.dbClose();
-        if(userdata.isEmpty()){
+        if(userdata.isEmpty()) {
             Log.d("saea", "getuser and insertdatato Server DB");
             // 서버에서 user 정보를 가져와서 user database에 삽입
             getUser(ProfileActivity.this, uid);
 
             // 모바일 데이터가 있는 경우, 그리고 uid값이 없는 경우
-            CommentInfoHelper commentInfoHelper = new CommentInfoHelper(ProfileActivity.this);
-            SQLiteDatabase db;
-            ContentValues values;
+          /*
 
-            try{
-                db = commentInfoHelper.getReadableDatabase();
-                String query = "SELECT comment_con, date, sentence FROM comment";
-                Cursor cursor = db.rawQuery(query, null);
+            ArrayList<Comment> comments = new ArrayList<Comment>();
+            String comment_str = null;
 
-                while(cursor.moveToNext()){
-                    String comment_con = cursor.getString(0);
-                    String date = cursor.getString(1);
-                    String sentence = cursor.getString(2);
-                    if(uid != null){
-                        Log.d("saea", uid+date+sentence+comment_con);
-                        Server_CommentData.insertComment(ProfileActivity.this, uid, date, sentence, comment_con);
-                    }
+            dbMgr.dbOpen();
+            dbMgr.selectCommentAllData(CommentDBSqlData.SQL_DB_SELECT_DATA_ALL, uid, comments);
+            dbMgr.dbClose();
+            //Iterator 통한 전체 조회
+            Iterator iterator = comments.iterator();
+            while (iterator.hasNext()) {
+                Comment comment = (Comment) iterator.next();
+                String comment_con = comment.getComment();
+                String date = comment.getDate();
+                String sentence = comment.getOneSentence();
+                if(uid != null){
+                    Log.d("saea", uid+date+sentence+comment_con);
+                    Server_CommentData.insertComment(ProfileActivity.this, uid, date, sentence, comment_con);
                 }
-                cursor.close();
-                commentInfoHelper.close();
-            }catch(Exception e){
-                e.printStackTrace();
             }
+  */
 
             // 렉시오디비나
+        /*
+
             LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(ProfileActivity.this);
             SQLiteDatabase db2;
 
@@ -184,7 +186,7 @@ public class ProfileActivity extends AppCompatActivity {
                     onesentence = cursor.getString(8);
                     if(uid != null){
                         Log.d("saea", uid+date+onesentence+bg1);
-                        Lectio lectio = new Lectio(date, onesentence, bg1, bg2, bg3, sum1, sum2, js1, js2);
+                        Lectio lectio = new Lectio(uid, date, onesentence, bg1, bg2, bg3, sum1, sum2, js1, js2);
                         Server_LectioData.insertLectio(ProfileActivity.this, uid, lectio);
                     }
                 }
@@ -195,6 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
             catch(Exception e){
 
             }
+
             // weekend 데이터
             WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(ProfileActivity.this);
             ContentValues values3;
@@ -224,6 +227,7 @@ public class ProfileActivity extends AppCompatActivity {
             }catch(Exception e){
                 e.printStackTrace();
             }
+             */
         }else{
             UserData udata = userdata.get(0);
             name = udata.getName();
@@ -297,16 +301,21 @@ public class ProfileActivity extends AppCompatActivity {
         session.setLogin(false, "");
 
         SQLiteDatabase db = null;
-        CommentInfoHelper commentInfoHelper = new CommentInfoHelper(this);
-        try {
+   /*     try {
             db = commentInfoHelper.getReadableDatabase();
             db.delete("comment", null, null);
             db.close();
         }catch(Exception e){
 
         }
+        */
+        DBManager dbMgr = new DBManager(ProfileActivity.this);
+        dbMgr.dbOpen();
+        dbMgr.deleteCommentData(CommentDBSqlData.SQL_DB_DELETE_DATA, uid);
+        dbMgr.dbClose();
 
-        LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(this);
+
+ /*       LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(this);
         try {
             db = lectioInfoHelper.getReadableDatabase();
             db.delete("lectio", null, null);
@@ -314,15 +323,26 @@ public class ProfileActivity extends AppCompatActivity {
         }catch(Exception e){
 
         }
+*/
+        dbMgr.dbOpen();
+        dbMgr.deleteLectioData(LectioDBSqlData.SQL_DB_DELETE_DATA, uid);
+        dbMgr.dbClose();
 
-        WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(this);
+
+        dbMgr.dbOpen();
+        dbMgr.deleteWeekendData(WeekendDBSqlData.SQL_DB_DELETE_DATA, uid);
+        dbMgr.dbClose();
+  /*      WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(this);
         try {
             db = weekendInfoHelper.getReadableDatabase();
             db.delete("weekend", null, null);
             db.close();
         }catch(Exception e){
 
+
         }
+
+        */
         // Launching the login activity
         Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
         startActivity(intent);

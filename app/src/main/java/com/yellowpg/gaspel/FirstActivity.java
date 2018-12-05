@@ -30,11 +30,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
-import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.LectioDBSqlData;
 import com.yellowpg.gaspel.DB.UserDBSqlData;
-import com.yellowpg.gaspel.DB.WeekendInfoHelper;
+import com.yellowpg.gaspel.DB.WeekendDBSqlData;
+import com.yellowpg.gaspel.data.Comment;
+import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.UserData;
 import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
@@ -93,6 +95,14 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         //session 정보 가져오기
         session = new SessionManager(getApplicationContext());
         uid = session.getUid();
+
+        // 첫화면에서 로그인 안한 경우에는 이렇게 넣으면 된다.
+        if(uid == null || uid == ""){
+            Log.d("saea", "this is ");
+            Intent i0 = new Intent(FirstActivity.this, PreviousActivity.class);
+            startActivity(i0);
+        }
+
 
         // 인터넷연결 확인
         ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -355,7 +365,26 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         String date_aft = sdf1.format(origin_date) + getDay() + "요일";
 
         String comment_str = null;
-        CommentInfoHelper commentInfoHelper = new CommentInfoHelper(this);
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        DBManager dbMgr = new DBManager(FirstActivity.this);
+        dbMgr.dbOpen();
+        dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft , comments);
+        dbMgr.dbClose();
+
+        if(!comments.isEmpty()){
+            comment_str = comments.get(0).getComment();
+        }else{
+        }
+
+        if (comment_str != null) {
+            Log.d("saea", comment_str);
+            comment.setText(comment_str);
+            i++;
+        }else{
+            comment.setText(Html.fromHtml("<font color=\"#999999\">오늘의 복음 말씀새기기 하기</font>"));
+            comment.setOnClickListener(this);
+        }
+    /*    CommentInfoHelper commentInfoHelper = new CommentInfoHelper(this);
         SQLiteDatabase db = null;
         try {
             db = commentInfoHelper.getReadableDatabase();
@@ -383,6 +412,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             e1.printStackTrace();
         }
 
+        */
+
     }
 
     public void getLectio(String date){
@@ -395,7 +426,30 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         }
         String date_aft = sdf1.format(origin_date) + getDay() + "요일";
         // cf : 렉시오 디비나 부분
-        LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(FirstActivity.this);
+        ArrayList<Lectio> lectios = new ArrayList<Lectio>();
+        String lectio_str = null;
+        DBManager dbMgr = new DBManager(FirstActivity.this);
+        dbMgr.dbOpen();
+        dbMgr.selectLectioData(LectioDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft , lectios);
+        dbMgr.dbClose();
+
+        String sum2_str = null;
+        String js2_str = null;
+
+        if(!lectios.isEmpty()){
+            sum2_str = lectios.get(0).getSum2();
+            js2_str = lectios.get(0).getJs2();
+
+        }
+
+        if(sum2_str != null){
+            lectio.setText(sum2_str+"\n\""+js2_str+"\"");
+            i++;
+        }else{
+            lectio.setText(Html.fromHtml("<font color=\"#999999\">오늘의 복음 렉시오 디비나 하기</font>"));
+            lectio.setOnClickListener(this);
+        }
+      /*  LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(FirstActivity.this);
         SQLiteDatabase db2;
         String bg1_str = null;
         String bg2_str= null;
@@ -442,6 +496,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         catch(Exception e){
 
         }
+        */
     }
 
     public void getWeekend(String date){
@@ -452,8 +507,36 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         date_val = sdf1.format(c1.getTime());
         String date_detail = date_val+getDay()+"요일";
         Log.d("saea", date_detail);
+
         // cf : 렉시오 디비나 부분
-        WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(FirstActivity.this);
+        String mysentence_str = null;
+        String mythought_str= null;
+
+        ArrayList<Weekend> weekends = new ArrayList<Weekend>();
+        String comment_str = null;
+        DBManager dbMgr = new DBManager(FirstActivity.this);
+        dbMgr.dbOpen();
+        dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, date_detail, weekends);
+        dbMgr.dbClose();
+
+        if(!weekends.isEmpty()){
+            mysentence_str = weekends.get(0).getMySentence();
+            mythought_str = weekends.get(0).getMyThought();
+            Log.d("saea", mysentence_str +mythought_str );
+        }
+
+        // 기존 값이 있는 경우 보여지기
+        if(mysentence_str != null){
+            Log.d("saea", "한주복음묵상 있음");
+            i++;
+            mysentence.setText(mysentence_str);
+
+        }else{
+            Log.d("saea", "한주복음묵상 없음");
+            mysentence.setText(Html.fromHtml("<font color=\"#999999\">이번주 복음묵상 하기</font>"));
+            mysentence.setOnClickListener(this);
+        }
+       /* WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(FirstActivity.this);
         SQLiteDatabase db;
         String mysentence_str = null;
         String mythought_str= null;
@@ -488,6 +571,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         }catch(Exception e){
 
         }
+
+        */
     }
 
     // 요일 얻어오기

@@ -11,8 +11,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
-import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.DBManager;
+import com.yellowpg.gaspel.DB.LectioDBSqlData;
+import com.yellowpg.gaspel.LectioActivity;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.etc.AppConfig;
@@ -162,10 +163,31 @@ public class Server_LectioData {
                                 for(int j=0; j<arr.length; j++) {
                                     arr[j]=eachstack.optString(j);
                                 }
-                                Lectio lectio = new Lectio(arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9]);
+                                Lectio lectio = new Lectio(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9]);
                                 Log.d("saea", arr[1]+arr[2]+arr[3]);
 
-                                SQLiteDatabase db;
+                                ArrayList<Lectio> lectios = new ArrayList<Lectio>();
+                                String bg1_str = null;
+                                DBManager dbMgr = new DBManager(context);
+                                dbMgr.dbOpen();
+                                dbMgr.selectLectioData(LectioDBSqlData.SQL_DB_SELECT_DATA, uid, arr[1] , lectios);
+                                dbMgr.dbClose();
+
+                                if(!lectios.isEmpty()){
+                                    bg1_str = lectios.get(0).getBg1();
+                                }
+
+                                if(bg1_str!= null){
+                                    Log.d("saea", "기존 값이 있음");
+                                }else{
+                                    Log.d("saea", "기존 값이 없음");
+                                    Lectio lectioData = new Lectio(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9]);
+                                    dbMgr.dbOpen();
+                                    dbMgr.insertLectioData(LectioDBSqlData.SQL_DB_INSERT_DATA, lectioData);
+                                    dbMgr.dbClose();
+                                }
+
+                                /*SQLiteDatabase db;
                                 LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(context);
                                 ContentValues values;
 
@@ -203,6 +225,7 @@ public class Server_LectioData {
                                 }catch(Exception e){
 
                                 }
+                                */
 
 
                                 lectioItems.add(lectio);

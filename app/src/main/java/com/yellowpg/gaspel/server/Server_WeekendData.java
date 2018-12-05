@@ -11,8 +11,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
-import com.yellowpg.gaspel.DB.WeekendInfoHelper;
+import com.yellowpg.gaspel.DB.DBManager;
+import com.yellowpg.gaspel.DB.WeekendDBSqlData;
 import com.yellowpg.gaspel.LectioActivity;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Weekend;
@@ -154,9 +154,35 @@ public class Server_WeekendData {
                                 for(int j=0; j<arr.length; j++) {
                                     arr[j]=eachstack.optString(j);
                                 }
-                                Weekend weekend = new Weekend(arr[1], arr[2], arr[3]);
+                                Weekend weekend = new Weekend(arr[0], arr[1], arr[2], arr[3]);
                                 Log.d("saea", arr[1]+arr[2]+arr[3]);
-                                WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(context);
+
+                                ArrayList<Weekend> weekends = new ArrayList<Weekend>();
+                                String comment_str = null;
+                                DBManager dbMgr = new DBManager(context);
+                                dbMgr.dbOpen();
+                                dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, arr[1], weekends);
+                                dbMgr.dbClose();
+                                String weekend_str = null;
+                                String mythought = "";
+                                if(!weekends.isEmpty()){
+                                    weekend_str = weekends.get(0).getMySentence();
+                                    mythought = weekends.get(0).getMyThought();
+                                }
+
+                                if(weekend_str!=null){
+                                    Log.d("saea", "기존 값이 있음");
+                                }else{
+                                    Log.d("saea", "기존 값이 없음");
+                                    // db=commentInfoHelper.getWritableDatabase();
+                                    Weekend weekendData = new Weekend(arr[0], arr[1], arr[2], arr[3]);
+                                    dbMgr.dbOpen();
+                                    dbMgr.insertWeekendData(WeekendDBSqlData.SQL_DB_INSERT_DATA, weekendData);
+                                    dbMgr.dbClose();
+                                    //   commentInfoHelper.close();
+                                }
+
+                         /*       WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(context);
                                 ContentValues values;
                                 SQLiteDatabase db3;
                                 try{
@@ -193,6 +219,8 @@ public class Server_WeekendData {
                                 }catch(Exception e){
                                     e.printStackTrace();
                                 }
+
+                                */
 
                                 weekendItems.add(weekend);
                                 Log.d("saea", "weekends size:"+String.valueOf(weekendItems.size()));

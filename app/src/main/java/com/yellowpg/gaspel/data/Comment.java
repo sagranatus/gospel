@@ -5,23 +5,27 @@ import android.widget.Button;
 import hirondelle.date4j.DateTime;
 
 public class Comment {
+	private String uid;
 	private String date;
 	private String oneSentence;
 	private String comment;
 	DateTime date_time;
 
-    public Comment(String com, String date, String sentence) {
-        this.comment = com;
-        this.date = date;
-        this.oneSentence = sentence;
+    public Comment(String uid, String date, String onesentence, String comment) {
+    	this.uid = uid;
+		this.oneSentence = onesentence;
+		this.date = date;
+        this.comment = comment;
     }
 
-	public Comment(DateTime date_time, String date, String sentence, String com){
+	public Comment(String uid, DateTime date_time, String date, String onesentence, String comment){
+    	this.uid = uid;
 		this.date_time = date_time;
 		this.date = date;
-		this.oneSentence = sentence;
-		this.comment = com;
+		this.oneSentence = onesentence;
+		this.comment = comment;
 	}
+	public String getUid(){return  uid;}
 	public String getDate(){
 		return date;
 	}
@@ -34,9 +38,10 @@ public class Comment {
 
 	public String[] getcDataArray(){
 		String[] cData = {
-				this.comment,
+				this.uid,
 				this.date,
-				this.oneSentence
+				this.oneSentence,
+				this.comment
 		};
 		return cData;
 	}

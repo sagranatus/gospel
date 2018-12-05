@@ -40,8 +40,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.LectioInfoHelper;
-import com.yellowpg.gaspel.DB.WeekendInfoHelper;
+import com.yellowpg.gaspel.DB.DBManager;
+import com.yellowpg.gaspel.DB.WeekendDBSqlData;
+import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
@@ -210,7 +211,7 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 	public void checkWeekendRecord(){
 		SQLiteDatabase db;
 		ContentValues values;
-		WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(WeekendActivity.this);
+		//WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(WeekendActivity.this);
 		c1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
 		c1.add(c1.DATE,7);
@@ -218,7 +219,37 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		date_val = sdf.format(c1.getTime());
 		date_detail = date_val+getDay()+"요일";
 		Log.d("saea", date_detail);
+		String mysentence = null;
+		String mythought = null;
 
+		ArrayList<Weekend> weekends = new ArrayList<Weekend>();
+		String comment_str = null;
+		DBManager dbMgr = new DBManager(WeekendActivity.this);
+		dbMgr.dbOpen();
+		dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, date_detail, weekends);
+		dbMgr.dbClose();
+
+		if(!weekends.isEmpty()){
+			mysentence = weekends.get(0).getMySentence();
+			mythought = weekends.get(0).getMyThought();
+		}
+
+		// 기존 값이 있는 경우 보여지기
+		if(mysentence != null){
+			Log.d("saea", "한주복음묵상 있음");
+			mySentence.setVisibility(View.VISIBLE);
+			saveThought.setVisibility(View.VISIBLE);
+			Thought.setVisibility(View.VISIBLE);
+			mySentence.setText(mysentence);
+			if(mythought != null){
+				Thought.setText(mythought);
+			}
+
+		}else{
+			Log.d("saea", "한주복음묵상 없음");
+			weekendGaspel.setVisibility(View.VISIBLE);
+		}
+/*
 		try{
 			String mysentence = null;
 			String mythought = null;
@@ -256,6 +287,8 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		}catch(Exception e){
 
 		}
+
+		*/
 	}
 
 	// exp : 요일 얻어오기
@@ -302,6 +335,15 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 					WeekendActivity.this.startActivity(intent);
 					break;
 				case R.id.bt_saveThought:
+					String weekend_date = date_detail;
+					String mythought = Thought.getText().toString();
+					String mysentence = mySentence.getText().toString();
+					Log.d("saea", "mythoght="+mythought);
+					DBManager dbMgr = new DBManager(WeekendActivity.this);
+					dbMgr.dbOpen();
+					dbMgr.updateWeekendData(WeekendDBSqlData.SQL_DB_UPDATE_DATA, uid, weekend_date, mysentence, mythought);
+					dbMgr.dbClose();
+					/*
 					SQLiteDatabase db;
 					ContentValues values;
 					WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(WeekendActivity.this);
@@ -319,6 +361,7 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 					}catch(Exception e){
 						e.printStackTrace();
 					}
+					*/
 
 					if(uid != null && uid != ""){
 						Server_WeekendData.updateWeekend(WeekendActivity.this, uid, weekend_date, mysentence, mythought);

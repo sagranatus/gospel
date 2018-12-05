@@ -54,10 +54,10 @@ public final class R {
         public static final int disable_cell = 0x7f080077;
         public static final int disabled_cell_dark = 0x7f080078;
         public static final int left_arrow = 0x7f080084;
-        public static final int red_border = 0x7f080098;
-        public static final int red_border_dark = 0x7f080099;
-        public static final int red_border_gray_bg = 0x7f08009a;
-        public static final int right_arrow = 0x7f08009c;
+        public static final int red_border = 0x7f080099;
+        public static final int red_border_dark = 0x7f08009a;
+        public static final int red_border_gray_bg = 0x7f08009b;
+        public static final int right_arrow = 0x7f08009d;
     }
     public static final class id {
         private id() {}
@@ -74,11 +74,11 @@ public final class R {
     public static final class layout {
         private layout() {}
 
-        public static final int calendar_view = 0x7f0c0032;
-        public static final int date_grid_fragment = 0x7f0c0035;
-        public static final int normal_date_cell = 0x7f0c0045;
-        public static final int square_date_cell = 0x7f0c0058;
-        public static final int weekday_textview = 0x7f0c005a;
+        public static final int calendar_view = 0x7f0c0033;
+        public static final int date_grid_fragment = 0x7f0c0036;
+        public static final int normal_date_cell = 0x7f0c0046;
+        public static final int square_date_cell = 0x7f0c0059;
+        public static final int weekday_textview = 0x7f0c005b;
     }
     public static final class string {
         private string() {}

@@ -3,12 +3,14 @@ package com.yellowpg.gaspel.data;
 import hirondelle.date4j.DateTime;
 
 public class Lectio {
+    private String uid;
     private String date;
     private String oneSentence;
     private String bg1, bg2, bg3, sum1, sum2, js1, js2;
     DateTime date_time;
 
-    public Lectio(String date, String sentence, String bg1, String bg2, String bg3, String sum1, String sum2, String js1, String js2){
+    public Lectio(String uid, String date, String sentence, String bg1, String bg2, String bg3, String sum1, String sum2, String js1, String js2){
+        this.uid = uid;
         this.date = date;
         this.oneSentence = sentence;
         this.bg1 = bg1;
@@ -20,7 +22,8 @@ public class Lectio {
         this.js2 = js2;
     }
 
-    public Lectio(DateTime date_time, String date, String sentence, String bg1, String bg2, String bg3, String sum1, String sum2, String js1, String js2){
+    public Lectio(String uid, DateTime date_time, String date, String sentence, String bg1, String bg2, String bg3, String sum1, String sum2, String js1, String js2){
+        this.uid = uid;
         this.date_time = date_time;
         this.date = date;
         this.oneSentence = sentence;
@@ -34,6 +37,7 @@ public class Lectio {
 
     }
 
+    public  String getUid(){ return uid; }
     public String getDate(){
         return date;
     }
@@ -64,6 +68,7 @@ public class Lectio {
 
     public String[] getcDataArray(){
         String[] cData = {
+                this.uid,
                 this.date,
                 this.oneSentence,
                 this.bg1,

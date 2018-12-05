@@ -23,18 +23,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yellowpg.gaspel.DB.CommentInfoHelper;
-import com.yellowpg.gaspel.DB.LectioInfoHelper;
+import com.yellowpg.gaspel.DB.CommentDBSqlData;
+import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.adapter.StatusSaveAdapter;
+import com.yellowpg.gaspel.data.Comment;
+import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.MonthRecord;
+import com.yellowpg.gaspel.etc.SessionManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 
 public class StatusActivity extends AppCompatActivity {
-    CommentInfoHelper commentInfoHelper;
-    LectioInfoHelper lectioInfoHelper;
 
     Calendar c1 = Calendar.getInstance();
 
@@ -52,10 +54,15 @@ public class StatusActivity extends AppCompatActivity {
     int j=0;
     TextView status;
     LinearLayout ll2, ll3;
+    private SessionManager session;
+    String uid = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
+
+        session = new SessionManager(getApplicationContext());
+        uid = session.getUid();
 
         //actionbar setting
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
@@ -89,9 +96,31 @@ public class StatusActivity extends AppCompatActivity {
 
         }
       //  init();
-        
+        SQLiteDatabase db;
+
+        ArrayList<Comment> comments_arr = new ArrayList<Comment>();
+        String comment_str = null;
+        DBManager dbMgr = new DBManager(StatusActivity.this);
+        dbMgr.dbOpen();
+        dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%"+date_val+"%'", uid, comments_arr);
+        dbMgr.dbClose();
+
+        //Iterator 통한 전체 조회
+        Iterator iterator = comments_arr.iterator();
+        String date;
+        while (iterator.hasNext()) {
+            date = null;
+            Comment comment = (Comment) iterator.next();
+            String comment_con = comment.getComment();
+            date = comment.getDate();
+            String sentence = comment.getOneSentence();
+            if(date != null){
+                i++;
+            }
+        }
+
         // 코멘트 기록을 가져온다
-        commentInfoHelper = new CommentInfoHelper(this);
+   /*     commentInfoHelper = new CommentInfoHelper(this);
         SQLiteDatabase db;
         ContentValues values;
             try{
@@ -116,9 +145,27 @@ public class StatusActivity extends AppCompatActivity {
 
             }
 
+        */
+       // 렉시오디비나 기록을 가져온다
+        ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
+        String bg1_str = null;
+        dbMgr.dbOpen();
+        dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%"+date_val+"%'", uid, lectios_arr);
+        dbMgr.dbClose();
 
+        //Iterator 통한 전체 조회
+        Iterator iterator2 = lectios_arr.iterator();
+        String date2;
+        while (iterator2.hasNext()) {
+            date2 = null;
+            Lectio lectio = (Lectio) iterator2.next();
+            date2 = lectio.getDate();
+            if(date2 != null){
+                j++;
+            }
+        }
 
-        // 렉시오디비나 기록을 가져온다
+    /*
         lectioInfoHelper = new LectioInfoHelper(this);
 
         try{
@@ -142,6 +189,8 @@ public class StatusActivity extends AppCompatActivity {
       catch(Exception e){
         Toast.makeText(StatusActivity.this, "실패", Toast.LENGTH_SHORT).show();
     }
+
+    */
     int point = i+j*5;
     status.setText("복음 묵상 "+i+"일\n렉시오디비나 "+j+"일");
     if(1<= point && point < 5){
@@ -233,8 +282,9 @@ public class StatusActivity extends AppCompatActivity {
     public int[] getData(String month){
         int i = 0;
         int j = 0;
+        SQLiteDatabase db;
         // 코멘트 기록을 가져온다
-        commentInfoHelper = new CommentInfoHelper(this);
+    /*    commentInfoHelper = new CommentInfoHelper(this);
         SQLiteDatabase db;
         ContentValues values;
         try{
@@ -259,32 +309,50 @@ public class StatusActivity extends AppCompatActivity {
 
         }
 
+        */
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        String comment_str = null;
+        DBManager dbMgr = new DBManager(StatusActivity.this);
+        dbMgr.dbOpen();
+        dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%"+month+"%'", uid, comments);
+        dbMgr.dbClose();
 
-
-        // 렉시오디비나 기록을 가져온다
-        lectioInfoHelper = new LectioInfoHelper(this);
-
-        try{
-            db = lectioInfoHelper.getReadableDatabase();
-            String query = "SELECT bg1, bg2, bg3, sum1, sum2, js1, js2, date, onesentence FROM lectio WHERE date LIKE '%"+month+"%'";
-            Cursor cursor = db.rawQuery(query, null);
-
-            String date_str = null;
-
-            while(cursor.moveToNext()){
-                date_str = cursor.getString(7);
-                if(date_str!=null){
-                    j++;
-                }
-                Log.d("saea",j+date_str);
+        if(!comments.isEmpty()){
+            comment_str = comments.get(0).getComment();
+        }else{
+        }
+        //Iterator 통한 전체 조회
+        Iterator iterator = comments.iterator();
+        String date;
+        while (iterator.hasNext()) {
+            date = null;
+            Comment comment = (Comment) iterator.next();
+            String comment_con = comment.getComment();
+            date = comment.getDate();
+            String sentence = comment.getOneSentence();
+            if(date != null){
+                i++;
             }
+        }
 
-            cursor.close();
-            lectioInfoHelper.close();
+
+        ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
+        dbMgr.dbOpen();
+        dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%"+month+"%'", uid, lectios_arr);
+        dbMgr.dbClose();
+
+        //Iterator 통한 전체 조회
+        Iterator iterator2 = lectios_arr.iterator();
+        String date2;
+        while (iterator2.hasNext()) {
+            date2 = null;
+            Lectio lectio = (Lectio) iterator2.next();
+            date2 = lectio.getDate();
+            if(date2 != null){
+                j++;
+            }
         }
-        catch(Exception e){
-            Toast.makeText(StatusActivity.this, "실패", Toast.LENGTH_SHORT).show();
-        }
+
         return new int[]{i,j};
     }
 
