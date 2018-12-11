@@ -1,7 +1,7 @@
 package com.yellowpg.gaspel.DB;
 
 public class WeekendDBSqlData {
-    public static final String SQL_DB_CREATE_TABLE = "CREATE TABLE weekend "+
+    public static final String SQL_DB_CREATE_TABLE = "CREATE TABLE if not exists weekend "+
             "(reg_id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "uid INTEGER NOT NULL, "
             +"date TEXT NOT NULL, "

@@ -11,7 +11,7 @@
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:fontFamily="@font/notosans_regular"
-        android:text="렉시오 디비나"
+        android:text="거룩한독서"
         android:textColor="#ffffff"
         android:id="@+id/mytext"
         android:textSize="15dp" />

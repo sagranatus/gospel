@@ -1,6 +1,7 @@
 package com.yellowpg.gaspel.etc;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidFragment;
@@ -41,8 +45,11 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
     protected HashMap<DateTime, Lectio> events2 = new HashMap<DateTime, Lectio>();
     protected HashMap<DateTime, Weekend> events3 = new HashMap<DateTime, Weekend>();
     TextView text;
-    TextView today, date, oneSentence, comment;
-    TextView date2, sentence2, bg1;
+    TextView today, date, oneSentence, comment, upper;
+    TextView bg1;
+    ImageView slide1, slide2, slide3;
+    Button edit, goComment, goLectio, goWeekend;
+    LinearLayout ll_content;
     private SessionManager session;
     String uid;
     // gridadapter를 새로 불러와서 생성
@@ -54,15 +61,28 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
         date = (TextView) getActivity().findViewById(R.id.tv_date);
         oneSentence = (TextView) getActivity().findViewById(R.id.tv_oneSentence);
         comment = (TextView) getActivity().findViewById(R.id.tv_comment);
+        upper = (TextView) getActivity().findViewById(R.id.tv_upper);
+        edit = (Button) getActivity().findViewById(R.id.bt_edit);
 
-        date2 = (TextView) getActivity().findViewById(R.id.tv_date2);
-        sentence2 = (TextView) getActivity().findViewById(R.id.tv_oneSentence2);
+       // date2 = (TextView) getActivity().findViewById(R.id.tv_date2);;
         bg1 = (TextView) getActivity().findViewById(R.id.tv_bg1);
+
+        slide1 = (ImageView) getActivity().findViewById(R.id.slide1);
+        slide2 = (ImageView) getActivity().findViewById(R.id.slide2);
+        slide3 = (ImageView) getActivity().findViewById(R.id.slide3);
+
+        goComment = (Button) getActivity().findViewById(R.id.bt_gocomment);
+        goLectio = (Button) getActivity().findViewById(R.id.bt_golectio);
+        goWeekend = (Button) getActivity().findViewById(R.id.bt_goweekend);
+        ll_content = (LinearLayout) getActivity().findViewById(R.id.ll_content);
+
+        Intent intent = getActivity().getIntent();
+
         // TODO Auto-generated method stub
 
         //  custom adapter에 값을 전달
-        return new CaldroidSampleCustomAdapter(getActivity(), month, year,
-                getCaldroidData(), extraData, events, events2, today, date, oneSentence, comment, date2, sentence2, bg1);
+        return new CaldroidSampleCustomAdapter(getActivity(), intent, month, year,
+                getCaldroidData(), extraData, events, events2, today, date, oneSentence, comment, bg1, slide1, slide2, slide3, upper, edit, goComment, goLectio, goWeekend, ll_content);
 
     }
 
@@ -85,6 +105,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
         String textsize = sp.getString("textsize", "");
         if(textsize.equals("big")){
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+
         }else{
 
         }
@@ -141,7 +162,7 @@ public class CaldroidSampleCustomFragment extends CaldroidFragment {
                     day = "0"+date.substring(monthsite+2, daysite);
                 }
                 // hashmap에 값을 삽입
-                events.put(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000") , new Comment(uid, new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000"), date, comment_con, sentence));
+                events.put(new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000") , new Comment(uid, new DateTime(year+"-"+month+"-"+day+" 00:00:00.000000000"), date, sentence, comment_con));
 
 
             }

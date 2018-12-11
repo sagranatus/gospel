@@ -60,6 +60,11 @@ public class Server_CommentData {
             }
         });
         t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

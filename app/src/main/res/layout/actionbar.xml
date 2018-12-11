@@ -11,7 +11,7 @@
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:fontFamily="@font/notosans_regular"
-        android:text="오늘의 복음"
+        android:text="오늘의복음"
         android:textColor="#ffffff"
         android:id="@+id/mytext"
         android:textSize="15dp" />

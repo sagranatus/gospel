@@ -68,7 +68,7 @@ public class StatusActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_status);
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
         actionbar.setDisplayHomeAsUpEnabled(true);

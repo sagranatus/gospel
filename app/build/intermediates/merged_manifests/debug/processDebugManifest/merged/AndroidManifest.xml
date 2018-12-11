@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yellowpg.gaspel"
-    android:versionCode="74"
-    android:versionName="1.8.6" >
+    android:versionCode="77"
+    android:versionName="1.8.9" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -36,22 +36,14 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name="com.yellowpg.gaspel.FirstActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan" >
+        <activity android:name="com.yellowpg.gaspel.FirstActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.yellowpg.gaspel.MainActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan" >
+        <activity android:name="com.yellowpg.gaspel.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
 
@@ -60,48 +52,14 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.yellowpg.gaspel.WeekendActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
-        <activity
-            android:name="com.yellowpg.gaspel.SettingActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
-        <activity
-            android:name="com.yellowpg.gaspel.RecordActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.yellowpg.gaspel.LectioActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.yellowpg.gaspel.StatusActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
-        <activity
-            android:name="com.yellowpg.gaspel.ExplainActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
-        <activity
-            android:name="com.yellowpg.gaspel.LoginActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
-        <activity
-            android:name="com.yellowpg.gaspel.RegisterActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+        <activity android:name="com.yellowpg.gaspel.WeekendActivity" />
+        <activity android:name="com.yellowpg.gaspel.SettingActivity" />
+        <activity android:name="com.yellowpg.gaspel.RecordActivity" />
+        <activity android:name="com.yellowpg.gaspel.LectioActivity" />
+        <activity android:name="com.yellowpg.gaspel.StatusActivity" />
+        <activity android:name="com.yellowpg.gaspel.ExplainActivity" />
+        <activity android:name="com.yellowpg.gaspel.LoginActivity" />
+        <activity android:name="com.yellowpg.gaspel.RegisterActivity" />
         <activity android:name="com.yellowpg.gaspel.ProfileActivity" />
         <activity
             android:name="com.yellowpg.gaspel.PreviousActivity"

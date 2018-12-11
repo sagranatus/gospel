@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yellowpg.gaspel.DB.DBManager;
+import com.yellowpg.gaspel.DB.UsersDBSqlData;
 import com.yellowpg.gaspel.etc.SessionManager;
 import com.yellowpg.gaspel.server.Server_UserData;
 
@@ -40,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_login);
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
 
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
@@ -84,6 +86,13 @@ public class LoginActivity extends AppCompatActivity {
                 // Check for empty data in the form
                 if (!email.isEmpty() && !password.isEmpty()) {
                     // login user
+
+                    // 로그인시 기존에 user테이블이 있는 사용자의 경우 user테이블 삭제 및 users 테이블 생성
+                    DBManager dbMgr = new DBManager(LoginActivity.this);
+                    dbMgr.dbOpen();
+                    dbMgr.firstUserData();
+                    dbMgr.dbClose();
+
                     Server_UserData.checkLogin(LoginActivity.this, session, pDialog, email, password);
 
                 } else {
@@ -112,7 +121,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 return true;
             }
         });

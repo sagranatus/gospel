@@ -101,7 +101,7 @@ public class SettingActivity extends AppCompatActivity {
 //actionbar setting
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_setting);
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
         actionbar.setDisplayHomeAsUpEnabled(true);
@@ -288,7 +288,7 @@ public class SettingActivity extends AppCompatActivity {
 					stop.setBackgroundResource(R.drawable.button_bg2);
 					timesetbtn.setBackgroundResource(R.drawable.button_bg_grey);
 					// TODO Auto-generated method stub
-					Intent intent = new Intent(SettingActivity.this, MainActivity.class);
+					Intent intent = new Intent(SettingActivity.this, FirstActivity.class);
 					PendingIntent pendingIntent = PendingIntent.getActivity(SettingActivity.this, 0, intent, 0);
 					am.cancel(pendingIntent);
 					// cf : 세팅값에 time을 비워둔다
@@ -446,7 +446,7 @@ public class SettingActivity extends AppCompatActivity {
 		time = sp.getString("time", "");
 
 		// exp : 이 intent str는 사운드를 내기 위해 전달하는 값이다
-		Intent intent = new Intent(SettingActivity.this, MainActivity.class);
+		Intent intent = new Intent(SettingActivity.this, FirstActivity.class);
 		intent.putExtra("str", "value");
 
 		// cf : pending 기능으로 주기적으로 알람을 설정한다

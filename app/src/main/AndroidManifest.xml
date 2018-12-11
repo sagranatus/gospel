@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yellowpg.gaspel"
-    android:versionCode="74"
-    android:versionName="1.8.6">
+    android:versionCode="77"
+    android:versionName="1.8.9">
 
     <uses-sdk android:targetSdkVersion="21" />
 
@@ -33,10 +33,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".FirstActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan">
+            android:name=".FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,10 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
 
@@ -57,47 +51,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WeekendActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:name=".WeekendActivity" />
         <activity
-            android:name=".SettingActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:name=".SettingActivity" />
         <activity
-            android:name=".RecordActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan" />
+            android:name=".RecordActivity" />
         <activity
-            android:name=".LectioActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor"
-            android:windowSoftInputMode="adjustPan" />
+            android:name=".LectioActivity" />
         <activity
-            android:name=".StatusActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:name=".StatusActivity" />
         <activity
-            android:name=".ExplainActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:name=".ExplainActivity" />
         <activity
-            android:name=".LoginActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:name=".LoginActivity" />
         <activity
-            android:name=".RegisterActivity"
-            android:configChanges="screenSize|orientation|layoutDirection"
-            android:label="오늘의복음"
-            android:screenOrientation="sensor" />
+            android:name=".RegisterActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".PreviousActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>

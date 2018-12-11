@@ -2,8 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:id="@+id/root"
+    android:background="#ffffff"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <LinearLayout
@@ -11,92 +11,126 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:orientation="vertical" >
 
-            <LinearLayout
-                android:id="@+id/ll_date"
+    <LinearLayout
+        android:id="@+id/pray"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/closePray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/actionbar"
+            android:fontFamily="@font/notosans_semibold"
+            android:textSize="13dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:lineSpacingExtra="3dp"
+            android:text="기도마침"
+            android:background="#ffffff"
+            style="?android:attr/borderlessButtonStyle" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/main1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/lectio_img1"
+            android:adjustViewBounds="true" />
+        <TextView
+            android:id="@+id/main2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/actionbar"
+            android:fontFamily="@font/notosans_bold"
+            android:lineSpacingExtra="3dp"
+            android:gravity="right"
+            android:text="거룩한 독서"/>
+        <TextView
+            android:id="@+id/main3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="11dp"
+            android:paddingRight="10dp"
+            android:textColor="#00579a"
+            android:gravity="right"
+            android:fontFamily="@font/notosans_bold"
+            android:lineSpacingExtra="3dp"
+            android:text="Lectio Divina"/>
+        <TextView
+            android:id="@+id/main4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textColor="#000000"
+            android:fontFamily="@font/notosans_regular"
+            android:lineSpacingExtra="3dp"
+            android:text="거룩한 독서는 하느님의 말씀인 성경을 깊이 읽고 묵상하는 수행이다. 이는 단순하고 정감적인 마음으로 성경을 읽고 맛들임으로써 궁극적으로 하느님과 관상적 일치를 이루고자 하는 인간적 활동이면서 성령에 의한 초자연적 활동이다."/>
+        <ImageView
+            android:id="@+id/main5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/lectio_img2"
+            android:paddingTop="5dp"
+            android:adjustViewBounds="true" />
+
+    </LinearLayout>
+            <Button
+                android:id="@+id/bt_onesentence"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal" >
-
-                <ImageButton
-                    android:id="@+id/bt_before"
-                    android:src="@drawable/left"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:scaleType="fitXY"
-                    android:layout_marginTop="15dp"
-                    android:layout_alignParentLeft="true"
-                    android:background="#ffffff"
-                    android:textColor="#000000" />
-                <Button
-                    android:id="@+id/bt_date"
-                    android:layout_width="170dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:paddingTop="0px"
-                    android:fontFamily="@font/notosans_regular"
-                    android:layout_toLeftOf="@+id/bt_before"
-                    android:layout_toRightOf="@+id/bt_after"
-                    android:layout_gravity="center"
-                    android:background="#ffffff"
-                    android:textColor="#000000"
-                    style="?android:attr/borderlessButtonStyle" />
-                <ImageButton
-                    android:id="@+id/bt_after"
-                    android:src="@drawable/right"
-                    android:scaleType="fitXY"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_alignParentRight="true"
-                    android:background="#ffffff"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-
-            <LinearLayout
+                android:textColor="@color/actionbar"
+                android:fontFamily="@font/notosans_semibold"
+                android:textSize="17dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="10dp"
+                android:lineSpacingExtra="3dp"
+                style="?android:attr/borderlessButtonStyle" />
+              <LinearLayout
                 android:id="@+id/ll1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:orientation="vertical" >
-                <Button
-                    android:id="@+id/bt_onesentence"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/actionbar"
-                    android:fontFamily="@font/notosans_semibold"
-                    android:textSize="17dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="30dp"
-                    android:lineSpacingExtra="3dp"
-                    android:background="#ffffff"
-                    style="?android:attr/borderlessButtonStyle" />
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
                     android:layout_marginBottom="-10dp"
+                    android:paddingBottom="0dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal" >
                     <Button
                         android:id="@+id/bt_prev"
-                        android:background="#e6e6e6"
+                        android:background="#72a2c8"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
                         android:layout_width="55dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="0dp"
                         android:layout_marginRight="10dp"
-                        android:textSize="11dp"
-                        android:text="prev"
-                        android:fontFamily="@font/notosans_regular"
-                        android:textColor="#838383"
+                        android:textSize="12dp"
+                        android:text="이전"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textColor="@color/white"
                         android:textAllCaps="false"
                         style="?android:attr/borderlessButtonStyle" />
                     <TextView
@@ -105,40 +139,47 @@
                         android:layout_height="60dp"
                         android:gravity="center"
                         android:textSize="16dp"
-                        android:textColor="#16a085"
+                        android:textColor="#000000"
                         android:fontFamily="@font/notosans_regular"
-                        android:lineSpacingExtra="3dp"
-                        android:text="복음의 배경은 무엇인가요?" />
+                        android:lineSpacingExtra="3dp" />
                     <Button
                         android:id="@+id/bt_next"
-                        android:background="#e6e6e6"
+                        android:background="#72a2c8"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
                         android:layout_width="55dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="0dp"
                         android:layout_marginLeft="10dp"
-                        android:textSize="11dp"
-                        android:text="next"
-                        android:fontFamily="@font/notosans_regular"
-                        android:textColor="#838383"
+                        android:textSize="12dp"
+                        android:text="다음"
+                        android:fontFamily="@font/notosans_bold"
+                        android:textColor="@color/white"
                         android:textAllCaps="false"
                         style="?android:attr/borderlessButtonStyle" />
                 </LinearLayout>
+                  <TextView
+                      android:id="@+id/pray_content"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/tv_first"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="15dp"
-                    android:fontFamily="@font/notosans_regular"
-                    android:lineSpacingExtra="5dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="#5e5e5e"
-                    android:text="당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?"
-                    android:layout_marginBottom="10dp"/>
+                      <TextView
+                          android:id="@+id/tv_first"
+                          android:paddingLeft="5dp"
+                          android:paddingRight="5dp"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:scrollbars = "vertical"
+                          android:gravity="center"
+                          android:layout_gravity="center_horizontal"
+                          android:textSize="15dp"
+                          android:fontFamily="@font/notosans_regular"
+                          android:lineSpacingExtra="5dp"
+                          android:paddingBottom="10dp"
+                          android:paddingTop="0dp"
+                          android:textColor="#5e5e5e"
+                          android:text="당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?"/>
+
                 <Button
                     android:id="@+id/bt_start"
                     android:layout_width="80dp"
@@ -154,151 +195,392 @@
                     android:textSize="11dp" />
                 <EditText
                     android:id="@+id/et_background1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:paddingTop="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:lineSpacingExtra="5dp"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="15dp"
-                    android:hint="등장인물은.."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
                 <EditText
                     android:id="@+id/et_background2"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:paddingTop="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dp"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="15dp"
-                    android:hint="배경 장소는.."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
                 <EditText
                     android:id="@+id/et_background3"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:paddingTop="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dp"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="15dp"
-                    android:hint="배경시간 혹은 상황은.."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
 
                 <EditText
                     android:id="@+id/et_summary1"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="15dp"
-                    android:hint="복음의 내용을 간추리면.."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
                 <EditText
                     android:id="@+id/et_summary2"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/notosans_regular"
                     android:lineSpacingExtra="5dip"
-                    android:textSize="15dp"
-                    android:hint="특별히 눈에 띄는 부분은.."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
 
                 <EditText
                     android:id="@+id/et_jesus1"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="15dp"
-                    android:hint="복음에서 보여지는 예수님의 모습은.."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
                 <EditText
                     android:id="@+id/et_jesus2"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="15dp"
-                    android:hint="복음을 통해 예수님께서 내게 해주시는 말씀은.."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
                 <EditText
                     android:id="@+id/et_weekend"
-                    android:paddingLeft="5px"
-                    android:paddingRight="5px"
-                    android:paddingTop="50px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="5dip"
                     android:fontFamily="@font/notosans_regular"
-                    android:textSize="15dp"
-                    android:hint="특별히 와닿는 구절을 선택하여 한주동안 묵상해 봅시다."
-                    android:textColor="#16a085" />
+                    android:textSize="14dp"
+                    android:hint="여기에 작성하세요"
+                    android:textColor="#000000" />
+                       <Button
+                           android:id="@+id/bt_save"
+                           android:layout_width="80dp"
+                           android:layout_height="30dp"
+                           android:layout_gravity="center"
+                           android:background="#000000"
+                           android:fontFamily="@font/notosans_bold"
+                           android:paddingLeft="20dp"
+                           android:paddingRight="20dp"
+                           android:layout_marginTop="5dp"
+                           android:layout_marginBottom="10dp"
+                           android:text="저장"
+                           android:textColor="#ffffff"
+                           android:textSize="11dp" />
 
         </LinearLayout>
 
-            <Button
-                android:id="@+id/bt_save"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="#16a085"
-                android:fontFamily="@font/notosans_bold"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="SAVE"
-                android:textColor="#ffffff"
-                android:textSize="11dp" />
             <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
                 android:id="@+id/after_save"
                 android:layout_width="match_parent"
                 android:typeface="sans"
-                android:background="#ffffff"
-                android:layout_height="250dp"
+                android:background="#e3edf4"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:paddingBottom="70dp"
                 >
             <TextView
-                android:id="@+id/after_save_tv"
                 android:fontFamily="@font/notosans_regular"
-                android:textColor="#16a085"
+                android:textColor="#000000"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="5dp"
+                android:textSize="15dp"
+                android:text="복음의 등장인물은?"/>
+            <TextView
+                android:id="@+id/after_save_tv1"
+                android:fontFamily="@font/notosans_regular"
+                android:textColor="#000000"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="5dp"
                 android:textSize="15dp"
-                android:inputType="textMultiLine"
-                android:layout_marginBottom="20dp"/>
-
-            </ScrollView>
-            <Button
-                android:id="@+id/bt_edit"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="center"
-                android:background="#16a085"
-                android:fontFamily="@font/notosans_bold"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:inputType="textMultiLine"/>
+                <TextView
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:text="복음의 배경장소는?"/>
+                <TextView
+                    android:id="@+id/after_save_tv2"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:inputType="textMultiLine"/>
+                <TextView
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:text="배경시간 혹은 상황은?"/>
+                <TextView
+                    android:id="@+id/after_save_tv3"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:inputType="textMultiLine"/>
+                <TextView
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:text="복음의 내용을 사건 중심으로 요약해 봅시다" />
+                <TextView
+                    android:id="@+id/after_save_tv4"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:inputType="textMultiLine"/>
+                <TextView
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:text="특별히 눈에 띄는 부분은?"/>
+                <TextView
+                    android:id="@+id/after_save_tv5"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:inputType="textMultiLine"/>
+                <TextView
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:text="복음에서 보여지는 예수님의 모습은 어떠한가요?"/>
+                <TextView
+                android:id="@+id/after_save_tv6"
+                android:fontFamily="@font/notosans_regular"
+                android:textColor="#000000"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="EDIT"
-                android:textColor="#ffffff"
-                android:textSize="11dp" />
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="5dp"
+                android:textSize="15dp"
+                android:inputType="textMultiLine"/>
+                <TextView
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:text="복음을 통하여 예수님께서 내게 해주시는 말씀은?"/>
+                <TextView
+                    android:id="@+id/after_save_tv7"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:inputType="textMultiLine"/>
+                <TextView
+                    android:id="@+id/after_save_tv8_1"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:text="이번주 복음에서 특별히 와닿는 구절을 선택해 봅시다"/>
+                <TextView
+                    android:id="@+id/after_save_tv8"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:textSize="15dp"
+                    android:inputType="textMultiLine"/>
+                <Button
+                    android:id="@+id/bt_edit"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:background="#000000"
+                    android:fontFamily="@font/notosans_bold"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="수정"
+                    android:textColor="#ffffff"
+                    android:textSize="11dp" />
+            </LinearLayout>
+            </ScrollView>
+
 
             <!-- This could be your fragment container, or something -->
             <ScrollView
@@ -320,6 +602,7 @@
 
                     <TextView
                         android:id="@+id/tv_contents"
+                        android:background="#ffffff"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"

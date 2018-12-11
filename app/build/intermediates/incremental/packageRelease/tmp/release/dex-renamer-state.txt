@@ -1,4 +1,4 @@
-#Sat Dec 01 12:27:12 KST 2018
+#Sun Dec 09 00:51:07 KST 2018
 base.0=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
 path.0=classes.dex
 renamed.0=classes.dex

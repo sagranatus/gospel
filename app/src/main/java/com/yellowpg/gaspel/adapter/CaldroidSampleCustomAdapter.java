@@ -6,24 +6,32 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Html;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.roomorama.caldroid.CaldroidGridAdapter;
 import com.roomorama.caldroid.CellView;
+import com.yellowpg.gaspel.LectioActivity;
 import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.R;
+import com.yellowpg.gaspel.WeekendActivity;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.Weekend;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import hirondelle.date4j.DateTime;
@@ -32,18 +40,24 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
     int month;
     int year;
     TextView text;
-    TextView today, date, oneSentence, comment;
-    TextView date2, sentence2, bg1;
+    TextView today, date, oneSentence, comment, upper;
+    TextView bg1;
     Context mContext;
+    ImageView slide1, slide2, slide3;
+    Calendar c1;
+    String day;
+    Button edit, goComment, goLectio, goWeekend;
+    LinearLayout ll_content;
+    Intent intent;
     protected HashMap<DateTime, Comment> events = new HashMap<DateTime, Comment>();
     protected HashMap<DateTime, Lectio> events2 = new HashMap<DateTime, Lectio>();
     protected HashMap<DateTime, Weekend> events3 = new HashMap<DateTime, Weekend>();
     //hirondelle.date4j.DateTime blueDate2 = new DateTime("2017-07-19 00:00:00.000000000");
 
-    public CaldroidSampleCustomAdapter(Context context, int month, int year,
+    public CaldroidSampleCustomAdapter(Context context,  Intent intent, int month, int year,
                                        HashMap<String, Object> caldroidData,
                                        HashMap<String, Object> extraData, HashMap<DateTime, Comment> events, HashMap<DateTime, Lectio> events2, TextView today, TextView date, TextView oneSentence, TextView comment,
-                                       TextView date2, TextView sentence2, TextView bg1) {
+                                       TextView bg1, ImageView slide1, ImageView slide2, ImageView slide3, TextView upper, Button edit, Button goComment, Button goLectio, Button goWeekend, LinearLayout ll_content) {
         super(context, month, year, caldroidData, extraData);
         this.mContext = context;
         this.month = month;
@@ -53,9 +67,19 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         this.date = date;
         this.comment = comment;
         this.oneSentence = oneSentence;
-        this.date2 = date2;
-        this.sentence2  = sentence2;
+      //  this.date2 = date2;
         this.bg1 = bg1;
+        this.slide1 = slide1;
+        this.slide2 = slide2;
+        this.slide3 = slide3;
+        this.upper = upper;
+        this.edit = edit;
+        this.goComment = goComment;
+        this.goLectio = goLectio;
+        this.goWeekend = goWeekend;
+
+        this.ll_content = ll_content;
+        this.intent = intent;
     }
 
     public void setEvents(HashMap<DateTime, Comment> events) {
@@ -88,7 +112,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         TextView tv1 = (TextView) cellView.findViewById(R.id.tv1);
         final TextView tv2 = (TextView) cellView.findViewById(R.id.tv2);
         final ImageView img = (ImageView) cellView.findViewById(R.id.img);
-        ImageView img2 = (ImageView) cellView.findViewById(R.id.img2);
+        final ImageView img2 = (ImageView) cellView.findViewById(R.id.img2);
         Resources resources = context.getResources();
         final DateTime dateTime = this.datetimeList.get(position);
 
@@ -98,115 +122,314 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         tv1.setTextColor(Color.parseColor("#999999"));
         tv1.setText("" + dateTime.getDay());
 
-        date.setVisibility(View.GONE);
-        oneSentence.setVisibility(View.GONE);
-        comment.setVisibility(View.GONE);
-        date2.setVisibility(View.GONE);
-        sentence2.setVisibility(View.GONE);
-        bg1.setVisibility(View.GONE);
+        c1 = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
+        String date_typed = sdf.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+        String typedDate = date_typed+getDay()+"요일"; // c1으로 getday()함
 
-        today.setVisibility(today.VISIBLE);
-        // 데이터값이 있는 경우 별이 보이게 하는 부분 - 렉시오 디비나 부분
-        if(events2.get(dateTime)!=null && events2.get(dateTime).getOneSentence()!=null) {
+        today.setVisibility(View.GONE);
 
-           // img.getLayoutParams().height = 50;
+        DateTime firstdate = getToday();
+        String daydate = intent.getStringExtra("dateBack");
+        if(daydate != null) {
+            firstdate = new DateTime(daydate + " 00:00:00.000000000");
+        }
 
-            img2.setVisibility(View.VISIBLE);
+        edit.setBackgroundResource(R.drawable.button_bg2);
+        goComment.setBackgroundResource(R.drawable.button_bg2);
+        goLectio.setBackgroundResource(R.drawable.button_bg2);
+        goWeekend.setBackgroundResource(R.drawable.button_bg2);
+        date.setVisibility(View.VISIBLE);
+        date.setText(typedDate);
+        // 여기부터 오늘의 데이터를 가져온다.
 
-            date2.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v) {
-
-                    // TODO Auto-generated method stub
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    String _date = date2.getText().toString();
-                    int y1 = _date.indexOf("년");
-                    int m1 = _date.indexOf("월 ");
-                    int d1 = _date.indexOf("일 ");
-                    String year = _date.substring(0,y1);
-                    String month = _date.substring(6,m1);
-                    String day = _date.substring(m1+2, d1);
-                    String thisdate = year+"-"+month+"-"+day;
-                    intent.putExtra("date", thisdate);
-                    mContext.startActivity(intent);
+        if(events.get(firstdate)==null && events2.get(firstdate)==null){
+            if(daydate != null) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date date_ = null;
+                try {
+                    date_ = formatter.parse(daydate); // string yyyy-MM-dd => Date 형식
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            });
-            if (events.get(dateTime) != null) {
-                sentence2.setOnClickListener(new View.OnClickListener()
-                {
+                c1 = Calendar.getInstance();
+                c1.setTime(date_);
+                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy년 MM월 dd일 ");
+                String date_val1 = sdf1.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+                typedDate = date_val1 + getDay() + "요일"; // c1으로 getday()함
+
+                date.setText(typedDate);
+            }
+
+            slide1.setVisibility(View.GONE);
+            slide2.setVisibility(View.GONE);
+            slide3.setVisibility(View.GONE);
+            upper.setVisibility(View.GONE);
+            edit.setVisibility(View.GONE);
+            comment.setVisibility(View.GONE);
+            if(typedDate.contains("일요일")){
+                goWeekend.setVisibility(View.VISIBLE);
+                goComment.setVisibility(View.GONE);
+                goLectio.setVisibility(View.GONE);
+            }else{
+                goComment.setVisibility(View.VISIBLE);
+                goLectio.setVisibility(View.VISIBLE);
+                goWeekend.setVisibility(View.GONE);
+            }
+
+            date.setVisibility(View.VISIBLE);
+            oneSentence.setVisibility(View.GONE);
+            bg1.setVisibility(View.GONE);
+
+
+        }else{
+            slide1.setVisibility(View.VISIBLE);
+            slide3.setVisibility(View.VISIBLE);
+
+            goComment.setVisibility(View.GONE);
+            goLectio.setVisibility(View.GONE);
+            goWeekend.setVisibility(View.GONE);
+
+            slide1.setVisibility(View.VISIBLE);
+            upper.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.GONE);
+            slide1.setImageResource(R.drawable.slide1);
+            upper.setText("그날의 복음 말씀");
+            slide2.setImageResource(R.drawable.slide2_off);
+            slide3.setImageResource(R.drawable.slide3_off);
+            date.setVisibility(date.VISIBLE);
+            comment.setVisibility(View.GONE);
+            bg1.setVisibility(View.GONE);
+
+            // TODO Auto-generated method stub
+
+            if(events.get(firstdate)!=null) {
+                if(events.get(firstdate).getDate().contains("일요일")){
+                    slide2.setVisibility(View.GONE);
+                }else{
+                    slide2.setVisibility(View.VISIBLE);
+                }
+                oneSentence.setVisibility(oneSentence.VISIBLE);
+                //  comment.setVisibility(comment.VISIBLE);
+                date.setText(events.get(firstdate).getDate());
+                oneSentence.setText(events.get(firstdate).getOneSentence());
+                comment.setText(events.get(firstdate).getComment());
+
+                slide1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO Auto-generated method stub
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        String _date = null;
-                        if(date2.getText().toString() == ""){
-                            _date = date.getText().toString();
-                        }else{
-                            _date = date2.getText().toString();
-                        }
+                        slide1.setImageResource(R.drawable.slide1);
+                        slide2.setImageResource(R.drawable.slide2_off);
+                        slide3.setImageResource(R.drawable.slide3_off);
+                        upper.setText("그날의 복음 말씀");
+                        edit.setVisibility(View.GONE);
+                        comment.setVisibility(View.GONE);
+                        oneSentence.setVisibility(View.VISIBLE);
+                        bg1.setVisibility(View.GONE);
+                    }
+                });
+                slide2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        slide1.setImageResource(R.drawable.slide1_off);
+                        slide2.setImageResource(R.drawable.slide2);
+                        slide3.setImageResource(R.drawable.slide3_off);
+                        upper.setText("말씀 새기기");
+                        edit.setVisibility(View.VISIBLE);
+                        comment.setVisibility(View.VISIBLE);
+                        oneSentence.setVisibility(View.GONE);
+                        bg1.setVisibility(View.GONE);
 
-                        int y1 = _date.indexOf("년");
-                        int m1 = _date.indexOf("월 ");
-                        int d1 = _date.indexOf("일 ");
-                        String year = _date.substring(0,y1);
-                        String month = _date.substring(6,m1);
-                        String day = _date.substring(m1+2, d1);
-                        String thisdate = year+"-"+month+"-"+day;
-                        intent.putExtra("date",thisdate);
-                        mContext.startActivity(intent);
+                        edit.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO Auto-generated method stub
+                                Intent intent = new Intent(mContext, MainActivity.class);
+                                String _date = date.getText().toString();
+                                int y1 = _date.indexOf("년");
+                                int m1 = _date.indexOf("월 ");
+                                int d1 = _date.indexOf("일 ");
+                                String year = _date.substring(0,y1);
+                                String month = _date.substring(6,m1);
+                                String day = _date.substring(m1+2, d1);
+                                String thisdate = year+"-"+month+"-"+day;
+                                intent.putExtra("date",thisdate);
+                                mContext.startActivity(intent);
+                            }
+                        });
+                    }
+
+                });
+
+
+            }else{
+                slide2.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        oneSentence.setVisibility(oneSentence.GONE);
+                        upper.setText("말씀새기기");
+                        edit.setVisibility(View.GONE);
+                        bg1.setVisibility(View.GONE);
+                        slide1.setImageResource(R.drawable.slide1_off);
+                        slide2.setImageResource(R.drawable.slide2);
+                        slide3.setImageResource(R.drawable.slide3_off);
+                        goComment.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+            if(events2.get(firstdate)!=null) {
+                if(events2.get(firstdate).getDate().contains("일요일")){
+                    slide2.setVisibility(View.GONE);
+                }else{
+                    slide2.setVisibility(View.VISIBLE);
+                }
+                date.setText(events2.get(firstdate).getDate());
+                //    sentence2.setVisibility(sentence2.VISIBLE);
+                //    bg1.setVisibility(bg1.VISIBLE);
+                oneSentence.setVisibility(oneSentence.VISIBLE);
+                oneSentence.setText(events2.get(firstdate).getOneSentence());
+                // 한주복음 묵상일 경우
+                if(events3.get(firstdate) != null){
+                    Log.d("saea2", events3.get(firstdate).getMyThought());
+                    if(events3.get(firstdate).getMyThought().equals("")){
+                        bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(firstdate).getBg1()
+                                +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(firstdate).getBg2() +
+                                "<br><font color=\"#999999\">· 시간은</font> " + events2.get(firstdate).getBg3()
+                                +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(firstdate).getSum1()
+                                +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(firstdate).getSum2()
+                                +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(firstdate).getJs1()
+                                +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(firstdate).getJs2()+"\""
+                                +"<br><font color=\"#999999\">· 주일 복음에서 묵상한 구절은 </font> " + events3.get(firstdate).getMySentence()
+                        ));
+                    }else{
+                        bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(firstdate).getBg1()
+                                +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(firstdate).getBg2() +
+                                "<br><font color=\"#999999\">· 시간은</font> " + events2.get(firstdate).getBg3()
+                                +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(firstdate).getSum1()
+                                +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(firstdate).getSum2()
+                                +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(firstdate).getJs1()
+                                +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(firstdate).getJs2()+"\""
+                                +"<br><font color=\"#999999\">· 주일 복음에서 묵상한 구절은 </font> " + events3.get(firstdate).getMySentence()
+                                +"<br><font color=\"#999999\">· 구절을 묵상하면 내가 느낀 점은 </font> " + events3.get(firstdate).getMyThought()
+                        ));
+                    }
+
+                }else{
+                    bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(firstdate).getBg1()
+                            +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(firstdate).getBg2() +
+                            "<br><font color=\"#999999\">· 시간은</font> " + events2.get(firstdate).getBg3()
+                            +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(firstdate).getSum1()
+                            +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(firstdate).getSum2()
+                            +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(firstdate).getJs1()
+                            +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(firstdate).getJs2()+"\""));
+                }
+                slide1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        slide1.setImageResource(R.drawable.slide1);
+                        slide2.setImageResource(R.drawable.slide2_off);
+                        slide3.setImageResource(R.drawable.slide3_off);
+                        edit.setVisibility(View.GONE);
+                        upper.setText("그날의 복음 말씀");
+                        comment.setVisibility(View.GONE);
+                        bg1.setVisibility(View.GONE);
+                        oneSentence.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                final DateTime finalFirstdate = firstdate;
+                slide3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        slide1.setImageResource(R.drawable.slide1_off);
+                        slide2.setImageResource(R.drawable.slide2_off);
+                        slide3.setImageResource(R.drawable.slide3);
+                        if(events2.get(finalFirstdate).getDate().contains("일요일")){
+                            upper.setText("주일의 독서");
+                        }else{
+                            upper.setText("거룩한 독서");
+                        }
+                        edit.setVisibility(View.VISIBLE);
+                        comment.setVisibility(View.GONE);
+                        bg1.setVisibility(View.VISIBLE);
+                        oneSentence.setVisibility(View.GONE);
+
+                        edit.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO Auto-generated method stub
+
+                                String _date = date.getText().toString();
+                                Log.d("saea", "!!!!!!!!!!!!!"+_date);
+
+                                int y1 = _date.indexOf("년");
+                                int m1 = _date.indexOf("월 ");
+                                int d1 = _date.indexOf("일 ");
+                                String year = _date.substring(0,y1);
+                                String month = _date.substring(6,m1);
+                                String day = _date.substring(m1+2, d1);
+                                String thisdate = year+"-"+month+"-"+day;
+
+                                if(_date.contains("일요일")){
+                                    Intent intent = new Intent(mContext, LectioActivity.class);
+                                    intent.putExtra("weekend",true);
+                                    intent.putExtra("date",thisdate);
+                                    mContext.startActivity(intent);
+                                }else{
+                                    Intent intent = new Intent(mContext, LectioActivity.class);
+                                    intent.putExtra("date",thisdate);
+                                    mContext.startActivity(intent);
+                                }
+
+
+                            }
+                        });
+
+                    }
+                });
+
+
+            }else{
+                slide3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        oneSentence.setVisibility(oneSentence.GONE);
+                        upper.setText("거룩한 독서");
+
+                        comment.setVisibility(View.GONE);
+                        edit.setVisibility(View.GONE);
+
+                        slide1.setImageResource(R.drawable.slide1_off);
+                        slide2.setImageResource(R.drawable.slide2_off);
+                        slide3.setImageResource(R.drawable.slide3);
+                        goLectio.setVisibility(View.VISIBLE);
                     }
                 });
             }
 
         }
 
+        //여기까지
+
+
+        // 데이터값이 있는 경우 별이 보이게 하는 부분 - 렉시오 디비나 부분
+        if(events2.get(dateTime)!=null) {
+           // img.getLayoutParams().height = 50;
+            img2.setVisibility(View.VISIBLE);
+         }
+
         // 데이터값이 있는 경우 별이 보이게 하는 부분 - 코멘트 부분
-        if(events.get(dateTime)!=null && events.get(dateTime).getOneSentence()!=null){
+        if(events.get(dateTime)!=null && events2.get(dateTime)==null){
             img.setVisibility(View.VISIBLE);
-            date.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    String _date = date.getText().toString();
-                    int y1 = _date.indexOf("년");
-                    int m1 = _date.indexOf("월 ");
-                    int d1 = _date.indexOf("일 ");
-                    String year = _date.substring(0,y1);
-                    String month = _date.substring(6,m1);
-                    String day = _date.substring(m1+2, d1);
-                    String thisdate = year+"-"+month+"-"+day;
-                    intent.putExtra("date",thisdate);
-                    mContext.startActivity(intent);
-                }
-            });
-
-
-            comment.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    String _date = date.getText().toString();
-                    int y1 = _date.indexOf("년");
-                    int m1 = _date.indexOf("월 ");
-                    int d1 = _date.indexOf("일 ");
-                    String year = _date.substring(0,y1);
-                    String month = _date.substring(6,m1);
-                    String day = _date.substring(m1+2, d1);
-                    String thisdate = year+"-"+month+"-"+day;
-                    intent.putExtra("date",thisdate);
-                    mContext.startActivity(intent);
-                }
-            });
-
         }
 
         // 별이 보이는 경우에 클릭 이벤트
         if (img.getVisibility() == View.VISIBLE || img2.getVisibility() == View.VISIBLE)  {
+
+
             if(events.get(dateTime)!=null && events2.get(dateTime)!=null){
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(img.getLayoutParams());
                 int sizeInDP = 1;
@@ -222,44 +445,141 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
             {
                 @Override
                 public void onClick(View v) {
-                    today.setVisibility(today.GONE);
+                    goComment.setVisibility(View.GONE);
+                    goLectio.setVisibility(View.GONE);
+                    goWeekend.setVisibility(View.GONE);
+
+                    slide1.setVisibility(View.VISIBLE);
+                    slide3.setVisibility(View.VISIBLE);
+                    upper.setVisibility(View.VISIBLE);
+                    edit.setVisibility(View.GONE);
+                    slide1.setImageResource(R.drawable.slide1);
+                    upper.setText("그날의 복음 말씀");
+                    slide2.setImageResource(R.drawable.slide2_off);
+                    slide3.setImageResource(R.drawable.slide3_off);
+                    date.setVisibility(date.VISIBLE);
+                    comment.setVisibility(View.GONE);
+                    bg1.setVisibility(View.GONE);
+
                     // TODO Auto-generated method stub
 
                     if(events.get(dateTime)!=null) {
-                        date.setVisibility(date.VISIBLE);
+                        if(events.get(dateTime).getDate().contains("일요일")){
+                            slide2.setVisibility(View.GONE);
+                        }else{
+                            slide2.setVisibility(View.VISIBLE);
+                        }
                         oneSentence.setVisibility(oneSentence.VISIBLE);
-                        comment.setVisibility(comment.VISIBLE);
+                      //  comment.setVisibility(comment.VISIBLE);
                         date.setText(events.get(dateTime).getDate());
                         oneSentence.setText(events.get(dateTime).getOneSentence());
                         comment.setText(events.get(dateTime).getComment());
+
+                        slide1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                goComment.setVisibility(View.GONE);
+                                goLectio.setVisibility(View.GONE);
+                                goWeekend.setVisibility(View.GONE);
+                                slide1.setImageResource(R.drawable.slide1);
+                                slide2.setImageResource(R.drawable.slide2_off);
+                                slide3.setImageResource(R.drawable.slide3_off);
+                                upper.setText("그날의 복음 말씀");
+                                edit.setVisibility(View.GONE);
+                                comment.setVisibility(View.GONE);
+                                oneSentence.setVisibility(View.VISIBLE);
+                                bg1.setVisibility(View.GONE);
+                            }
+                        });
+                        slide2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                goComment.setVisibility(View.GONE);
+                                goLectio.setVisibility(View.GONE);
+                                goWeekend.setVisibility(View.GONE);
+                                slide1.setImageResource(R.drawable.slide1_off);
+                                slide2.setImageResource(R.drawable.slide2);
+                                slide3.setImageResource(R.drawable.slide3_off);
+                                upper.setText("말씀 새기기");
+                                edit.setVisibility(View.VISIBLE);
+                                comment.setVisibility(View.VISIBLE);
+                                oneSentence.setVisibility(View.GONE);
+                                bg1.setVisibility(View.GONE);
+
+                                edit.setOnClickListener(new View.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // TODO Auto-generated method stub
+                                        Intent intent = new Intent(mContext, MainActivity.class);
+                                        String _date = date.getText().toString();
+                                        int y1 = _date.indexOf("년");
+                                        int m1 = _date.indexOf("월 ");
+                                        int d1 = _date.indexOf("일 ");
+                                        String year = _date.substring(0,y1);
+                                        String month = _date.substring(6,m1);
+                                        String day = _date.substring(m1+2, d1);
+                                        String thisdate = year+"-"+month+"-"+day;
+                                        intent.putExtra("date",thisdate);
+                                        mContext.startActivity(intent);
+                                    }
+                                });
+                            }
+
+                        });
+
+
                     }else{
-                        date.setVisibility(date.GONE);
-                        oneSentence.setVisibility(oneSentence.GONE);
-                        comment.setVisibility(comment.GONE);
+                        slide2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                oneSentence.setVisibility(oneSentence.GONE);
+                                upper.setText("말씀새기기");
+                                edit.setVisibility(View.GONE);
+                                bg1.setVisibility(View.GONE);
+                                slide1.setImageResource(R.drawable.slide1_off);
+                                slide2.setImageResource(R.drawable.slide2);
+                                slide3.setImageResource(R.drawable.slide3_off);
+                                goComment.setVisibility(View.VISIBLE);
+                            }
+                        });
                     }
                     if(events2.get(dateTime)!=null) {
-                        date2.setVisibility(date2.VISIBLE);
-                        sentence2.setVisibility(sentence2.VISIBLE);
-                        bg1.setVisibility(bg1.VISIBLE);
-                        if(events.get(dateTime)!=null) {
-                            date2.setText("");
-                            sentence2.setText("렉시오 디비나");
+                        if(events2.get(dateTime).getDate().contains("일요일")){
+                            slide2.setVisibility(View.GONE);
                         }else{
-                            date2.setText(events2.get(dateTime).getDate());
-                            sentence2.setText(events2.get(dateTime).getOneSentence());
+                            slide2.setVisibility(View.VISIBLE);
                         }
+                        date.setText(events2.get(dateTime).getDate());
+                    //    sentence2.setVisibility(sentence2.VISIBLE);
+                    //    bg1.setVisibility(bg1.VISIBLE);
+                        oneSentence.setVisibility(oneSentence.VISIBLE);
+                        oneSentence.setText(events2.get(dateTime).getOneSentence());
                         // 한주복음 묵상일 경우
                         if(events3.get(dateTime) != null){
-                            bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
-                                    +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
-                                    "<br><font color=\"#999999\">· 시간은</font> " + events2.get(dateTime).getBg3()
-                                    +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(dateTime).getSum1()
-                                    +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(dateTime).getSum2()
-                                    +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
-                                    +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""
-                                    +"<br><font color=\"#999999\">· 주일 복음에서 묵상한 구절은 </font> " + events3.get(dateTime).getMySentence()
-                                    +"<br><font color=\"#999999\">· 구절을 묵상하면 내가 느낀 점은 </font> " + events3.get(dateTime).getMyThought()
-                                    ));
+                            if(events3.get(dateTime).getMyThought().equals("")){
+                                bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
+                                        +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
+                                        "<br><font color=\"#999999\">· 시간은</font> " + events2.get(dateTime).getBg3()
+                                        +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(dateTime).getSum1()
+                                        +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(dateTime).getSum2()
+                                        +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
+                                        +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""
+                                        +"<br><font color=\"#999999\">· 주일 복음에서 묵상한 구절은 </font> " + events3.get(dateTime).getMySentence()
+                                ));
+                            }else{
+                                bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
+                                        +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
+                                        "<br><font color=\"#999999\">· 시간은</font> " + events2.get(dateTime).getBg3()
+                                        +"<br><font color=\"#999999\">· 이 복음의 내용을 간추리면</font> " + events2.get(dateTime).getSum1()
+                                        +"<br><font color=\"#999999\">· 특별히 눈에 띄는 부분은</font> " + events2.get(dateTime).getSum2()
+                                        +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
+                                        +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""
+                                        +"<br><font color=\"#999999\">· 주일 복음에서 묵상한 구절은 </font> " + events3.get(dateTime).getMySentence()
+                                        +"<br><font color=\"#999999\">· 구절을 묵상하면 내가 느낀 점은 </font> " + events3.get(dateTime).getMyThought()
+                                ));
+                            }
+
                         }else{
                             bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
                                     +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(dateTime).getBg2() +
@@ -269,12 +589,90 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                                     +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
                                     +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""));
                         }
+                        slide1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                slide1.setImageResource(R.drawable.slide1);
+                                slide2.setImageResource(R.drawable.slide2_off);
+                                slide3.setImageResource(R.drawable.slide3_off);
+                                edit.setVisibility(View.GONE);
+                                upper.setText("그날의 복음 말씀");
+                                comment.setVisibility(View.GONE);
+                                bg1.setVisibility(View.GONE);
+                                oneSentence.setVisibility(View.VISIBLE);
+                            }
+                        });
+
+                        slide3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                slide1.setImageResource(R.drawable.slide1_off);
+                                slide2.setImageResource(R.drawable.slide2_off);
+                                slide3.setImageResource(R.drawable.slide3);
+                                if(events2.get(dateTime).getDate().contains("일요일")){
+                                    upper.setText("주일의 독서");
+                                }else{
+                                    upper.setText("거룩한 독서");
+                                }
+
+                                edit.setVisibility(View.VISIBLE);
+                                comment.setVisibility(View.GONE);
+                                bg1.setVisibility(View.VISIBLE);
+                                oneSentence.setVisibility(View.GONE);
+
+                                edit.setOnClickListener(new View.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // TODO Auto-generated method stub
+                                        String _date = date.getText().toString();
+                                        Log.d("saea", "!!!!!!!!!!!!!"+_date);
+
+                                        int y1 = _date.indexOf("년");
+                                        int m1 = _date.indexOf("월 ");
+                                        int d1 = _date.indexOf("일 ");
+                                        String year = _date.substring(0,y1);
+                                        String month = _date.substring(6,m1);
+                                        String day = _date.substring(m1+2, d1);
+                                        String thisdate = year+"-"+month+"-"+day;
+
+                                        if(_date.contains("일요일")){
+                                            Intent intent = new Intent(mContext, LectioActivity.class);
+                                            intent.putExtra("weekend",true);
+                                            intent.putExtra("date",thisdate);
+                                            mContext.startActivity(intent);
+                                        }else{
+                                            Intent intent = new Intent(mContext, LectioActivity.class);
+                                            intent.putExtra("date",thisdate);
+                                            mContext.startActivity(intent);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+
 
                     }else{
-                        date2.setVisibility(date2.GONE);
-                        sentence2.setVisibility(sentence2.GONE);
-                        bg1.setVisibility(bg1.GONE);
+                        slide3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                oneSentence.setVisibility(oneSentence.GONE);
+                                upper.setText("거룩한 독서");
+
+                                comment.setVisibility(View.GONE);
+                                edit.setVisibility(View.GONE);
+
+                                slide1.setImageResource(R.drawable.slide1_off);
+                                slide2.setImageResource(R.drawable.slide2_off);
+                                slide3.setImageResource(R.drawable.slide3);
+                                goLectio.setVisibility(View.VISIBLE);
+                            }
+                        });
                     }
+
+
+
 
                 }
 
@@ -288,7 +686,15 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(mContext, MainActivity.class);
+                    slide1.setVisibility(View.GONE);
+                    slide2.setVisibility(View.GONE);
+                    slide3.setVisibility(View.GONE);
+                    upper.setVisibility(View.GONE);
+                    edit.setVisibility(View.GONE);
+                    comment.setVisibility(View.GONE);
+
+
+                    //  Intent intent = new Intent(mContext, MainActivity.class);
                     String month = dateTime.getMonth().toString();
                     String day = dateTime.getDay().toString();
                     int length = month.length();
@@ -299,15 +705,136 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                     if(length_day == 1){
                         day = "0"+day;
                     }
-                    intent.putExtra("date",dateTime.getYear()+"-"+month+"-"+day);
-                    mContext.startActivity(intent);
 
+                    date.setVisibility(View.VISIBLE);
+                    oneSentence.setVisibility(View.GONE);
+                    bg1.setVisibility(View.GONE);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date_ = null;
+                    try {
+                        date_ = formatter.parse(dateTime.getYear()+"-"+month+"-"+day);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    c1 = Calendar.getInstance();
+                    c1.setTime(date_);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
+                    String date_typed = sdf.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+                    String typedDate = date_typed+getDay()+"요일"; // c1으로 getday()함
+
+                    date.setText(typedDate);
+                  //  intent.putExtra("date",dateTime.getYear()+"-"+month+"-"+day);
+                  //  mContext.startActivity(intent);
+
+                    if(typedDate.contains("일요일")){
+                        goWeekend.setVisibility(View.VISIBLE);
+                        goComment.setVisibility(View.GONE);
+                        goLectio.setVisibility(View.GONE);
+                    }else{
+                        goComment.setVisibility(View.VISIBLE);
+                        goLectio.setVisibility(View.VISIBLE);
+                        goWeekend.setVisibility(View.GONE);
+                    }
                 }
 
             });
         }
+
+        //method
+
+        goLectio.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(mContext, LectioActivity.class);
+                String _date = date.getText().toString();
+                int y1 = _date.indexOf("년");
+                int m1 = _date.indexOf("월 ");
+                int d1 = _date.indexOf("일 ");
+                String year = _date.substring(0,y1);
+                String month = _date.substring(6,m1);
+                String day = _date.substring(m1+2, d1);
+                String thisdate = year+"-"+month+"-"+day;
+                intent.putExtra("date",thisdate);
+                mContext.startActivity(intent);
+            }
+        });
+
+        goComment.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(mContext,MainActivity.class);
+                String _date = date.getText().toString();
+                int y1 = _date.indexOf("년");
+                int m1 = _date.indexOf("월 ");
+                int d1 = _date.indexOf("일 ");
+                String year = _date.substring(0,y1);
+                String month = _date.substring(6,m1);
+                String day = _date.substring(m1+2, d1);
+                String thisdate = year+"-"+month+"-"+day;
+                intent.putExtra("date",thisdate);
+                mContext.startActivity(intent);
+            }
+        });
+
+        goWeekend.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(mContext, LectioActivity.class);
+                String _date = date.getText().toString();
+                int y1 = _date.indexOf("년");
+                int m1 = _date.indexOf("월 ");
+                int d1 = _date.indexOf("일 ");
+                String year = _date.substring(0,y1);
+                String month = _date.substring(6,m1);
+                String day = _date.substring(m1+2, d1);
+                String thisdate = year+"-"+month+"-"+day;
+                intent.putExtra("date",thisdate);
+                intent.putExtra("weekend",true);
+                mContext.startActivity(intent);
+            }
+        });
+
+
         setCustomResources(dateTime, cellView, tv1);
         return cellView;
     }
+    // 요일 얻어오기
+    public String getDay(){
+        int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
+
+        switch(dayNum){
+            case 1:
+                day = "일";
+                break ;
+            case 2:
+                day = "월";
+                break ;
+            case 3:
+                day = "화";
+                break ;
+            case 4:
+                day = "수";
+                break ;
+            case 5:
+                day = "목";
+                break ;
+            case 6:
+                day = "금";
+                break ;
+            case 7:
+                day = "토";
+                break ;
+
+        }
+        return day;
+    }
+
 
 }

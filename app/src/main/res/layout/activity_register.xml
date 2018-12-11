@@ -30,8 +30,6 @@
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
 
-
-
         <EditText
             android:id="@+id/name"
             android:fontFamily="@font/notosans_regular"
@@ -57,7 +55,30 @@
             android:singleLine="true"
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
-
+        <EditText
+            android:id="@+id/age"
+            android:fontFamily="@font/notosans_regular"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="나이"
+            android:textSize="14dp"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/input_register"
+            android:textColorHint="@color/input_register_hint" />
+        <EditText
+            android:id="@+id/region"
+            android:fontFamily="@font/notosans_regular"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="교구"
+            android:textSize="14dp"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/input_register"
+            android:textColorHint="@color/input_register_hint" />
         <EditText
             android:id="@+id/cathedral"
             android:fontFamily="@font/notosans_regular"
@@ -86,11 +107,25 @@
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
 
+        <EditText
+            android:id="@+id/password_confirm"
+            android:fontFamily="@font/notosans_regular"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="14dp"
+            android:hint="비밀번호 확인"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/input_register"
+            android:textColorHint="@color/input_register_hint" />
+
         <!-- Login Button -->
 
         <Button
             android:id="@+id/btnRegister"
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:background="#16a085"
@@ -110,7 +145,7 @@
             android:fontFamily="@font/notosans_regular"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:background="@null"
             android:text="이미 계정이 있으신가요? 로그인하기"
             android:textAllCaps="false"

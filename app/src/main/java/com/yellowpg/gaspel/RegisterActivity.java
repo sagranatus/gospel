@@ -41,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity{
     private EditText inputPassword;
     private EditText inputChristName;
     private EditText inputCathedral;
+    private EditText inputAge;
+    private EditText inputRegion;
     private ProgressDialog pDialog;
     private SessionManager session;
 
@@ -53,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity{
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_register);
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
 
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
@@ -64,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity{
         inputEmail = (EditText) findViewById(R.id.email);
         inputChristName= (EditText) findViewById(R.id.christ_name);
         inputCathedral = (EditText) findViewById(R.id.cathedral);
+        inputRegion = (EditText) findViewById(R.id.region);
+        inputAge= (EditText) findViewById(R.id.age);
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
@@ -74,8 +78,10 @@ public class RegisterActivity extends AppCompatActivity{
         btnRegister.setBackgroundResource(R.drawable.button_bg);
         inputChristName.setBackgroundResource(R.drawable.edit_bg);
         inputCathedral.setBackgroundResource(R.drawable.edit_bg);
-
-
+        inputRegion.setBackgroundResource(R.drawable.edit_bg);
+        inputAge.setBackgroundResource(R.drawable.edit_bg);
+        EditText password_confirm = (EditText) findViewById(R.id.password_confirm);
+        password_confirm.setBackgroundResource(R.drawable.edit_bg);
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -99,17 +105,32 @@ public class RegisterActivity extends AppCompatActivity{
                 String christ_name = inputChristName.getText().toString().trim();
                 String cathedral = inputCathedral.getText().toString().trim();
                 String email = inputEmail.getText().toString().trim();
-                int place = email.indexOf('@');
-                String id = email.substring(0, place);
-                String password = inputPassword.getText().toString().trim();
+                String age = inputAge.getText().toString().trim();
+                String region = inputRegion.getText().toString().trim();
+                int place = 0;
+                String id = "";
+                try{
+                    place = email.indexOf('@');
+                    id = email.substring(0, place);
+                }catch (Exception e){
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()  && !christ_name.isEmpty() && !cathedral.isEmpty()) {
-                    Server_UserData.registerUser(RegisterActivity.this, session, pDialog, id, email, password,  name, christ_name, cathedral);
-                } else {
+                }
+                EditText password_confirm = (EditText) findViewById(R.id.password_confirm);
+                String password = inputPassword.getText().toString().trim();
+                if(password.equals(password_confirm.getText().toString().trim())){
+                    if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()  && !christ_name.isEmpty() && !cathedral.isEmpty()  && !age.isEmpty() && !region.isEmpty()) {
+                        Server_UserData.registerUser(RegisterActivity.this, session, pDialog, id, email, password,  name, christ_name, age, region, cathedral);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "모든 정보를 입력해주세요", Toast.LENGTH_LONG)
+                                .show();
+                    }
+                }else{
                     Toast.makeText(getApplicationContext(),
-                            "Please enter your details!", Toast.LENGTH_LONG)
+                            "비밀번호가 일치하지 않습니다", Toast.LENGTH_LONG)
                             .show();
                 }
+
             }
         });
 
@@ -129,7 +150,9 @@ public class RegisterActivity extends AppCompatActivity{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 return true;
             }
         });

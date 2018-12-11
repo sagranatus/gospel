@@ -10,16 +10,21 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.CaldroidSampleCustomFragment;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
+import com.yellowpg.gaspel.etc.SessionManager;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,12 +34,18 @@ public class RecordActivity extends AppCompatActivity {
 	final static String TAG = "RecordActivity";
 	String textsize;
 	TextView date, comment, sentence;
-	TextView date2, sentence2, bg1;
+	TextView date2, bg1;
 	TextView today;
 	BottomNavigationView bottomNavigationView;
 	 ListSelectorDialog dlg_left;
 	 String[] listk_left, listv_left;
 
+	Calendar c1 = Calendar.getInstance();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
+	String date_navi;
+	String day;
+    private SessionManager session;
+    String uid = null;
 	/**
 	 * Create the main activity.
 	 * @param savedInstanceState previously saved instance data.
@@ -44,24 +55,30 @@ public class RecordActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_record);
 
-		//actionbar setting
+        // session정보 가져오기
+        session = new SessionManager(getApplicationContext());
+        uid = session.getUid();
+
+
+        //actionbar setting
 		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		actionbar.setCustomView(R.layout.actionbar_record);
 		TextView mytext = (TextView) findViewById(R.id.mytext);
-		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
 		actionbar.setElevation(0);
-
-		// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-		actionbar.setDisplayHomeAsUpEnabled(true);
-		actionbar.setHomeAsUpIndicator(R.drawable.list);
 
 		date = (TextView) findViewById(R.id.tv_date);
 		comment= (TextView) findViewById(R.id.tv_comment);
 		sentence = (TextView) findViewById(R.id.tv_oneSentence);
 
-		date2 = (TextView) findViewById(R.id.tv_date2);
-		sentence2 = (TextView) findViewById(R.id.tv_oneSentence2);
+		c1 = Calendar.getInstance();
+	//	c1.add(Calendar.DATE, 1);
+		date_navi = sdf.format(c1.getTime());
+		date_navi = date_navi+getDay()+"요일";
+		Log.d("saea","today"+date_navi);
+
+	//	date2 = (TextView) findViewById(R.id.tv_date2);
 		bg1 = (TextView) findViewById(R.id.tv_bg1);
 
 		today = (TextView)findViewById(R.id.tv_today);
@@ -92,13 +109,28 @@ public class RecordActivity extends AppCompatActivity {
 						startActivity(i0);
 						break;
 					case R.id.action_one:
-						Intent i = new Intent(RecordActivity.this, MainActivity.class);
-						startActivity(i);
-						break;
+						if (date_navi.contains("일요일")) {
+							Toast.makeText(RecordActivity.this, "일요일에는 주일의 독서를 해주세요", Toast.LENGTH_SHORT).show();
+							Intent i4 = new Intent(RecordActivity.this, RecordActivity.class);
+							startActivity(i4);
+							break;
+						} else {
+							Intent i = new Intent(RecordActivity.this, MainActivity.class);
+							startActivity(i);
+                            break;
+						}
+
 					case R.id.action_two:
-						Intent i2 = new Intent(RecordActivity.this, LectioActivity.class);
-						startActivity(i2);
-						break;
+						if (date_navi.contains("일요일")) {
+							Toast.makeText(RecordActivity.this, "일요일에는 주일의 독서를 해주세요", Toast.LENGTH_SHORT).show();
+							Intent i4 = new Intent(RecordActivity.this, RecordActivity.class);
+							startActivity(i4);
+							break;
+						} else {
+							Intent i2 = new Intent(RecordActivity.this, LectioActivity.class);
+							startActivity(i2);
+							break;
+						}
 					case R.id.action_three:
 						Intent i3 = new Intent(RecordActivity.this, WeekendActivity.class);
 						startActivity(i3);
@@ -118,10 +150,8 @@ public class RecordActivity extends AppCompatActivity {
 		textsize = sp2.getString("textsize", "");
 		if(textsize.equals("big")){
 			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			sentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			date2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			sentence2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			sentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 			today.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 
@@ -133,7 +163,7 @@ public class RecordActivity extends AppCompatActivity {
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 		// custom dialog key, value 설정
 		listk_left = new String[] {"a", "b", "c"};
-		listv_left = new String[] { "설정", "나의 상태", "계정정보"};
+		listv_left = new String[] { "설정", "계정정보", "로그아웃"};
 	}
 
 
@@ -154,12 +184,11 @@ public class RecordActivity extends AppCompatActivity {
 						 if(item.equals("설정")){
 							 Intent i = new Intent(RecordActivity.this, SettingActivity.class);
 							 startActivity(i);
-						 }else if(item.equals("나의 상태")){
-							 Intent i = new Intent(RecordActivity.this, StatusActivity.class);
-							 startActivity(i);
 						 }else if(item.equals("계정정보")){
 							 Intent i = new Intent(RecordActivity.this, LoginActivity.class);
 							 startActivity(i);
+						 }else if (item.equals("로그아웃")) {
+							 ProfileActivity.logoutUser(session,RecordActivity.this);
 						 }/*else if(item.equals("기록 삭제")){
 							 try{
 								 CommentInfoHelper commentInfoHelper;
@@ -217,6 +246,44 @@ public class RecordActivity extends AppCompatActivity {
 		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
 		t.replace(R.id.calendar1, caldroidFragment);
 		t.commit();
+	}
+
+	// actionbar 오른쪽 아이콘 추가
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.topmenu_main, menu);
+		return true;
+	}
+
+	// 요일 얻어오기
+	public String getDay() {
+		int dayNum = c1.get(Calendar.DAY_OF_WEEK);
+		switch (dayNum) {
+			case 1:
+				day = "일";
+				break;
+			case 2:
+				day = "월";
+				break;
+			case 3:
+				day = "화";
+				break;
+			case 4:
+				day = "수";
+				break;
+			case 5:
+				day = "목";
+				break;
+			case 6:
+				day = "금";
+				break;
+			case 7:
+				day = "토";
+				break;
+
+		}
+		return day;
 	}
 
 

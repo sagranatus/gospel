@@ -26,10 +26,10 @@ public class DBManager {
         public OpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
         }
-
+        // 가장 맨 처음에 만들어 지는 거 같다. 그 이후에는 불러와지지 않는 거 같다.
         @Override
         public void onCreate(SQLiteDatabase aDb) {
-            aDb.execSQL(UserDBSqlData.SQL_DB_CREATE_TABLE);
+            aDb.execSQL(UsersDBSqlData.SQL_DB_CREATE_TABLE);
             aDb.execSQL(CommentDBSqlData.SQL_DB_CREATE_TABLE);
             aDb.execSQL(LectioDBSqlData.SQL_DB_CREATE_TABLE);
             aDb.execSQL(WeekendDBSqlData.SQL_DB_CREATE_TABLE);
@@ -55,16 +55,21 @@ public class DBManager {
 
 
     //user data
+
+    public void firstUserData(){
+        mDbController.execSQL("DROP TABLE IF EXISTS user");
+        mDbController.execSQL(UsersDBSqlData.SQL_DB_CREATE_TABLE); // 만약 users 테이블이 없는 경우에는 억지로라도 생성해야함
+    }
     public void insertUserData(String aSql, UserData aCData) {
-        //    mDbController.execSQL("DROP TABLE IF EXISTS user");
         //   mDbController.execSQL("delete from user");
         String[] sqlData = aCData.getcDataArray();
         this.mDbController.execSQL(aSql, sqlData);
-
-
     }
 
     public void selectUserData(String aSql, String uid, ArrayList<UserData> aCDataList){
+        // 이미 사용하고 있는 사용자의 경우에는 기존의 user 테이블 삭제하고 users 테이블을 만든다 // 만약 없는 경우에는 테이블 만들도록
+     //   mDbController.execSQL("DROP TABLE IF EXISTS user");
+     //   mDbController.execSQL(UsersDBSqlData.SQL_DB_CREATE_TABLE); // 만약 users 테이블이 없는 경우에는 억지로라도 생성해야함
         String[] sqlData = {uid};
         Cursor results = this.mDbController.rawQuery(aSql, sqlData);
         results.moveToNext();
@@ -76,7 +81,9 @@ public class DBManager {
                     results.getString(3),
                     results.getString(4),
                     results.getString(5),
-                    results.getString(6));
+                    results.getString(6),
+                    results.getString(7),
+                    results.getString(8));
             aCDataList.add(cData);
             results.moveToNext();
         }
@@ -136,6 +143,8 @@ public class DBManager {
     public void deleteCommentData(String aSql, String uid) {
         String[] sqlData = {uid};
         this.mDbController.execSQL(aSql, sqlData);
+     //   mDbController.execSQL(UserDBSqlData.SQL_DB_CREATE_TABLE); // 테스트용
+    //    mDbController.execSQL("DROP TABLE IF EXISTS users"); // 테스트용
     }
 
 

@@ -1,16 +1,24 @@
 package com.yellowpg.gaspel;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Message;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -20,11 +28,13 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -34,6 +44,7 @@ import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.LectioDBSqlData;
 import com.yellowpg.gaspel.DB.UserDBSqlData;
+import com.yellowpg.gaspel.DB.UsersDBSqlData;
 import com.yellowpg.gaspel.DB.WeekendDBSqlData;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
@@ -42,6 +53,8 @@ import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
+import com.yellowpg.gaspel.etc.DownloadImageTask;
+import com.yellowpg.gaspel.etc.DownloadImageTask_bitmap;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.SessionManager;
 
@@ -49,46 +62,88 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hirondelle.date4j.DateTime;
 
+import static com.yellowpg.gaspel.MainActivity.playSound;
+import static com.yellowpg.gaspel.MainActivity.releaseCpuLock;
+
+
 public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
     final static String TAG = "FirstActivity";
     private SessionManager session;
     String uid = null;
-
+    Button circle1, circle2, circle3;
     BottomNavigationView bottomNavigationView;
     ListSelectorDialog dlg_left;
     String[] listk_left, listv_left;
     SharedPreferences pref;
     Calendar c1 = Calendar.getInstance();
+
     //현재 해 + 달 구하기
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월");
     String date_val = sdf.format(c1.getTime());
     //현재 해 + 달 구하기
-    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy년 MM월 dd일 ");
+    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy. MM. dd.");
     String date_val1 = sdf1.format(c1.getTime());
+
+    SimpleDateFormat year = new SimpleDateFormat("yyyy");
+    String year_val = year.format(c1.getTime());
+
+    SimpleDateFormat month = new SimpleDateFormat("MM");
+    String month_val = month.format(c1.getTime());
+
+    SimpleDateFormat sdf_today = new SimpleDateFormat("yyyy년 MM월 dd일 ");
+    String date_today = sdf_today.format(c1.getTime());
 
     SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
     String date_val2 = sdf2.format(c1.getTime());
     String date_val2_yesterday;
-    Button todaysentence, mysentence;
-    TextView comment, lectio;
+    TextView todaysentence;
+    TextView date;
 
     static String day;
-    int i = 0;
 
+    String name, user_id, email, christ_name, cathedral, password;
+    String age, region;
+
+    private static PowerManager.WakeLock myWakeLock;
+
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
+        c1.add(Calendar.MONTH, 1);
+
+        date_today = sdf_today.format(c1.getTime());
+        year_val = year.format(c1.getTime());
+        date_val1 = sdf1.format(c1.getTime());
+        month_val = month.format(c1.getTime());
+        date_val2 = sdf2.format(c1.getTime());
+
+        //preference에 저장한다.
+        pref = FirstActivity.this.getSharedPreferences("todaysentence", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove(date_val2 );
+        editor.commit();
+        */
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
 
@@ -97,12 +152,35 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         uid = session.getUid();
 
         // 첫화면에서 로그인 안한 경우에는 이렇게 넣으면 된다.
-        if(uid == null || uid == ""){
+        if (uid == null || uid == "") {
             Log.d("saea", "this is ");
             Intent i0 = new Intent(FirstActivity.this, PreviousActivity.class);
             startActivity(i0);
+        } else {
+            // 만약 로그인상태에서 users 테이블이 없는 경우는 강제로 logout한다.
+            SQLiteDatabase db = null;
+            Boolean result = checkTable(db);
+            if (!result) {
+                Log.d("saea", "테이블 없음");
+                logoutUser();
+            } else {
+                Log.d("saea", "테이블 있음");
+            }
         }
 
+        // 세팅에서 알람 설정
+        Intent intent = getIntent();
+        String alarm = intent.getStringExtra("str");
+        if(alarm!=null){
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            myWakeLock= pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                    PowerManager.ON_AFTER_RELEASE, TAG);
+            myWakeLock.acquire(); //실행후 리소스 반환 필수
+            releaseCpuLock();
+            playSound(FirstActivity.this, "alarm");
+
+        }
 
         // 인터넷연결 확인
         ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -113,87 +191,102 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar);
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
 
-        // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.list);
+        todaysentence = (TextView) findViewById(R.id.bt_today);
+        date = (TextView) findViewById(R.id.date);
 
-        todaysentence = (Button) findViewById(R.id.bt_today);
-        mysentence = (Button) findViewById(R.id.bt_weekend);
-        comment = (TextView) findViewById(R.id.tv_comment);
-        lectio = (TextView) findViewById(R.id.tv_lectio);
+
+       // c1.add(Calendar.DATE, 1);
+        date_today = sdf_today.format(c1.getTime());
+        date_today = date_today +""+getDay()+"요일";
+        Log.d("saea", "today"+date_today);
+        String typedDate = date_val1;
+        date.setText(typedDate);
+        circle1 = (Button) findViewById(R.id.circle1);
+        circle2 = (Button) findViewById(R.id.circle2);
+        circle3 = (Button) findViewById(R.id.circle3);
+
         pref = FirstActivity.this.getSharedPreferences("todaysentence", 0);
-        String saved_todaysentence = pref.getString(date_val2, "");
-        // 오늘 구절은 sharedpreference에 저장해둔다.
-        if(saved_todaysentence != ""){
-            todaysentence.setText(saved_todaysentence);
+        String saved_todaysentence = pref.getString(date_val2, "");        // 오늘 구절은 sharedpreference에 저장해둔다.
+
+        if (saved_todaysentence != "") {
+            todaysentence.setText("\" " + saved_todaysentence + " \"");
             Log.d("saea", "saved already");
-        }else{
+            ImageView img3 = (ImageView) findViewById(R.id.img2);
+
+            ContextWrapper cw = new ContextWrapper(FirstActivity.this);
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            try {
+                File f=new File(directory, "firstimage");
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                img3.setImageBitmap(b);
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+        } else {
             // 인터넷연결된 상태에서만 데이터 가져오기
             if ((wifi.isConnected() || mobile.isConnected())) {
                 Log.d("saea", "get data");
                 getGaspel(date_val2);
+
+
+                //    new DownloadImageTask(img3).execute("https://sssagranatus.cafe24.com/resource/firstimg.png");
+                String urldisplay ="https://sssagranatus.cafe24.com/resource/firstimg.png";
+                Log.d("saea", "urld"+urldisplay);
+                Bitmap mbitmap = null;
+                new DownloadImageTask_bitmap(FirstActivity.this, uid, "firstimage", mbitmap).execute(urldisplay);
+                //   img3.setImageBitmap(mbitmap);
+                ImageView img3 = (ImageView) findViewById(R.id.img2);
+
+                ContextWrapper cw = new ContextWrapper(FirstActivity.this);
+                File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+                try {
+                    File f=new File(directory, "firstimage");
+                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                    img3.setImageBitmap(b);
+                }
+                catch (FileNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
             } else {
                 todaysentence.setText("인터넷을 연결해주세요");
             }
         }
 
+        int todaynum = getData("today", "", "");
+        Log.d("saea", todaynum+"today");
+        circle1.setText(Integer.toString(todaynum));
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        if(date_today.contains("일요일")){
+            cal.add(Calendar.DATE, -7);
+        }
+        SimpleDateFormat sdf_monday = new SimpleDateFormat("dd");
+        String date_monday = sdf_monday.format(cal.getTime());
+
+        int weeknum = getData("weekend", month_val, date_monday);
+        Log.d("saea", weeknum+"weeknum");
+        circle2.setText(Integer.toString(weeknum));
+
+        int monthnum = getData("month", month_val, "");
+        Log.d("saea", monthnum+"monthnum");
+        circle3.setText(Integer.toString(monthnum));
+
+
         // textsize 설정
-        SharedPreferences sp = getSharedPreferences("setting",0);
-       String textsize = sp.getString("textsize", "");
-        if(textsize.equals("big")){
+        SharedPreferences sp = getSharedPreferences("setting", 0);
+        String textsize = sp.getString("textsize", "");
+        if (textsize.equals("big")) {
             todaysentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            mysentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            lectio.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        }else{
+        } else {
 
         }
-
-        // 각 코멘트, 렉시오, 한주묵상구절을 가져온다.
-        getComments(date_val2);
-        getLectio(date_val2);
-        getWeekend(date_val2);
-
-        // 오늘의 기록된 값에 따라 나오는 아이콘이 달라진다
-        TextView exhausted_name = (TextView) findViewById(R.id.exhausted_name);
-        TextView walking_name = (TextView) findViewById(R.id.walking_name);
-        TextView happy_name = (TextView) findViewById(R.id.happy_name);
-        if(i == 0){
-            ImageView exhausted = (ImageView) findViewById(R.id.exhausted_person);
-            exhausted.setVisibility(View.VISIBLE);
-            exhausted_name.setVisibility(View.VISIBLE);
-        }else if(i == 1){
-            ImageView walking = (ImageView) findViewById(R.id.walking_person);
-            walking.setVisibility(View.VISIBLE);
-            walking_name.setVisibility(View.VISIBLE);
-        }else if(i >= 2){
-            ImageView happy = (ImageView) findViewById(R.id.happy_person);
-            happy.setVisibility(View.VISIBLE);
-            happy_name.setVisibility(View.VISIBLE);
-        }
-
-        // 로그인한 경우에는 값을 가져온다.
-        if(uid != "" && uid != null){
-            ArrayList<UserData> userdata = new ArrayList<UserData>();
-            DBManager dbMgr = new DBManager(FirstActivity.this);
-            dbMgr.dbOpen();
-            dbMgr.selectUserData(UserDBSqlData.SQL_DB_SELECT_DATA, uid, userdata);
-            dbMgr.dbClose();
-
-            UserData udata = userdata.get(0);
-            walking_name.setText(udata.getName()+"\n"+udata.getChristName());
-            exhausted_name.setText(udata.getName()+"\n"+udata.getChristName());
-            happy_name.setText(udata.getName()+"\n"+udata.getChristName());
-        }else{
-            walking_name.setOnClickListener(this);
-            exhausted_name.setOnClickListener(this);
-            happy_name.setOnClickListener(this);
-        }
-
-
         // bottomnavigation 뷰 등록
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -219,13 +312,28 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         startActivity(i0);
                         break;
                     case R.id.action_one:
-                        Intent i = new Intent(FirstActivity.this, MainActivity.class);
-                        startActivity(i);
-                        break;
+                        if (date_today.contains("일요일")) {
+                            Toast.makeText(FirstActivity.this, "일요일에는 주일의 독서를 해주세요", Toast.LENGTH_SHORT).show();
+                            Intent i1 = new Intent(FirstActivity.this, FirstActivity.class);
+                            startActivity(i1);
+                            break;
+                        } else {
+                            Intent i = new Intent(FirstActivity.this, MainActivity.class);
+                            startActivity(i);
+                            break;
+                        }
+
                     case R.id.action_two:
-                        Intent i2 = new Intent(FirstActivity.this, LectioActivity.class);
-                        startActivity(i2);
-                        break;
+                        if (date_today.contains("일요일")) {
+                            Toast.makeText(FirstActivity.this, "일요일에는 주일의 독서를 해주세요", Toast.LENGTH_SHORT).show();
+                            Intent i2 = new Intent(FirstActivity.this, FirstActivity.class);
+                            startActivity(i2);
+                            break;
+                        } else {
+                            Intent i2 = new Intent(FirstActivity.this, LectioActivity.class);
+                            startActivity(i2);
+                            break;
+                        }
                     case R.id.action_three:
                         Intent i3 = new Intent(FirstActivity.this, WeekendActivity.class);
                         startActivity(i3);
@@ -242,11 +350,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
 
         // 왼쪽 list클릭시 이벤트 custom dialog setting
-        dlg_left  = new ListSelectorDialog(this, "Select an Operator");
+        dlg_left = new ListSelectorDialog(this, "Select an Operator");
 
         // custom dialog key, value 설정
-        listk_left = new String[] {"a", "b", "c"};
-        listv_left = new String[] { "설정", "나의 상태", "계정정보"};
+        listk_left = new String[]{"a", "b", "c"};
+        listv_left = new String[]{"설정", "계정정보", "로그아웃"};
+
 
     }
 
@@ -255,32 +364,31 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             default:
-
                 // show the list dialog.
                 dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
 
                     // procedure if user cancels the dialog.
                     public void selectorCanceled() {
                     }
+
                     // procedure for when a user selects an item in the dialog.
                     public void selectedItem(String key, String item) {
-                        if(item.equals("설정")){
+                        if (item.equals("설정")) {
                             Intent i = new Intent(FirstActivity.this, SettingActivity.class);
                             startActivity(i);
-                        }else if(item.equals("나의 상태")){
-                            Intent i = new Intent(FirstActivity.this, StatusActivity.class);
-                            startActivity(i);
-                        }else if(item.equals("계정정보")){
+                        } else if (item.equals("계정정보")) {
                             Intent i = new Intent(FirstActivity.this, LoginActivity.class);
                             startActivity(i);
+                        }else if (item.equals("로그아웃")) {
+                            ProfileActivity.logoutUser(session,FirstActivity.this);
                         }
                     }
                 });
 
-
                 return true;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -296,6 +404,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 StringRequest strReq = new StringRequest(Request.Method.POST,
                         AppConfig.URL_TODAY, new Response.Listener<String>() { // URL_LOGIN : "http://192.168.116.1/android_login_api/login.php";
                     boolean error;
+
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "getGaspel Response: " + response.toString());
@@ -307,7 +416,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                             if (!error) {
                                 // Now store the user in SQLite
                                 String gaspel_sentence = jObj.getString("sentence");
-                                todaysentence.setText(gaspel_sentence);
+                                todaysentence.setText("\" " + gaspel_sentence + " \"");
 
                                 //preference에 저장한다.
                                 SharedPreferences.Editor editor = pref.edit();
@@ -315,11 +424,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                                 // 전날 preference값을 지운다.
                                 Calendar c1 = Calendar.getInstance();
                                 c1.add(Calendar.DATE, -1);
-                                date_val2_yesterday = sdf1.format(c1.getTime());
+                                date_val2_yesterday = sdf2.format(c1.getTime());
                                 editor.remove(date_val2_yesterday);
 
                                 // commit changes
                                 editor.commit();
+
                             } else {
                                 // Error in login. Get the error message
                                 String errorMsg = jObj.getString("error_msg");
@@ -354,252 +464,32 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         t.start();
     }
 
-    public void getComments(String date) {
-
-        Date origin_date = null;
-        try {
-            origin_date = sdf2.parse(date);
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
-        String date_aft = sdf1.format(origin_date) + getDay() + "요일";
-
-        String comment_str = null;
-        ArrayList<Comment> comments = new ArrayList<Comment>();
-        DBManager dbMgr = new DBManager(FirstActivity.this);
-        dbMgr.dbOpen();
-        dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft , comments);
-        dbMgr.dbClose();
-
-        if(!comments.isEmpty()){
-            comment_str = comments.get(0).getComment();
-        }else{
-        }
-
-        if (comment_str != null) {
-            Log.d("saea", comment_str);
-            comment.setText(comment_str);
-            i++;
-        }else{
-            comment.setText(Html.fromHtml("<font color=\"#999999\">오늘의 복음 말씀새기기 하기</font>"));
-            comment.setOnClickListener(this);
-        }
-    /*    CommentInfoHelper commentInfoHelper = new CommentInfoHelper(this);
-        SQLiteDatabase db = null;
-        try {
-            db = commentInfoHelper.getReadableDatabase();
-            String[] columns = {"comment_con", "date", "sentence"};
-            String whereClause = "date = ?";
-            String[] whereArgs = new String[]{
-                    date_aft
-            };
-            Cursor cursor = db.query("comment", columns, whereClause, whereArgs, null, null, null);
-
-            while (cursor.moveToNext()) {
-                comment_str = cursor.getString(0);
-
-            }
-            // 기존 값이 있는 경우 수정하기
-            if (comment_str != null) {
-                Log.d("saea", comment_str);
-                comment.setText(comment_str);
-                i++;
-            }else{
-                comment.setText(Html.fromHtml("<font color=\"#999999\">오늘의 복음 말씀새기기 하기</font>"));
-                comment.setOnClickListener(this);
-            }
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-
-        */
-
-    }
-
-    public void getLectio(String date){
-
-        Date origin_date = null;
-        try {
-            origin_date = sdf2.parse(date);
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
-        String date_aft = sdf1.format(origin_date) + getDay() + "요일";
-        // cf : 렉시오 디비나 부분
-        ArrayList<Lectio> lectios = new ArrayList<Lectio>();
-        String lectio_str = null;
-        DBManager dbMgr = new DBManager(FirstActivity.this);
-        dbMgr.dbOpen();
-        dbMgr.selectLectioData(LectioDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft , lectios);
-        dbMgr.dbClose();
-
-        String sum2_str = null;
-        String js2_str = null;
-
-        if(!lectios.isEmpty()){
-            sum2_str = lectios.get(0).getSum2();
-            js2_str = lectios.get(0).getJs2();
-
-        }
-
-        if(sum2_str != null){
-            lectio.setText(sum2_str+"\n\""+js2_str+"\"");
-            i++;
-        }else{
-            lectio.setText(Html.fromHtml("<font color=\"#999999\">오늘의 복음 렉시오 디비나 하기</font>"));
-            lectio.setOnClickListener(this);
-        }
-      /*  LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(FirstActivity.this);
-        SQLiteDatabase db2;
-        String bg1_str = null;
-        String bg2_str= null;
-        String bg3_str= null;
-        String sum1_str= null;
-        String sum2_str= null;
-        String js1_str= null;
-        String js2_str= null;
-        String date_str = null;
-        String onesentence_str = null;
-        try{
-
-            db2 = lectioInfoHelper.getReadableDatabase();
-            String[] columns = {"bg1", "bg2", "bg3", "sum1", "sum2", "js1", "js2"};
-            String whereClause = "date = ?";
-            String[] whereArgs = new String[] {
-                    date_aft
-            };
-            Cursor cursor = db2.query("lectio", columns,  whereClause, whereArgs, null, null, null);
-
-            if(cursor != null){
-                while(cursor.moveToNext()){
-                    bg1_str = cursor.getString(0);
-                    bg2_str = cursor.getString(1);
-                    bg3_str = cursor.getString(2);
-                    sum1_str = cursor.getString(3);
-                    sum2_str = cursor.getString(4);
-                    js1_str = cursor.getString(5);
-                    js2_str = cursor.getString(6);
-                }
-                if(sum2_str != null){
-                    lectio.setText(sum2_str+"\n\""+js2_str+"\"");
-                    i++;
-                }else{
-                    lectio.setText(Html.fromHtml("<font color=\"#999999\">오늘의 복음 렉시오 디비나 하기</font>"));
-                    lectio.setOnClickListener(this);
-                }
-
-            }
-
-            cursor.close();
-            lectioInfoHelper.close();
-        }
-        catch(Exception e){
-
-        }
-        */
-    }
-
-    public void getWeekend(String date){
-        c1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-
-        c1.add(c1.DATE,7);
-
-        date_val = sdf1.format(c1.getTime());
-        String date_detail = date_val+getDay()+"요일";
-        Log.d("saea", date_detail);
-
-        // cf : 렉시오 디비나 부분
-        String mysentence_str = null;
-        String mythought_str= null;
-
-        ArrayList<Weekend> weekends = new ArrayList<Weekend>();
-        String comment_str = null;
-        DBManager dbMgr = new DBManager(FirstActivity.this);
-        dbMgr.dbOpen();
-        dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, date_detail, weekends);
-        dbMgr.dbClose();
-
-        if(!weekends.isEmpty()){
-            mysentence_str = weekends.get(0).getMySentence();
-            mythought_str = weekends.get(0).getMyThought();
-            Log.d("saea", mysentence_str +mythought_str );
-        }
-
-        // 기존 값이 있는 경우 보여지기
-        if(mysentence_str != null){
-            Log.d("saea", "한주복음묵상 있음");
-            i++;
-            mysentence.setText(mysentence_str);
-
-        }else{
-            Log.d("saea", "한주복음묵상 없음");
-            mysentence.setText(Html.fromHtml("<font color=\"#999999\">이번주 복음묵상 하기</font>"));
-            mysentence.setOnClickListener(this);
-        }
-       /* WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(FirstActivity.this);
-        SQLiteDatabase db;
-        String mysentence_str = null;
-        String mythought_str= null;
-        try{
-            db = weekendInfoHelper.getReadableDatabase();
-            String[] columns = {"mysentence", "mythought"};
-            String whereClause = "date = ?";
-            String[] whereArgs = new String[] {
-                    date_detail
-            };
-            Cursor cursor = db.query("weekend", columns,  whereClause, whereArgs, null, null, null);
-
-            while(cursor.moveToNext()){
-                mysentence_str = cursor.getString(0);
-                mythought_str  = cursor.getString(1);
-                Log.d("saea", mysentence_str +mythought_str );
-
-            }
-            // 기존 값이 있는 경우 보여지기
-            if(mysentence_str != null){
-                Log.d("saea", "한주복음묵상 있음");
-                i++;
-                mysentence.setText(mysentence_str);
-
-            }else{
-                Log.d("saea", "한주복음묵상 없음");
-                mysentence.setText(Html.fromHtml("<font color=\"#999999\">이번주 복음묵상 하기</font>"));
-                mysentence.setOnClickListener(this);
-            }
-            cursor.close();
-            weekendInfoHelper.close();
-        }catch(Exception e){
-
-        }
-
-        */
-    }
 
     // 요일 얻어오기
-    public String getDay(){
+    public String getDay() {
         int dayNum = c1.get(Calendar.DAY_OF_WEEK);
-        switch(dayNum){
+        switch (dayNum) {
             case 1:
                 day = "일";
-                break ;
+                break;
             case 2:
                 day = "월";
-                break ;
+                break;
             case 3:
                 day = "화";
-                break ;
+                break;
             case 4:
                 day = "수";
-                break ;
+                break;
             case 5:
                 day = "목";
-                break ;
+                break;
             case 6:
                 day = "금";
-                break ;
+                break;
             case 7:
                 day = "토";
-                break ;
+                break;
 
         }
         return day;
@@ -612,26 +502,202 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 Intent i0 = new Intent(FirstActivity.this, MainActivity.class);
                 startActivity(i0);
                 break;
-            case R.id.tv_lectio:
-                Intent i1 = new Intent(FirstActivity.this, LectioActivity.class);
-                startActivity(i1);
-                break;
-            case R.id.bt_weekend:
-                Intent i2 = new Intent(FirstActivity.this, WeekendActivity.class);
-                startActivity(i2);
-                break;
-            case R.id.walking_name:
-                Intent i3 = new Intent(FirstActivity.this, LoginActivity.class);
-                startActivity(i3);
-                break;
-            case R.id.exhausted_name:
-                Intent i4 = new Intent(FirstActivity.this, LoginActivity.class);
-                startActivity(i4);
-                break;
-            case R.id.happy_name:
-                Intent i5 = new Intent(FirstActivity.this, LoginActivity.class);
-                startActivity(i5);
-                break;
-        };
+        }
+
+    }
+
+
+    // 로그아웃할때
+    public void logoutUser() {
+        session.setLogin(false, "");
+
+        SQLiteDatabase db = null;
+
+        DBManager dbMgr = new DBManager(FirstActivity.this);
+
+        dbMgr.dbOpen();
+        dbMgr.deleteCommentData(CommentDBSqlData.SQL_DB_DELETE_DATA, uid);
+        dbMgr.dbClose();
+
+        dbMgr.dbOpen();
+        dbMgr.deleteLectioData(LectioDBSqlData.SQL_DB_DELETE_DATA, uid);
+        dbMgr.dbClose();
+
+        dbMgr.dbOpen();
+        dbMgr.deleteWeekendData(WeekendDBSqlData.SQL_DB_DELETE_DATA, uid);
+        dbMgr.dbClose();
+
+        // Launching the login activity
+        Intent intent = new Intent(FirstActivity.this, PreviousActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    public boolean checkTable(SQLiteDatabase db) {
+        //catch에 안 붙잡히면 테이블이 있다는 의미이므로 true, 잡히면 테이블이 없으므로 false를 반환
+        ArrayList<UserData> user = new ArrayList<UserData>();
+        try {
+            DBManager dbMgr = new DBManager(FirstActivity.this);
+            dbMgr.dbOpen();
+            dbMgr.selectUserData(UsersDBSqlData.SQL_DB_SELECT_DATA, uid, user);
+            dbMgr.dbClose();
+            Log.d("saea", "user" + user.get(0).getName());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // actionbar 오른쪽 아이콘 추가
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.topmenu_main, menu);
+        return true;
+    }
+
+    public int getData(String where, String month, String date) {
+
+        int j = 0;
+        if (where.equals("today")) {
+            int i = 0;
+            String today = date_today;
+
+            //comment
+            ArrayList<Comment> comments_arr = new ArrayList<Comment>();
+            String comment_str = null;
+            DBManager dbMgr = new DBManager(FirstActivity.this);
+            dbMgr.dbOpen();
+            dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + date_today + "%'", uid, comments_arr);
+            dbMgr.dbClose();
+
+            if (!comments_arr.isEmpty()) {
+                i++;
+            }
+
+            ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
+            String bg1_str = null;
+            dbMgr.dbOpen();
+            dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + date_today + "%'", uid, lectios_arr);
+            dbMgr.dbClose();
+
+            if (!lectios_arr.isEmpty()) {
+                i++;
+            }
+            if (i > 0) {
+                j++;
+            }
+
+        }else if(where.equals("month")){
+
+            for(int k=1; k<32; k++){
+                int i = 0;
+                //comment
+                int length = (int)(Math.log10(k)+1);
+                String day = String.format("%02d", k);
+
+                String thisdate = year_val+"년 "+month+"월 "+day+"일";
+                Log.d("saea",thisdate);
+                ArrayList<Comment> comments_arr = new ArrayList<Comment>();
+                String comment_str = null;
+                DBManager dbMgr = new DBManager(FirstActivity.this);
+                dbMgr.dbOpen();
+                dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, comments_arr);
+                dbMgr.dbClose();
+
+                if (!comments_arr.isEmpty()) {
+                    i++;
+                }
+
+                ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
+                String bg1_str = null;
+                dbMgr.dbOpen();
+                dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, lectios_arr);
+                dbMgr.dbClose();
+
+                if (!lectios_arr.isEmpty()) {
+                    i++;
+                }
+                if (i > 0) {
+                    j++;
+                }
+            }
+
+        }else if(where.equals("year")){
+
+            for(int k=1; k<32; k++){
+                int i = 0;
+                //comment
+                int length = (int)(Math.log10(k)+1);
+                String day = String.format("%02d", k);
+
+                String thisdate = year_val+"년 "+month+"월 "+day+"일";
+                Log.d("saea",thisdate);
+                ArrayList<Comment> comments_arr = new ArrayList<Comment>();
+                String comment_str = null;
+                DBManager dbMgr = new DBManager(FirstActivity.this);
+                dbMgr.dbOpen();
+                dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, comments_arr);
+                dbMgr.dbClose();
+
+                if (!comments_arr.isEmpty()) {
+                    i++;
+                }
+
+                ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
+                String bg1_str = null;
+                dbMgr.dbOpen();
+                dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, lectios_arr);
+                dbMgr.dbClose();
+
+                if (!lectios_arr.isEmpty()) {
+                    i++;
+                }
+                if (i > 0) {
+                    j++;
+                }
+            }
+
+        }else if(where.equals("weekend")){
+
+            int monday = Integer.parseInt(date);
+            for(int k=monday; k<monday+7; k++){
+                int i = 0;
+                //comment
+                int length = (int)(Math.log10(k)+1);
+                String day = String.format("%02d", k);
+
+                String thisdate = year_val+"년 "+month+"월 "+day+"일";
+                Log.d("saea",thisdate);
+                ArrayList<Comment> comments_arr = new ArrayList<Comment>();
+                String comment_str = null;
+                DBManager dbMgr = new DBManager(FirstActivity.this);
+                dbMgr.dbOpen();
+                dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, comments_arr);
+                dbMgr.dbClose();
+
+                if (!comments_arr.isEmpty()) {
+                    i++;
+                }
+
+                ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
+                String bg1_str = null;
+                dbMgr.dbOpen();
+                dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, lectios_arr);
+                dbMgr.dbClose();
+
+                if (!lectios_arr.isEmpty()) {
+                    i++;
+                }
+                if (i > 0) {
+                    j++;
+                }
+            }
+
+        }
+
+        return j;
+
     }
 }

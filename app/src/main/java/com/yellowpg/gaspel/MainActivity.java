@@ -43,6 +43,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,12 +78,11 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity {
 	final static String TAG = "MainActivity";
 	Button btnNetCon;
-	Button btnNetCon2;
-	Button comment_save;
+	Button comment_save, comment_edit;
 	TextView tv;
 	TextView tv2;
-	Button date;
-	ImageButton before, after;
+	TextView tv_comment;
+	String typedDate;
 	static String day;
 	String textsize;
 	EditText comment;
@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
 	@SuppressLint("InvalidWakeLockTag")
 	protected void onCreate(Bundle savedInstanceState){
+
 		//session 정보 가져오기
 		session = new SessionManager(getApplicationContext());
 		uid = session.getUid();
@@ -135,21 +136,9 @@ public class MainActivity extends AppCompatActivity {
 		//actionbar setting
 		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
 		actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		actionbar.setCustomView(R.layout.actionbar);
-		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+		actionbar.setCustomView(R.layout.actionbar_main);
+		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
 		actionbar.setElevation(0);
-
-		// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-		actionbar.setDisplayHomeAsUpEnabled(true);
-		actionbar.setHomeAsUpIndicator(R.drawable.list);
-
-
-		ll = (LinearLayout) findViewById(R.id.ll);
-		ll_date = (LinearLayout) findViewById(R.id.ll_date);
-		// date
-		date = (Button) findViewById(R.id.bt_date);
-		before = (ImageButton) findViewById(R.id.bt_beforedate);
-		after = (ImageButton) findViewById(R.id.bt_afterdate);
 
 		// 복음 제목, 내용
 		tv = (TextView) findViewById(R.id.tv_01);
@@ -157,17 +146,11 @@ public class MainActivity extends AppCompatActivity {
 
 		// 말씀 새기기 제목, 내용, 코멘트
 		tv2 = (TextView) findViewById(R.id.tv_02);
-		btnNetCon2 = (Button) findViewById(R.id.bt_network_con2);
+		tv_comment = (TextView) findViewById(R.id.tv_comment);
 		comment = (EditText) findViewById(R.id.et_comment);
-		comment_save = (Button) findViewById(R.id.bt_comment);
+		comment_save = (Button) findViewById(R.id.bt_save);
+		comment_edit = (Button) findViewById(R.id.bt_edit);
 
-		comment.setVisibility(comment.GONE);
-		comment_save.setVisibility(comment_save.GONE);
-
-		// 요일 앞뒤로 변경하는 소스
-		date.setText(date_val1+getDay()+"요일"); // "yyyy년 MM월 dd일 "
-		before.setOnClickListener(listener_date);
-		after.setOnClickListener(listener_date);
 
 		// bottomnavigation 뷰 등록
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -220,15 +203,9 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-				return true;
-			}
-		});
-		findViewById(R.id.bt_network_con2).setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				if (getCurrentFocus() != null) {
+					imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				}
 				return true;
 			}
 		});
@@ -237,12 +214,11 @@ public class MainActivity extends AppCompatActivity {
 		SharedPreferences sp = getSharedPreferences("setting",0);
 		textsize = sp.getString("textsize", "");
 		if(textsize.equals("big")){
-			date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			btnNetCon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			tv_comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 		}else{
 
 		}
@@ -250,12 +226,22 @@ public class MainActivity extends AppCompatActivity {
 		Intent intent = getIntent();
 		daydate = intent.getStringExtra("date");
 
-
-		// 인터넷연결된 상태에서만 데이터 가져오기
-		if ((wifi.isConnected() || mobile.isConnected())) {
+// 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
+		comment_save.setOnClickListener(listener);
+		comment_edit.setOnClickListener(listener);
+		comment_save.setBackgroundResource(R.drawable.button_bg);
+		comment_edit.setBackgroundResource(R.drawable.button_bg);
+		comment.setBackgroundResource(R.drawable.edit_bg_white);
+		tv_comment.setBackgroundResource(R.drawable.edit_bg_grey);
 
 			// intent로 들어온 daydate가 null이 아닌 경우
 			if(daydate != null){
+				LinearLayout ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
+				RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)ll_bottom.getLayoutParams();
+				params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+				ll_bottom.setLayoutParams(params);
+
+
 				comment.setText("");
 				String timeStr = daydate;
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -268,17 +254,13 @@ public class MainActivity extends AppCompatActivity {
 				c1 = Calendar.getInstance();
 				c1.setTime(date_);
 				String date_val1 = sdf1.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
-				date.setText(date_val1+getDay()+"요일"); // c1으로 getday()함
+				typedDate = date_val1+getDay()+"요일"; // c1으로 getday()함
 				getGaspel(timeStr);
-				getComments(timeStr);
-
-				//intent로 온 경우에 날짜 이동 없애고 actionbar 변경하기
-				before.setVisibility(View.GONE);
-				after.setVisibility(View.GONE);
+				getComments();
 
 				actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-				actionbar.setCustomView(R.layout.actionbar_back);
-				actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+				actionbar.setCustomView(R.layout.actionbar_main);
+				actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
 				actionbar.setElevation(0);
 
 				// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
@@ -286,38 +268,18 @@ public class MainActivity extends AppCompatActivity {
 				actionbar.setHomeAsUpIndicator(R.drawable.back);
 				bottomNavigationView.setVisibility(View.GONE);
 			}else{
+				typedDate = date_val1+getDay()+"요일"; // c1으로 getday()함
 				getGaspel(date_val2);
-				getComments(date_val2);
+				getComments();
 			}
 
-		} else {
-			tv.setText("인터넷을 연결해주세요");
-			tv.setGravity(Gravity.CENTER);
-		}
 
-		// 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
-		comment_save.setOnClickListener(listener);
-		comment_save.setBackgroundResource(R.drawable.button_bg);
-
-
-		// 세팅에서 알람 설정
-		String alarm = intent.getStringExtra("str");
-		if(alarm!=null){
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			myWakeLock= pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-					PowerManager.ACQUIRE_CAUSES_WAKEUP |
-					PowerManager.ON_AFTER_RELEASE, TAG);
-			myWakeLock.acquire(); //실행후 리소스 반환 필수
-			releaseCpuLock();
-			playSound(MainActivity.this, "alarm");
-		}
-
-		// 왼쪽 list클릭시 이벤트 custom dialog setting
+		// list클릭시 이벤트 custom dialog setting
 		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
 
 		// custom dialog key, value 설정
 		listk_left = new String[] {"a", "b", "c"};
-		listv_left = new String[] { "설정", "나의 상태", "계정정보"};
+		listv_left = new String[] { "설정",  "계정정보","로그아웃"};
 
 	} //onCreate 메소드 마침
 
@@ -326,35 +288,34 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.pray:
-				showPraying(item);
+			case R.id.list:
+				// show the list dialog.
+				dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
+
+					// procedure if user cancels the dialog.
+					public void selectorCanceled() {
+					}
+					// procedure for when a user selects an item in the dialog.
+					public void selectedItem(String key, String item) {
+						if(item.equals("설정")){
+							Intent i = new Intent(MainActivity.this, SettingActivity.class);
+							startActivity(i);
+						}else if(item.equals("계정정보")){
+							Intent i = new Intent(MainActivity.this, LoginActivity.class);
+							startActivity(i);
+						}else if (item.equals("로그아웃")) {
+							ProfileActivity.logoutUser(session,MainActivity.this);
+						}
+					}
+				});
 				return true;
 			default:
 				// intent daydate가 null이 아닌 경우
 				if(daydate != null){
-					finish();
+					Intent intent = new Intent(MainActivity.this, RecordActivity.class);
+					intent.putExtra("dateBack",daydate);
+					startActivity(intent);
 				// mainactivity인 경우
-				}else{
-					// show the list dialog.
-					dlg_left.show(listv_left, listk_left, new ListSelectorDialog.listSelectorInterface() {
-
-						// procedure if user cancels the dialog.
-						public void selectorCanceled() {
-						}
-						// procedure for when a user selects an item in the dialog.
-						public void selectedItem(String key, String item) {
-							if(item.equals("설정")){
-								Intent i = new Intent(MainActivity.this, SettingActivity.class);
-								startActivity(i);
-							}else if(item.equals("나의 상태")){
-								Intent i = new Intent(MainActivity.this, StatusActivity.class);
-								startActivity(i);
-							}else if(item.equals("계정정보")){
-								Intent i = new Intent(MainActivity.this, LoginActivity.class);
-								startActivity(i);
-							}
-						}
-					});
 				}
 
 				return true;
@@ -363,111 +324,6 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-	}
-	Thread t;
-	TextView text_ttl;
-	TextView text;
-	Button declineButton;
-
-	// 오른쪽 종을 누르면 청원기도가 보인다
-	@SuppressLint("InvalidWakeLockTag")
-	public void showPraying(final MenuItem item)
-	{
-
-		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		@SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-				PowerManager.ACQUIRE_CAUSES_WAKEUP |
-				PowerManager.ON_AFTER_RELEASE, TAG);
-		myWakeLock.acquire(); //실행후 리소스 반환 필수
-		MainActivity.releaseCpuLock();
-		MainActivity.playSound(MainActivity.this, "pray");
-
-		// Create custom dialog object
-		final Dialog dialog = new Dialog(MainActivity.this);
-		// Include dialog.xml file
-		dialog.setContentView(R.layout.dialog);
-		// Set dialog title
-		dialog.setTitle("Custom Dialog");
-
-		final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
-
-		t = new Thread(new Runnable() {
-			@Override
-			public void run(){
-				int progress=0;
-				while(progress<100){
-					++progress;
-					progressbar.setProgress(progress);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if(t.isInterrupted()) { break; }
-				}
-			}
-		});
-		t.start();
-
-		text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
-		//text_ttl.setText("성령 청원 기도");
-		text_ttl.setText("\n침묵에 들어가는 단계\n");
-		// set values for custom dialog components - text, image and button
-		text = (TextView) dialog.findViewById(R.id.textDialog);
-		text.setText("하느님의 현존을 느껴 봅시다. 하느님께서 주시는 새 마음으로 들어가도록 노력하며 \n" +
-				"일상을 떠나 잠시지만 하느님 세계로 차원을 바꿔 봅시다.\n");
-
-		dialog.show();
-		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				//  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
-			}
-		});
-
-		// 기도마침 클릭시 이벤트
-		declineButton = (Button) dialog.findViewById(R.id.declineButton);
-		declineButton.setText("[다음 단계]");
-		final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
-		// if decline button is clicked, close the custom dialog
-		declineButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mMediaPlayer.stop();
-				t.interrupt();
-				if(declineButton.getText().equals("[다음 단계]")){
-					dialog_image.setVisibility(View.GONE);
-					progressbar.setVisibility(View.GONE);
-					declineButton.setText("[기도 마침]");
-					text_ttl.setText("성령 청원 기도");
-					text.setText("오소서, 성령님\n" +
-							"당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
-							"가난한 이 아버지, 은총 주님\n" +
-							"오소서 마음에 빛을 주소서.\n" +
-							"가장 좋은 위로자, 영혼의 기쁜 손님,\n" +
-							"생기 돋워 주소서.\n" +
-							"일할 때에 휴식을, 무더울 때 바람을,\n" +
-							"슬플 때에 위로를, 지복의 빛이시여,\n" +
-							"저희 맘 깊은 곳을 가득히 채우소서.\n" +
-							"주님 도움 없으면 저희 삶 그 모든 것\n" +
-							"이로운 것 없으리.\n" +
-							"허물은 씻어 주고 마른 땅 물 주시고\n" +
-							"병든 것 고치소서.\n" +
-							"굳은 맘 풀어 주고 찬 마음 데우시고\n" +
-							"바른길 이끄소서.\n" +
-							"성령님을 믿으며 의지하는 이에게\n" +
-							"칠은을 베푸소서.\n" +
-							"공덕을 쌓게  하고 구원의 문을 넘어\n" +
-							"영복을 얻게 하소서.아멘");
-				}else{
-					// Close dialog
-					dialog.dismiss();
-
-				}
-
-			}
-		});
 	}
 
 	String gaspel_date;
@@ -527,12 +383,7 @@ public class MainActivity extends AppCompatActivity {
 									contents = contents.replaceAll(m.group(), "\n"+m.group());
 								}
 								tv.setText(contents);
-								tv2.setText("주님께서 오늘 나에게 하고자 하시는 말씀이 무엇인지 생각해 봅시다.");
-
 								btnNetCon.setText(gaspel_sentence);
-								btnNetCon2.setText("말씀새기기");
-								comment.setVisibility(comment.VISIBLE);
-								comment_save.setVisibility(comment_save.VISIBLE);
 
 							} else {
 								// Error in login. Get the error message
@@ -568,82 +419,39 @@ public class MainActivity extends AppCompatActivity {
 		t.start();
 	}
 
-	public void getComments(String date) {
+	public void getComments() {
 
-		Date origin_date = null;
-		try {
-			origin_date = sdf2.parse(date);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-		String date_aft = sdf1.format(origin_date) + getDay() + "요일";
-
-	/*	SQLiteDatabase db = null;
-		try {
-			db = commentInfoHelper.getReadableDatabase();
-			String[] columns = {"comment_con", "date", "sentence"};
-			String whereClause = "date = ?";
-			String[] whereArgs = new String[]{
-					date_aft
-			};
-			Cursor cursor = db.query("comment", columns, whereClause, whereArgs, null, null, null);
-
-			while (cursor.moveToNext()) {
-				comment_str = cursor.getString(0);
-
-			}
-			*/
 		ArrayList<Comment> comments = new ArrayList<Comment>();
 		String comment_str = null;
 		DBManager dbMgr = new DBManager(MainActivity.this);
 		dbMgr.dbOpen();
-		dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft , comments);
+		dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, typedDate , comments);
 		dbMgr.dbClose();
 
 		if(!comments.isEmpty()){
 			comment_str = comments.get(0).getComment();
-		}else{
 		}
-			// 기존 값이 있는 경우
-			if (comment_str != null) {
-				Log.d("saea", comment_str);
-				comment.setText(comment_str, TextView.BufferType.EDITABLE);
-			}else{
 
-			}
-	/*	} catch (Exception e1) {
-			e1.printStackTrace();
-		} */
+		// 기존 값이 있는 경우
+		if (comment_str != null) {
+			comment_edit.setVisibility(View.VISIBLE);
+			comment_save.setVisibility(View.GONE);
+			tv2.setText("복음에서 가장 마음에 드는 구절");
+			Log.d("saea", comment_str);
+			tv_comment.setVisibility(View.VISIBLE);
+			tv_comment.setText(comment_str);
+			comment.setText(comment_str, TextView.BufferType.EDITABLE);
+			comment.setVisibility(View.GONE);
+		}else{
+			comment_edit.setVisibility(View.GONE);
+			comment_save.setVisibility(View.VISIBLE);
+			tv2.setVisibility(View.VISIBLE);
+			tv2.setText("오늘의 복음에서 가장 마음에 드는 구절을 적어 봅시다.");
+			tv_comment.setVisibility(View.GONE);
+			comment.setVisibility(View.VISIBLE);
+		}
 
 	}
-
-	// 날짜 전후를 클릭할때 이벤트
-	OnClickListener listener_date = new OnClickListener() {
-
-		public void onClick(View v) {
-			switch (v.getId()) {
-				case R.id.bt_beforedate:
-					c1.add(Calendar.DATE, -1);
-					date_val = sdf1.format(c1.getTime()); // cf : ~년~월~일
-					date.setText(date_val + getDay() + "요일");
-					date_val2 = sdf2.format(c1.getTime());// cf : YYYY-mm-dd
-					comment.setText("");
-					getGaspel(date_val2);
-					getComments(date_val2);
-					break;
-				case R.id.bt_afterdate:
-					c1.add(Calendar.DATE, 1);
-					date_val = sdf1.format(c1.getTime());
-					date.setText(date_val + getDay() + "요일");
-					date_val2 = sdf2.format(c1.getTime());
-					comment.setText("");
-					getGaspel(date_val2);
-					getComments(date_val2);
-					break;
-
-			}
-		}
-	};
 
 	// 알람에서 사용되는 메소드 - 화면이 꺼져있을때 켜지게 하는
 	static void releaseCpuLock() {
@@ -673,9 +481,9 @@ public class MainActivity extends AppCompatActivity {
 			AssetFileDescriptor afd = null;
 			if(sound.equals("alarm")){
 				afd = mcontext.getAssets().openFd("bell.mp3"); // cf : 파일을 여는 부분
-			}else if(sound.equals("pray")){
-				afd = mcontext.getAssets().openFd("church_bell.mp3"); // cf : 파일을 여는 부분
-			}
+			}else{
+                afd = mcontext.getAssets().openFd("pray.mp3"); // cf : 파일을 여는 부분
+            }
 
 			mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			afd.close();
@@ -733,48 +541,30 @@ public class MainActivity extends AppCompatActivity {
 			ContentValues values;
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
-				case R.id.bt_comment:
+				case R.id.bt_save:
+					InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+					if (getCurrentFocus() != null) {
+						imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+					}
+
 					String comment_con = comment.getText().toString();
-					String comment_date = (String) date.getText();
+					String comment_date = typedDate;
 					String sentence = (String) btnNetCon.getText();
 
-					// 기존에 comment 값이 있는지 값이 있는지 확인하여 있는 수정, 없는 경우 저장
-				/*	String comment_str = null;
-					try{
-						db = commentInfoHelper.getReadableDatabase();
-						String[] columns = {"comment_con", "date", "sentence"};
-						String whereClause = "date = ?";
-						String[] whereArgs = new String[] {
-								date.getText().toString()
-						};
-						Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null);
-
-						while(cursor.moveToNext()){
-							comment_str = cursor.getString(0);
-
-						}
-					*/
 					ArrayList<Comment> comments = new ArrayList<Comment>();
 					String comment_str = null;
 					DBManager dbMgr = new DBManager(MainActivity.this);
 					dbMgr.dbOpen();
-					dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, date.getText().toString() , comments);
+					dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, comment_date, comments);
 					dbMgr.dbClose();
 
 					if(!comments.isEmpty()){
 						comment_str = comments.get(0).getComment();
-					}else{
 					}
-
-
 					// 기존 값이 있는 경우 수정하기
 					if(comment_str!=null){
-					/*	values = new ContentValues();
-						values.put("comment_con", comment_con);
-						String where = "date=?";
-						db.update("comment", values, where, whereArgs); */
 						dbMgr.dbOpen();
-						dbMgr.updateCommentData(CommentDBSqlData.SQL_DB_UPDATE_DATA, uid, date.getText().toString(), comment_con);
+						dbMgr.updateCommentData(CommentDBSqlData.SQL_DB_UPDATE_DATA, uid, typedDate, comment_con);
 						dbMgr.dbClose();
 
 						Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
@@ -784,13 +574,6 @@ public class MainActivity extends AppCompatActivity {
 						}
 					// 기존 값이 없는 경우 추가 하기
 					}else{
-						/*
-						values = new ContentValues();
-						values.put("comment_con", comment_con);
-						values.put("date", comment_date);
-						values.put("sentence", sentence);
-						db.insert("comment", null, values);
-						*/
 						Comment commentData = new Comment(uid, comment_date, sentence, comment_con);
 						dbMgr.dbOpen();
 						dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, commentData);
@@ -800,21 +583,34 @@ public class MainActivity extends AppCompatActivity {
 							Server_CommentData.insertComment(MainActivity.this, uid, comment_date, sentence, comment_con);
 							}
 						}
-				/*		}catch(Exception e){
 
-					} */
+					comment_edit.setVisibility(View.VISIBLE);
+					comment_save.setVisibility(View.GONE);
+					tv2.setText("복음에서 가장 마음에 드는 구절");
+					Log.d("saea", comment_con);
+					tv_comment.setVisibility(View.VISIBLE);
+					tv_comment.setText(comment_con);
+					comment.setVisibility(View.GONE);
+
+				break;
+				case R.id.bt_edit:
+					comment_edit.setVisibility(View.GONE);
+					comment_save.setVisibility(View.VISIBLE);
+					tv2.setText("복음에서 가장 마음에 드는 구절을 적어 봅시다.");
+					tv_comment.setVisibility(View.GONE);
+					comment.setVisibility(View.VISIBLE);
+					comment.setText(tv_comment.getText().toString());
 				break;
 			}
 		}
 	};
 
-	// actionbar 오른쪽 벨 추가
+	// actionbar 오른쪽 아이콘 추가
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.topmenu_main, menu);
 		return true;
 	}
-
 
 }

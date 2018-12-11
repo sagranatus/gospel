@@ -15,13 +15,13 @@
         android:id="@+id/action_two"
         app:showAsAction="ifRoom"
         android:icon="@drawable/bottom2"
-        android:title="렉시오디비나"/>
+        android:title="거룩한독서"/>
     <item
         android:id="@+id/action_three"
         app:showAsAction="ifRoom"
         android:enabled="true"
         android:icon="@drawable/bottom3"
-        android:title="한주복음묵상"/>
+        android:title="주일의독서"/>
     <item
         android:id="@+id/action_four"
         app:showAsAction="ifRoom"

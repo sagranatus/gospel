@@ -57,6 +57,11 @@ public class Server_LectioData {
             }
         });
         t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

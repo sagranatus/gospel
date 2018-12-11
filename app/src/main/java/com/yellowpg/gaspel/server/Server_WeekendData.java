@@ -59,6 +59,11 @@ public class Server_WeekendData {
             }
         });
         t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 

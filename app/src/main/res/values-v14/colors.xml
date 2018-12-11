@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="actionbar">#2980b9</color>
+    <color name="actionbar">#01579b</color> <!--#2980b9-->
 
     <color name="colorPrimary">#dddddd</color>
     <color name="colorPrimary_bottom">#F6F6F6</color>
@@ -33,7 +33,7 @@
     <color name="grey2">#6E6E6E</color>
     <color name="blue">#2980b9</color>
     <color name="input_login_hint">#999999</color>
-    <color name="input_register">#888888</color>
+    <color name="input_register">#000000</color>
     <color name="input_register_bg">#3b4148</color>
     <color name="input_register_hint">#5e6266</color>
     <color name="btn_login">#26ae90</color>

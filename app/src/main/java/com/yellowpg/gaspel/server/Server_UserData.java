@@ -14,6 +14,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.UserDBSqlData;
+import com.yellowpg.gaspel.DB.UsersDBSqlData;
+import com.yellowpg.gaspel.FirstActivity;
 import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.ProfileActivity;
 import com.yellowpg.gaspel.data.Comment;
@@ -64,9 +66,27 @@ public class Server_UserData {
                         String name = user.getString("name");
                         String user_id = user.getString("user_id");
                         String email = user.getString("email");
+                        String christ_name = user.getString("christ_name");
+                        String age = user.getString("age");
+                        String region = user.getString("region");
+                        String cathedral = user.getString("cathedral");
+                        String created_at = user.getString("created_at");
 
-                        String created_at = user
-                                .getString("created_at");
+
+                        ArrayList<UserData> userdata = new ArrayList<UserData>();
+                        DBManager dbMgr = new DBManager(context);
+                        dbMgr.dbOpen();
+                        dbMgr.selectUserData(UsersDBSqlData.SQL_DB_SELECT_DATA, uid, userdata);
+                        dbMgr.dbClose();
+                        if(userdata.isEmpty()) {
+                            // userdatabase에 user 정보 삽입
+                            UserData cData = new UserData(uid, user_id, email, name, christ_name, age, region, cathedral, created_at);
+                            dbMgr.dbOpen();
+                            dbMgr.insertUserData(UsersDBSqlData.SQL_DB_INSERT_DATA, cData);
+                            dbMgr.dbClose();
+                            Log.d("saea", uid+"add user into DB");
+
+                        }
 
                         // 서버 DB에 있는 정보를 모두 가져온다
                         ArrayList<Comment> comments = new  ArrayList<Comment>();
@@ -77,7 +97,8 @@ public class Server_UserData {
 
                         ArrayList<Weekend> weekends = new  ArrayList<Weekend>();
                         Server_WeekendData.selectAll(context, uid, weekends);
-                        Intent intent = new Intent(context, ProfileActivity.class);
+
+                        Intent intent = new Intent(context, FirstActivity.class);
                         context.startActivity(intent);
 
                     } else {
@@ -131,7 +152,7 @@ public class Server_UserData {
 
     // 회원가입 등록하는 코드
     public static void registerUser(final Context context, final SessionManager session, final ProgressDialog pDialog, final String id, final String email,  final String password, final String name,
-                                   final String christ_name, final String cathedral) {
+                                   final String christ_name,  final String age, final String region, final String cathedral) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -161,14 +182,17 @@ public class Server_UserData {
                         String user_id = user.getString("user_id");
                         String email = user.getString("email");
                         String christ_name = user.getString("christ_name");
+                        String age = user.getString("age");
+                        String region = user.getString("region");
                         String cathedral = user.getString("cathedral");
                         String created_at = user.getString("created_at"); // 보내는 값이 json형식의 response 이다
 
+
                         Log.d("saea", uid);
-                        UserData cData = new UserData(uid, user_id, email, name,  christ_name, cathedral, created_at);
+                        UserData cData = new UserData(uid, user_id, email, name,  christ_name, age, region, cathedral, created_at);
                         DBManager dbMgr = new DBManager(context);
                         dbMgr.dbOpen();
-                        dbMgr.insertUserData(UserDBSqlData.SQL_DB_INSERT_DATA, cData);
+                        dbMgr.insertUserData(UsersDBSqlData.SQL_DB_INSERT_DATA, cData);
                         dbMgr.dbClose();
 
                         session.setLogin(true, uid); // sharedpreference에서 로그인 트루로
@@ -182,7 +206,7 @@ public class Server_UserData {
                  //       Server_CommentData.selectAll(context, uid, comments);
 
                         Intent i = new Intent(context,
-                                MainActivity.class);
+                                FirstActivity.class);
                         i.putExtra("uid", uid);
                         context.startActivity(i);
                     } else {
@@ -219,6 +243,8 @@ public class Server_UserData {
                 params.put("id", id);
                 params.put("christ_name", christ_name);
                 params.put("cathedral", cathedral);
+                params.put("age", age);
+                params.put("region", region);
                 params.put("email", email);
                 params.put("password", password);
                 return params;
@@ -231,7 +257,7 @@ public class Server_UserData {
     }
 
     public static void updateUser(final Context context, final String uid, final String email, final String name,
-                                  final String christ_name, final String cathedral) {
+                                  final String christ_name, final String age, final String region, final String cathedral) {
         // Tag used to cancel the request
         String tag_string_req = "req_update";
 
@@ -261,13 +287,15 @@ public class Server_UserData {
                         String christ_name = user.getString("christ_name");
                         String cathedral = user.getString("cathedral");
                         String created_at = user.getString("created_at");
+                        String age = user.getString("age");
+                        String region = user.getString("region");
 
                         Log.d("saea", uid);
 
                         Log.d("saea", christ_name + cathedral);
                         DBManager dbMgr = new DBManager(context);
                         dbMgr.dbOpen();
-                        dbMgr.updateUserData(UserDBSqlData.SQL_DB_UPDATE_DATA, new String[]{email,name, christ_name, cathedral, uid});
+                        dbMgr.updateUserData(UsersDBSqlData.SQL_DB_UPDATE_DATA, new String[]{email,name, christ_name, age, region, cathedral, uid});
                         dbMgr.dbClose();
                         Toast.makeText(context, "성공적으로 수정되었습니다.", Toast.LENGTH_LONG).show();
 
@@ -303,6 +331,8 @@ public class Server_UserData {
                 params.put("uid", uid);
                 params.put("name", name);
                 params.put("christ_name", christ_name);
+                params.put("age", age);
+                params.put("region", region);
                 params.put("cathedral", cathedral);
                 params.put("email", email);
                 return params;

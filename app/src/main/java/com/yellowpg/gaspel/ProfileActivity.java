@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaCas;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,7 +41,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.LectioDBSqlData;
-import com.yellowpg.gaspel.DB.UserDBSqlData;
+import com.yellowpg.gaspel.DB.UsersDBSqlData;
 import com.yellowpg.gaspel.DB.WeekendDBSqlData;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
@@ -58,8 +60,10 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -71,10 +75,10 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     Context mContext;
-    EditText name_et, userId_et, email_et, christ_name_et, cathedral_et;
-    String uid;
+    EditText name_et, userId_et, email_et, christ_name_et, cathedral_et, age_et, region_et;
+    static String uid;
     String name, user_id, email, christ_name, cathedral, password;
-
+    String age, region;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -87,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_mypage);
-        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2980b9")));
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
 
         // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
@@ -99,6 +103,8 @@ public class ProfileActivity extends AppCompatActivity {
         email_et = (EditText) findViewById(R.id.email);
         christ_name_et = (EditText) findViewById(R.id.christ_name);
         cathedral_et =  (EditText) findViewById(R.id.cathedral);
+        age_et = (EditText) findViewById(R.id.age);
+        region_et = (EditText) findViewById(R.id.region);
         btnLogout = (Button) findViewById(R.id.btnLogout);
 
         email_et.setFocusable(false);
@@ -106,15 +112,23 @@ public class ProfileActivity extends AppCompatActivity {
         userId_et.setFocusable(false);
         userId_et.setClickable(false);
 
-        int color = Color.parseColor("#6E6E6E");
-        name_et.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        userId_et.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        email_et.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        name_et.setBackgroundResource(R.drawable.edit_bg);
+        userId_et.setBackgroundResource(R.drawable.edit_bg);
+        email_et.setBackgroundResource(R.drawable.edit_bg);
+        christ_name_et.setBackgroundResource(R.drawable.edit_bg);
+        cathedral_et.setBackgroundResource(R.drawable.edit_bg);
+        age_et.setBackgroundResource(R.drawable.edit_bg);
+        region_et.setBackgroundResource(R.drawable.edit_bg);
+
+        int color = Color.parseColor("#FFFFFF");
+        name_et.setEnabled(false);
+        userId_et.setEnabled(false);
+        email_et.setEnabled(false);
 
         // session manager
         session = new SessionManager(getApplicationContext());
         if (!session.isLoggedIn()) {
-            logoutUser();
+            logoutUser(session, ProfileActivity.this);
         }
         uid = session.getUid();
         Log.d("saea", uid);
@@ -123,124 +137,30 @@ public class ProfileActivity extends AppCompatActivity {
         ArrayList<UserData> userdata = new ArrayList<UserData>();
         DBManager dbMgr = new DBManager(ProfileActivity.this);
         dbMgr.dbOpen();
-        dbMgr.selectUserData(UserDBSqlData.SQL_DB_SELECT_DATA, uid, userdata);
+        dbMgr.selectUserData(UsersDBSqlData.SQL_DB_SELECT_DATA, uid, userdata);
         dbMgr.dbClose();
         if(userdata.isEmpty()) {
             Log.d("saea", "getuser and insertdatato Server DB");
             // 서버에서 user 정보를 가져와서 user database에 삽입
-            getUser(ProfileActivity.this, uid);
+           // getUser(ProfileActivity.this, uid);
 
-            // 모바일 데이터가 있는 경우, 그리고 uid값이 없는 경우
-          /*
 
-            ArrayList<Comment> comments = new ArrayList<Comment>();
-            String comment_str = null;
-
-            dbMgr.dbOpen();
-            dbMgr.selectCommentAllData(CommentDBSqlData.SQL_DB_SELECT_DATA_ALL, uid, comments);
-            dbMgr.dbClose();
-            //Iterator 통한 전체 조회
-            Iterator iterator = comments.iterator();
-            while (iterator.hasNext()) {
-                Comment comment = (Comment) iterator.next();
-                String comment_con = comment.getComment();
-                String date = comment.getDate();
-                String sentence = comment.getOneSentence();
-                if(uid != null){
-                    Log.d("saea", uid+date+sentence+comment_con);
-                    Server_CommentData.insertComment(ProfileActivity.this, uid, date, sentence, comment_con);
-                }
-            }
-  */
-
-            // 렉시오디비나
-        /*
-
-            LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(ProfileActivity.this);
-            SQLiteDatabase db2;
-
-            try{
-                String bg1 = null;
-                String bg2 = null;
-                String bg3 = null;
-                String sum1 = null;
-                String sum2 = null;
-                String js1 = null;
-                String js2 = null;
-
-                String date = null;
-                String onesentence = null;
-                db2 = lectioInfoHelper.getReadableDatabase();
-                String query = "SELECT bg1, bg2, bg3, sum1, sum2, js1, js2, date, onesentence FROM lectio";
-                Cursor cursor = db2.rawQuery(query, null);
-
-                while(cursor.moveToNext()){
-                    bg1 = cursor.getString(0);
-                    bg2 = cursor.getString(1);
-                    bg3 = cursor.getString(2);
-                    sum1 = cursor.getString(3);
-                    sum2 = cursor.getString(4);
-                    js1 = cursor.getString(5);
-                    js2 = cursor.getString(6);
-                    date = cursor.getString(7);
-                    onesentence = cursor.getString(8);
-                    if(uid != null){
-                        Log.d("saea", uid+date+onesentence+bg1);
-                        Lectio lectio = new Lectio(uid, date, onesentence, bg1, bg2, bg3, sum1, sum2, js1, js2);
-                        Server_LectioData.insertLectio(ProfileActivity.this, uid, lectio);
-                    }
-                }
-
-                cursor.close();
-                lectioInfoHelper.close();
-            }
-            catch(Exception e){
-
-            }
-
-            // weekend 데이터
-            WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(ProfileActivity.this);
-            ContentValues values3;
-            SQLiteDatabase db3;
-
-            try{
-                db3 = weekendInfoHelper.getReadableDatabase();
-                String query = "SELECT date, mysentence, mythought FROM weekend";
-                Cursor cursor = db3.rawQuery(query, null);
-                String weekend_str = null;
-                while(cursor.moveToNext()) {
-                    weekend_str = cursor.getString(0);
-                    String date = cursor.getString(0);
-                    String mysentence = cursor.getString(1);
-                    String mythought = cursor.getString(2);
-                    if(uid != null){
-                        if(mythought == null){
-                            mythought = "";
-                        }
-                        Log.d("saea", uid+date+mysentence+mythought);
-                        Server_WeekendData.insertWeekend(ProfileActivity.this, uid, date, mysentence, mythought);
-                    }
-                }
-
-                cursor.close();
-                weekendInfoHelper.close();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-             */
         }else{
             UserData udata = userdata.get(0);
             name = udata.getName();
             user_id = udata.getUserId();
             email = udata.getEmail();
             christ_name = udata.getChristName();
+            age = udata.getAge();
+            region = udata.getRegion();
             cathedral = udata.getCathedral();
             name_et.setText(udata.getName(), TextView.BufferType.EDITABLE);
             userId_et.setText(udata.getUserId());
             email_et.setText(udata.getEmail(), TextView.BufferType.EDITABLE);
             christ_name_et.setText(udata.getChristName(), TextView.BufferType.EDITABLE);
             cathedral_et.setText(udata.getCathedral(), TextView.BufferType.EDITABLE);
-
+            age_et.setText(udata.getAge(), TextView.BufferType.EDITABLE);
+            region_et.setText(udata.getRegion(), TextView.BufferType.EDITABLE);
         }
 
         // Logout button click event
@@ -248,7 +168,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                logoutUser();
+                logoutUser(session,ProfileActivity.this);
             }
         });
 
@@ -258,7 +178,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 return true;
             }
         });
@@ -285,8 +207,10 @@ public class ProfileActivity extends AppCompatActivity {
                 user_id = userId_et.getText().toString();
                 christ_name = christ_name_et.getText().toString();
                 cathedral = cathedral_et.getText().toString();
+                age = age_et.getText().toString();
+                region = region_et.getText().toString();
                 Log.d("saea", name+email+user_id+" "+uid);
-                Server_UserData.updateUser(ProfileActivity.this, uid, email, name, christ_name, cathedral);
+                Server_UserData.updateUser(ProfileActivity.this, uid, email, name, christ_name, age, region, cathedral);
                 return true;
             default:
                 Intent i = new Intent(ProfileActivity.this, FirstActivity.class);
@@ -297,33 +221,31 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     // 로그아웃할때
-    private void logoutUser() {
+    public static void logoutUser(SessionManager session, Context context) {
         session.setLogin(false, "");
 
-        SQLiteDatabase db = null;
-   /*     try {
-            db = commentInfoHelper.getReadableDatabase();
-            db.delete("comment", null, null);
-            db.close();
-        }catch(Exception e){
+        //sharedpreference 삭제
+        Calendar c1 = Calendar.getInstance();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        String date_val2 = sdf2.format(c1.getTime());
+        SharedPreferences pref = context.getSharedPreferences("todaysentence", 0);
 
-        }
-        */
-        DBManager dbMgr = new DBManager(ProfileActivity.this);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove(date_val2);
+        c1.add(Calendar.DATE, -1);
+
+        String date_val2_yesterday = sdf2.format(c1.getTime());
+        editor.remove(date_val2_yesterday);
+
+        // commit changes
+        editor.commit();
+
+
+        DBManager dbMgr = new DBManager(context);
         dbMgr.dbOpen();
         dbMgr.deleteCommentData(CommentDBSqlData.SQL_DB_DELETE_DATA, uid);
         dbMgr.dbClose();
 
-
- /*       LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(this);
-        try {
-            db = lectioInfoHelper.getReadableDatabase();
-            db.delete("lectio", null, null);
-            db.close();
-        }catch(Exception e){
-
-        }
-*/
         dbMgr.dbOpen();
         dbMgr.deleteLectioData(LectioDBSqlData.SQL_DB_DELETE_DATA, uid);
         dbMgr.dbClose();
@@ -332,21 +254,10 @@ public class ProfileActivity extends AppCompatActivity {
         dbMgr.dbOpen();
         dbMgr.deleteWeekendData(WeekendDBSqlData.SQL_DB_DELETE_DATA, uid);
         dbMgr.dbClose();
-  /*      WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(this);
-        try {
-            db = weekendInfoHelper.getReadableDatabase();
-            db.delete("weekend", null, null);
-            db.close();
-        }catch(Exception e){
 
-
-        }
-
-        */
         // Launching the login activity
-        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        Intent intent = new Intent(context, PreviousActivity.class);
+        context.startActivity(intent);
     }
 
 
@@ -374,14 +285,16 @@ public class ProfileActivity extends AppCompatActivity {
                         user_id = user.getString("user_id");
                         email = user.getString("email");
                         christ_name = user.getString("christ_name");
+                        age = user.getString("age");
+                        region = user.getString("region");
                         cathedral = user.getString("cathedral");
                         String created_at = user.getString("created_at");
 
                         // userdatabase에 user 정보 삽입
-                        UserData cData = new UserData(uid, user_id, email, name,  christ_name, cathedral, created_at);
+                        UserData cData = new UserData(uid, user_id, email, name, christ_name, age, region, cathedral, created_at);
                         DBManager dbMgr = new DBManager(context);
                         dbMgr.dbOpen();
-                        dbMgr.insertUserData(UserDBSqlData.SQL_DB_INSERT_DATA, cData);
+                        dbMgr.insertUserData(UsersDBSqlData.SQL_DB_INSERT_DATA, cData);
                         dbMgr.dbClose();
                         Log.d("saea", uid+"add user into DB");
 
