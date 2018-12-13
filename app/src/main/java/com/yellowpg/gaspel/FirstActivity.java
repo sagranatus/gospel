@@ -2,31 +2,28 @@ package com.yellowpg.gaspel;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
+import android.content.res.AssetFileDescriptor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
-import android.os.Message;
+import android.net.Uri;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,49 +40,34 @@ import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.LectioDBSqlData;
-import com.yellowpg.gaspel.DB.UserDBSqlData;
 import com.yellowpg.gaspel.DB.UsersDBSqlData;
 import com.yellowpg.gaspel.DB.WeekendDBSqlData;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.UserData;
-import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
-import com.yellowpg.gaspel.etc.DownloadImageTask;
 import com.yellowpg.gaspel.etc.DownloadImageTask_bitmap;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.SessionManager;
+import com.yellowpg.gaspel.etc.getDay;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.ParseException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import hirondelle.date4j.DateTime;
-
-import static com.yellowpg.gaspel.MainActivity.playSound;
-import static com.yellowpg.gaspel.MainActivity.releaseCpuLock;
 
 
-public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
+public class FirstActivity extends AppCompatActivity {
     final static String TAG = "FirstActivity";
     private SessionManager session;
     String uid = null;
@@ -96,9 +78,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     SharedPreferences pref;
     Calendar c1 = Calendar.getInstance();
 
-    //현재 해 + 달 구하기
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월");
-    String date_val = sdf.format(c1.getTime());
     //현재 해 + 달 구하기
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy. MM. dd.");
     String date_val1 = sdf1.format(c1.getTime());
@@ -114,36 +93,17 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
     SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
     String date_val2 = sdf2.format(c1.getTime());
+
     String date_val2_yesterday;
     TextView todaysentence;
     TextView date;
 
-    static String day;
-
-    String name, user_id, email, christ_name, cathedral, password;
-    String age, region;
-
+    public static MediaPlayer mMediaPlayer;
     private static PowerManager.WakeLock myWakeLock;
 
     @SuppressLint("InvalidWakeLockTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*
-        c1.add(Calendar.MONTH, 1);
-
-        date_today = sdf_today.format(c1.getTime());
-        year_val = year.format(c1.getTime());
-        date_val1 = sdf1.format(c1.getTime());
-        month_val = month.format(c1.getTime());
-        date_val2 = sdf2.format(c1.getTime());
-
-        //preference에 저장한다.
-        pref = FirstActivity.this.getSharedPreferences("todaysentence", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.remove(date_val2 );
-        editor.commit();
-        */
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
 
@@ -194,89 +154,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
 
-        todaysentence = (TextView) findViewById(R.id.bt_today);
-        date = (TextView) findViewById(R.id.date);
 
+        todaysentence = (TextView) findViewById(R.id.bt_today); // 오늘 구절
+        date = (TextView) findViewById(R.id.date); // 날짜
 
-       // c1.add(Calendar.DATE, 1);
-        date_today = sdf_today.format(c1.getTime());
-        date_today = date_today +""+getDay()+"요일";
-        Log.d("saea", "today"+date_today);
-        String typedDate = date_val1;
-        date.setText(typedDate);
         circle1 = (Button) findViewById(R.id.circle1);
         circle2 = (Button) findViewById(R.id.circle2);
         circle3 = (Button) findViewById(R.id.circle3);
-
-        pref = FirstActivity.this.getSharedPreferences("todaysentence", 0);
-        String saved_todaysentence = pref.getString(date_val2, "");        // 오늘 구절은 sharedpreference에 저장해둔다.
-
-        if (saved_todaysentence != "") {
-            todaysentence.setText("\" " + saved_todaysentence + " \"");
-            Log.d("saea", "saved already");
-            ImageView img3 = (ImageView) findViewById(R.id.img2);
-
-            ContextWrapper cw = new ContextWrapper(FirstActivity.this);
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-            try {
-                File f=new File(directory, "firstimage");
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                img3.setImageBitmap(b);
-            }
-            catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
-            }
-        } else {
-            // 인터넷연결된 상태에서만 데이터 가져오기
-            if ((wifi.isConnected() || mobile.isConnected())) {
-                Log.d("saea", "get data");
-                getGaspel(date_val2);
-
-
-                //    new DownloadImageTask(img3).execute("https://sssagranatus.cafe24.com/resource/firstimg.png");
-                String urldisplay ="https://sssagranatus.cafe24.com/resource/firstimg.png";
-                Log.d("saea", "urld"+urldisplay);
-                Bitmap mbitmap = null;
-                new DownloadImageTask_bitmap(FirstActivity.this, uid, "firstimage", mbitmap).execute(urldisplay);
-                //   img3.setImageBitmap(mbitmap);
-                ImageView img3 = (ImageView) findViewById(R.id.img2);
-
-                ContextWrapper cw = new ContextWrapper(FirstActivity.this);
-                File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-                try {
-                    File f=new File(directory, "firstimage");
-                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                    img3.setImageBitmap(b);
-                }
-                catch (FileNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
-            } else {
-                todaysentence.setText("인터넷을 연결해주세요");
-            }
-        }
-
-        int todaynum = getData("today", "", "");
-        Log.d("saea", todaynum+"today");
-        circle1.setText(Integer.toString(todaynum));
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        if(date_today.contains("일요일")){
-            cal.add(Calendar.DATE, -7);
-        }
-        SimpleDateFormat sdf_monday = new SimpleDateFormat("dd");
-        String date_monday = sdf_monday.format(cal.getTime());
-
-        int weeknum = getData("weekend", month_val, date_monday);
-        Log.d("saea", weeknum+"weeknum");
-        circle2.setText(Integer.toString(weeknum));
-
-        int monthnum = getData("month", month_val, "");
-        Log.d("saea", monthnum+"monthnum");
-        circle3.setText(Integer.toString(monthnum));
 
 
         // textsize 설정
@@ -287,6 +171,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         } else {
 
         }
+
         // bottomnavigation 뷰 등록
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -303,6 +188,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         menuItem_5.setChecked(false);
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -357,6 +243,90 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         listv_left = new String[]{"설정", "계정정보", "로그아웃"};
 
 
+
+       // c1.add(Calendar.DATE, 1);
+        date_today = sdf_today.format(c1.getTime());
+        date_today = date_today +""+getDay.getDay(c1)+"요일";
+        Log.d("saea", "today"+date_today);
+
+        String typedDate = date_val1; // yyyy. MM. dd. 형식
+        date.setText(typedDate);
+
+        // sharedpreference (todaysentence)에 저장한 값을 불러온다. id는 date_val2(오늘날짜 yyyy-MM-dd)
+        pref = FirstActivity.this.getSharedPreferences("todaysentence", 0);
+        String saved_todaysentence = pref.getString(date_val2, "");        // 오늘 구절은 sharedpreference에 저장해둔다.
+
+        // 저장값이 있는 경우
+        if (saved_todaysentence != "") {
+            Log.d("saea", "saved already");
+            todaysentence.setText("\" " + saved_todaysentence + " \"");
+            ImageView img3 = (ImageView) findViewById(R.id.img2);
+
+            ContextWrapper cw = new ContextWrapper(FirstActivity.this);
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            try {
+                File f=new File(directory, "firstimage");
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                img3.setImageBitmap(b);
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+        } else {
+
+            if ((wifi.isConnected() || mobile.isConnected())) {
+                Log.d("saea", "get data");
+                // 첫 구절 가져오기
+                getGaspel(date_val2); // yyyy-MM-dd
+
+                // 이미지 다운로드 및 저장 후에 불러오기
+                String urldisplay ="https://sssagranatus.cafe24.com/resource/firstimg.png";
+                Log.d("saea", "urld"+urldisplay);
+                Bitmap mbitmap = null;
+                new DownloadImageTask_bitmap(FirstActivity.this, uid, "firstimage", mbitmap).execute(urldisplay);
+                ImageView img3 = (ImageView) findViewById(R.id.img2);
+
+                ContextWrapper cw = new ContextWrapper(FirstActivity.this);
+                File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+                try {
+                    File f=new File(directory, "firstimage");
+                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                    img3.setImageBitmap(b);
+                }
+                catch (FileNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+            } else {
+                todaysentence.setText("인터넷을 연결해주세요");
+            }
+        }
+
+        // circle에 들어갈 값 가져오기
+        // 오늘값 가져오기
+        int todaynum = getData("today", "", "");
+        Log.d("saea", todaynum+"today");
+        circle1.setText(Integer.toString(todaynum));
+
+        // 일주일 값 가져오기
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        if(date_today.contains("일요일")){ // 일요일인 경우 전주 값 가져와야 함
+            cal.add(Calendar.DATE, -7);
+        }
+        SimpleDateFormat sdf_monday = new SimpleDateFormat("dd");
+        String date_monday = sdf_monday.format(cal.getTime()); // 월요일 날짜 dd 형식
+
+        int weeknum = getData("weekend", month_val, date_monday);
+        Log.d("saea", weeknum+"weeknum");
+        circle2.setText(Integer.toString(weeknum));
+
+        // 한달 값 가져오기
+        int monthnum = getData("month", month_val, "");
+        Log.d("saea", monthnum+"monthnum");
+        circle3.setText(Integer.toString(monthnum));
+
     }
 
     // 커스텀 다이얼로그 선택시
@@ -377,14 +347,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                             Intent i = new Intent(FirstActivity.this, SettingActivity.class);
                             startActivity(i);
                         } else if (item.equals("계정정보")) {
-                            Intent i = new Intent(FirstActivity.this, LoginActivity.class);
+                            Intent i = new Intent(FirstActivity.this, ProfileActivity.class);
                             startActivity(i);
                         }else if (item.equals("로그아웃")) {
                             ProfileActivity.logoutUser(session,FirstActivity.this);
                         }
                     }
                 });
-
                 return true;
         }
     }
@@ -394,7 +363,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         super.onResume();
     }
 
-    // 그날 복음 구절 가져오기
+
+    // 오늘 날짜 복음 구절 가져오기
     public void getGaspel(final String date) {
         Thread t = new Thread(new Runnable() {
             @Override
@@ -402,7 +372,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 // Tag used to cancel the request
                 String tag_string_req = "req_getgaspel";
                 StringRequest strReq = new StringRequest(Request.Method.POST,
-                        AppConfig.URL_TODAY, new Response.Listener<String>() { // URL_LOGIN : "http://192.168.116.1/android_login_api/login.php";
+                        AppConfig.URL_TODAY, new Response.Listener<String>() {
                     boolean error;
 
                     @Override
@@ -421,10 +391,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                                 //preference에 저장한다.
                                 SharedPreferences.Editor editor = pref.edit();
                                 editor.putString(date, gaspel_sentence);
+
                                 // 전날 preference값을 지운다.
                                 Calendar c1 = Calendar.getInstance();
                                 c1.add(Calendar.DATE, -1);
                                 date_val2_yesterday = sdf2.format(c1.getTime());
+                                Log.d("saea", date_val2_yesterday );
                                 editor.remove(date_val2_yesterday);
 
                                 // commit changes
@@ -465,48 +437,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    // 요일 얻어오기
-    public String getDay() {
-        int dayNum = c1.get(Calendar.DAY_OF_WEEK);
-        switch (dayNum) {
-            case 1:
-                day = "일";
-                break;
-            case 2:
-                day = "월";
-                break;
-            case 3:
-                day = "화";
-                break;
-            case 4:
-                day = "수";
-                break;
-            case 5:
-                day = "목";
-                break;
-            case 6:
-                day = "금";
-                break;
-            case 7:
-                day = "토";
-                break;
-
-        }
-        return day;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_comment:
-                Intent i0 = new Intent(FirstActivity.this, MainActivity.class);
-                startActivity(i0);
-                break;
-        }
-
-    }
-
-
     // 로그아웃할때
     public void logoutUser() {
         session.setLogin(false, "");
@@ -535,7 +465,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
 
     public boolean checkTable(SQLiteDatabase db) {
-        //catch에 안 붙잡히면 테이블이 있다는 의미이므로 true, 잡히면 테이블이 없으므로 false를 반환
+        //테이블이 있다는 경우 true, 없는 경우 false를 반환
         ArrayList<UserData> user = new ArrayList<UserData>();
         try {
             DBManager dbMgr = new DBManager(FirstActivity.this);
@@ -562,11 +492,9 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         int j = 0;
         if (where.equals("today")) {
             int i = 0;
-            String today = date_today;
 
             //comment
             ArrayList<Comment> comments_arr = new ArrayList<Comment>();
-            String comment_str = null;
             DBManager dbMgr = new DBManager(FirstActivity.this);
             dbMgr.dbOpen();
             dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + date_today + "%'", uid, comments_arr);
@@ -577,7 +505,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             }
 
             ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
-            String bg1_str = null;
             dbMgr.dbOpen();
             dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + date_today + "%'", uid, lectios_arr);
             dbMgr.dbClose();
@@ -594,13 +521,11 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             for(int k=1; k<32; k++){
                 int i = 0;
                 //comment
-                int length = (int)(Math.log10(k)+1);
                 String day = String.format("%02d", k);
 
                 String thisdate = year_val+"년 "+month+"월 "+day+"일";
                 Log.d("saea",thisdate);
                 ArrayList<Comment> comments_arr = new ArrayList<Comment>();
-                String comment_str = null;
                 DBManager dbMgr = new DBManager(FirstActivity.this);
                 dbMgr.dbOpen();
                 dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, comments_arr);
@@ -609,9 +534,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 if (!comments_arr.isEmpty()) {
                     i++;
                 }
-
+                //lectio
                 ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
-                String bg1_str = null;
                 dbMgr.dbOpen();
                 dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, lectios_arr);
                 dbMgr.dbClose();
@@ -635,7 +559,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 String thisdate = year_val+"년 "+month+"월 "+day+"일";
                 Log.d("saea",thisdate);
                 ArrayList<Comment> comments_arr = new ArrayList<Comment>();
-                String comment_str = null;
                 DBManager dbMgr = new DBManager(FirstActivity.this);
                 dbMgr.dbOpen();
                 dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, comments_arr);
@@ -646,7 +569,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
-                String bg1_str = null;
                 dbMgr.dbOpen();
                 dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, lectios_arr);
                 dbMgr.dbClose();
@@ -665,13 +587,11 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             for(int k=monday; k<monday+7; k++){
                 int i = 0;
                 //comment
-                int length = (int)(Math.log10(k)+1);
                 String day = String.format("%02d", k);
 
                 String thisdate = year_val+"년 "+month+"월 "+day+"일";
                 Log.d("saea",thisdate);
                 ArrayList<Comment> comments_arr = new ArrayList<Comment>();
-                String comment_str = null;
                 DBManager dbMgr = new DBManager(FirstActivity.this);
                 dbMgr.dbOpen();
                 dbMgr.selectCommentAllData("SELECT * FROM comment WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, comments_arr);
@@ -681,8 +601,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                     i++;
                 }
 
+                //lectio
                 ArrayList<Lectio> lectios_arr = new ArrayList<Lectio>();
-                String bg1_str = null;
                 dbMgr.dbOpen();
                 dbMgr.selectLectioAllData("SELECT * FROM lectio WHERE uid = ? AND date LIKE '%" + thisdate + "%'", uid, lectios_arr);
                 dbMgr.dbClose();
@@ -694,10 +614,59 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                     j++;
                 }
             }
-
         }
 
         return j;
 
+    }
+
+    // 알람에서 사용되는 메소드 - 화면이 꺼져있을때 켜지게 하는
+    static void releaseCpuLock() {
+        Log.d(TAG,"Releasing cpu wake lock");
+        if (myWakeLock!= null) {
+            myWakeLock.release();
+            myWakeLock= null;
+        }
+    }
+    // exp : 알람시 ringtonePanager를 이용하며 uri를 설정한다. 알람 -> 없을경우에 noti -> 없을경우에 ringtone순서로
+    private Uri getAlarmUri() {
+        Intent i = getIntent();
+        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alert == null) {
+            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            if (alert == null) {
+                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            }
+        }
+        return alert;
+    }
+
+    // MediaPlayer객체를 생성 및 설정 알람 울리도록 함
+    public static void playSound(Context mcontext, String sound) {
+        mMediaPlayer = new MediaPlayer();
+        try {
+            AssetFileDescriptor afd = null;
+            if(sound.equals("alarm")){
+                afd = mcontext.getAssets().openFd("bell.mp3"); // cf : 파일을 여는 부분
+            }else{
+                afd = mcontext.getAssets().openFd("pray.mp3"); // cf : 파일을 여는 부분
+            }
+
+            mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
+            mMediaPlayer.prepare();
+            mMediaPlayer.start();
+
+            // 이때 setOnseekCompleteListener를 이용하여 알람이 한번만 울리고 멈추게 해 주었다.
+            mMediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                public void onSeekComplete(MediaPlayer mMediaPlayer) {
+                    mMediaPlayer.stop();
+                    mMediaPlayer.release();
+                }
+            });
+
+        } catch (IOException e) {
+            System.out.println("OOPS");
+        }
     }
 }

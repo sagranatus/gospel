@@ -1,10 +1,6 @@
 package com.yellowpg.gaspel.server;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -13,7 +9,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
-import com.yellowpg.gaspel.MainActivity;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -48,29 +43,14 @@ public class Server_CommentData {
 
 
     public static void selectAll(final Context context, final String uid, final ArrayList<Comment> mAppItem) {
+        selectAll_Connect(context, uid, mAppItem);
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                Log.i("saea", "Starting Upload...");
-
-                selectAll_Connect(context, uid, mAppItem);
-
-            }
-        });
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 
     public static void insertComment_Connect(Context context, final String uid, final String date, final String oneSentence, final String comment) {
         // Tag used to cancel the request
-        String tag_string_req = "req_cloth";
+        String tag_string_req = "req_comment";
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -87,7 +67,6 @@ public class Server_CommentData {
                         String uid = jObj.getString("uid");
 
                         JSONObject comments = jObj.getJSONObject("comment");
-                        String comment = comments.getString("comment");
                         String onesentence = comments.getString("onesentence");
                         String date = comments.getString("date");
                         Log.d("saea", "result:"+ uid + date + onesentence);
@@ -162,21 +141,6 @@ public class Server_CommentData {
                                 Comment comment = new Comment(uid, arr[1], arr[2], arr[3]);
                                 Log.d("saea", arr[1]+arr[2]+arr[3]);
 
-                                // 기존에 값이 있는지 확인하고 없는 경우에 모바일 DB에 삽입
-                          /*      SQLiteDatabase db;
-                                    CommentInfoHelper commentInfoHelper = new CommentInfoHelper(context);
-                                    ContentValues values;
-
-                                    try{
-                                        String comment_str = null;
-                                        db = commentInfoHelper.getReadableDatabase();
-                                        String[] columns = {"comment_con", "date", "sentence"};
-                                        String whereClause = "date = ?";
-                                        String[] whereArgs = new String[] {
-                                                arr[1]
-                                        };
-                                        Cursor cursor = db.query("comment", columns,  whereClause, whereArgs, null, null, null);
-                                    */
 
                                 ArrayList<Comment> comments = new ArrayList<Comment>();
                                 String comment_str = null;
@@ -195,24 +159,13 @@ public class Server_CommentData {
                                 }else{
 
                                     Log.d("saea", "기존 값이 없음");
-                                  /* // db=commentInfoHelper.getWritableDatabase();
-                                    values = new ContentValues();
-                                    values.put("comment_con", arr[3]);
-                                    values.put("date", arr[1]);
-                                    values.put("sentence", arr[2]);
-                                    db.insert("comment", null, values);
-                                    */
+
                                     Comment commentData = new Comment(uid, arr[1],arr[2],arr[3]);
                                     dbMgr.dbOpen();
                                     dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, commentData);
                                     dbMgr.dbClose();
                                 }
-                                        /*
-                                        commentInfoHelper.close();
 
-                                    }catch(Exception e){
-
-                                    } */
 
                                 commentItems.add(comment);
                                 Log.d("saea", "comments size:"+String.valueOf(commentItems.size()));
@@ -263,7 +216,6 @@ public class Server_CommentData {
 
 
     public static void updateComment(final Context context, final String uid, final String aDate, final String aOnesentence, final String aComment) {
-        Log.i("saea", "Starting Upload...");
         updateComment_Connect(context, uid, aDate, aOnesentence, aComment);
     }
 

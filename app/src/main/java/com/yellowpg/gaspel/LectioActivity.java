@@ -1,25 +1,16 @@
 package com.yellowpg.gaspel;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -34,14 +25,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,11 +38,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.LectioDBSqlData;
 import com.yellowpg.gaspel.DB.WeekendDBSqlData;
-import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
@@ -62,13 +48,11 @@ import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.SessionManager;
+import com.yellowpg.gaspel.etc.getDay;
 import com.yellowpg.gaspel.server.Server_LectioData;
 import com.yellowpg.gaspel.server.Server_WeekendData;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,8 +64,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LectioActivity extends AppCompatActivity{
-    final static String TAG = "lectioActivity";
-    LinearLayout ll_first, ll1, ll_upper, ll_pray, ll_main;
+    LinearLayout ll_first, ll1, ll_upper, ll_main;
     String date_intent;
     EditText bg1, bg2, bg3;
     EditText sum1, sum2;
@@ -89,16 +72,18 @@ public class LectioActivity extends AppCompatActivity{
     ScrollView scrollView;
     LinearLayout after_save;
     Button save,start, edit;
-    Button prev, next,  closePray;
+    Button prev, next;
     InputMethodManager imm;
     TextView contentsGaspel;
-    TextView q1, firstSentence, pray_content;
+    TextView q1, firstSentence;
     TextView after_save_tv1, after_save_tv2, after_save_tv3, after_save_tv4, after_save_tv5, after_save_tv6, after_save_tv7, after_save_tv8_1, after_save_tv8;
     Button onesentence;
     BottomNavigationView bottomNavigationView;
     String day;
     Calendar c1 = Calendar.getInstance();
     String typedDate;
+    NetworkInfo mobile;
+    NetworkInfo wifi;
 
     // 오늘날짜 생성
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
@@ -116,52 +101,28 @@ public class LectioActivity extends AppCompatActivity{
     private SessionManager session;
     String uid = null;
     String weekend_date = null;
-    Button declineButton;
     MenuInflater inflater;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // exp : 인터넷연결 확인
-        ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lectio);
-
         // session 정보 가져오기
         session = new SessionManager(getApplicationContext());
         uid = session.getUid();
 
-        // edit 일단 false 설정
-        edit_now = false;
-        start_now = false;
 
+        // 인터넷연결 확인
+        ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lectio);
 
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-
-        // bottomnavigation 뷰 등록
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-
-        // intent값 가져오기 - 한주복음묵상에서 오는 경우
-        Intent intent = getIntent();
-        date_intent = intent.getStringExtra("date");
-
-        // intent에 따른 actionbar, bottomnavigationview 상태 설정
-        // 다른 activity에서 온 경우
-
         actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionbar.setCustomView(R.layout.actionbar_lectio);
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
-        if(date_intent != null) {
-            // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-            actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setHomeAsUpIndicator(R.drawable.back);
-            bottomNavigationView.setVisibility(View.GONE);
-        // 일반 렉시오 디비나의 경우
-        }
+
 
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         scrollView = (ScrollView) findViewById(R.id.scrollView);
@@ -170,11 +131,9 @@ public class LectioActivity extends AppCompatActivity{
         ll_first = (LinearLayout) findViewById(R.id.ll_first);
         ll1 = (LinearLayout) findViewById(R.id.ll1);
         ll_upper = (LinearLayout) findViewById(R.id.ll_upper);
-        ll_pray= (LinearLayout) findViewById(R.id.pray);
 
         save = (Button) findViewById(R.id.bt_save);
         edit = (Button) findViewById(R.id.bt_edit);
-        closePray =  (Button) findViewById(R.id.closePray);
         bg1 = (EditText) findViewById(R.id.et_background1);
         bg2 = (EditText) findViewById(R.id.et_background2);
         bg3 = (EditText) findViewById(R.id.et_background3);
@@ -185,7 +144,6 @@ public class LectioActivity extends AppCompatActivity{
         weekend = (EditText) findViewById(R.id.et_weekend);
 
         q1 = (TextView) findViewById(R.id.question1);
-        pray_content = (TextView) findViewById(R.id.pray_content);
 
         // 데이터값이 있는 경우 보여질 view
         after_save = (LinearLayout) findViewById(R.id.after_save);
@@ -248,63 +206,45 @@ public class LectioActivity extends AppCompatActivity{
         next.setOnClickListener(listener);
         start.setOnClickListener(listener);
         edit.setOnClickListener(listener);
-        closePray.setOnClickListener(listener);
+        // 저장을 누르면 실행되는 이벤트
+        save.setOnClickListener(listener_save);
 
         save.setBackgroundResource(R.drawable.button_bg);
         edit.setBackgroundResource(R.drawable.button_bg);
         start.setBackgroundResource(R.drawable.button_bg2);
 
-
-        // 맨처음에는 start 버튼만 보이도록 순서 세팅
-        lectio_order = 0;
-
-        // 다른 activity에서 온 경우 / 날짜에 맞는 복음 및 정보 가져온다
-        if(date_intent != null){
-            date_val2 = date_intent; // 형식 : yyyy-MM-dd
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = null;
-            try {
-                date = formatter.parse(date_val2);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            c1 = Calendar.getInstance();
-            c1.setTime(date);
-            String date_val1 = sdf.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
-            typedDate = date_val1+getDay()+"요일"; // c1으로 getday()함
-            Log.d("saea", typedDate);
-            if(typedDate.contains("일요일")){
-                weekend_date = "일요일";
-            }else{
-                weekend_date = null;
-            }
-          //  getGaspel(date_val2);
+        // exp : 텍스트사이즈 설정
+        SharedPreferences sp = getSharedPreferences("setting",0);
+        String textsize = sp.getString("textsize", "");
+        if(textsize.equals("big")){
+            onesentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+            firstSentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            weekend.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv6.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv7.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            after_save_tv8.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            //    bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
         }else{
-            typedDate = date_val+getDay()+"요일"; // c1으로 getday()함
-            Log.d("ha", typedDate);
-            if(typedDate.contains("일요일")){
-                weekend_date = "일요일";
-            }else{
-                weekend_date = null;
-            }
-          //  checkRecord();
+
         }
 
-        // 인터넷 연결 확인하는 부분
-        if (wifi.isConnected() || mobile.isConnected()) {
-            // exp : 복음 내용 데이터 가져오기
-            checkRecord();
-            getGaspel(date_val2);
-
-        } else {
-            contentsGaspel.setText("인터넷을 연결해주세요");
-            contentsGaspel.setGravity(Gravity.CENTER);
-        }
-
-
-        // 맨처음에는 복음 내용이 보이지 않는다
-        ll_upper.setVisibility(ll_upper.GONE);
-
+        // bottomnavigation 뷰 등록
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem_1 = menu.getItem(0);
         MenuItem menuItem_2 = menu.getItem(1);
@@ -355,34 +295,74 @@ public class LectioActivity extends AppCompatActivity{
         listk_left = new String[] {"a", "b", "c"};
         listv_left = new String[] { "설정", "계정정보", "로그아웃"};
 
-        // exp : 텍스트사이즈 설정
-        SharedPreferences sp = getSharedPreferences("setting",0);
-        String textsize = sp.getString("textsize", "");
-        if(textsize.equals("big")){
-            onesentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-            firstSentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            contentsGaspel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            q1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            bg1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            bg2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            bg3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            sum1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            sum2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            js1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            js2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            weekend.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv6.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv7.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-            after_save_tv8.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        //    bt_notyet.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-        }else{
 
+
+        // intent값 가져오기
+        Intent intent = getIntent();
+        date_intent = intent.getStringExtra("date");
+
+        // 다른 activity에서 온 경우 / 날짜에 맞는 복음 및 정보 가져온다
+        if(date_intent != null){ // 형식 : yyyy-MM-dd
+            // back 보이기
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.back);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            date_val2 = date_intent; // 형식 : yyyy-MM-dd
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = formatter.parse(date_val2);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            c1 = Calendar.getInstance();
+            c1.setTime(date);
+            String date_val1 = sdf.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+            typedDate = date_val1+getDay.getDay(c1)+"요일";
+            Log.d("saea", typedDate);
+
+            // 일요일인 경우 weekend_date에 일요일 저장
+            if(typedDate.contains("일요일")){
+                weekend_date = "일요일";
+            }else{
+                weekend_date = null;
+            }
+        }else{
+            // 거룩한독서인 경우
+            typedDate = date_val+getDay.getDay(c1)+"요일";
+            Log.d("saea", typedDate);
+
+            // 일요일인 경우 weekend_date에 일요일 저장
+       /*     if(typedDate.contains("일요일")){
+                weekend_date = "일요일";
+            }else{
+                weekend_date = null;
+            } */
         }
+
+        // 인터넷 연결 확인하는 부분
+        if (wifi.isConnected() || mobile.isConnected()) {
+            // exp : 복음 내용 데이터 가져오기
+            checkRecord();
+            getGaspel(date_val2);
+
+        } else {
+            checkRecord();
+            contentsGaspel.setText("인터넷을 연결해주세요");
+            contentsGaspel.setGravity(Gravity.CENTER);
+        }
+
+        // 맨처음에는 복음 내용이 보이지 않는다
+        ll_upper.setVisibility(ll_upper.GONE);
+
+        // edit 일단 false 설정
+        edit_now = false;
+        start_now = false;
+
+        // 맨처음에는 start 버튼만 보이도록 순서 세팅
+        lectio_order = 0;
+
 
         // 키보드 없애기 - 새로 추가한 부분
         findViewById(R.id.ll_first).setOnTouchListener(new View.OnTouchListener() {
@@ -426,28 +406,22 @@ public class LectioActivity extends AppCompatActivity{
             }
         });
 
-
-        // 저장을 누르면 실행되는 이벤트
-        save.setOnClickListener(listener_save);
-
-        //weekend에서 온 경우 바로 시작되어야 함
-        String date_detail = intent.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일
-        Boolean edit_true =  intent.getBooleanExtra("edit",false);
-        if(date_detail != null && !edit_true){
+        //주일의 독서를 클릭시에 오는 경우(첫화면 안나오고 바로 나오게 해야함)
+        String date_detail = intent.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일 주일의 독서에서 온 경우
+        Boolean edit_true =  intent.getBooleanExtra("edit",false); // edit_true는 주일의 독서에서 edit 한 경우
+        if(date_detail != null && !edit_true){ // 주일의 독서에서 start로 온 경우
+            // 위에 주일의 복음으로 변경
             actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionbar.setCustomView(R.layout.actionbar_weekend);
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.back);
             ll_main.setVisibility(View.GONE);
-            // actionbar change
+            onesentence.setVisibility(View.GONE);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            // 시작에서 온 경우
             start_now = true;
 
-            // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-            // actionbar.setDisplayHomeAsUpEnabled(true);
-            //  actionbar.setHomeAsUpIndicator(R.drawable.back);
-
-            //  showPraying();
-            bottomNavigationView.setVisibility(View.GONE);
             firstSentence.setVisibility(View.VISIBLE);
             lectio_order = -1;
             prev.setVisibility(View.VISIBLE);
@@ -478,15 +452,17 @@ public class LectioActivity extends AppCompatActivity{
             ll1.setBackgroundColor(Color.parseColor("#e3edf4"));
             firstSentence.setMovementMethod(new ScrollingMovementMethod());
             start.setVisibility(View.GONE);
-        }else if(date_detail != null && edit_true){
-            checkRecord();
+        }else if(date_detail != null && edit_true){ // 주일의 독서에서 edit으로 온 경우
+            checkRecord(); // 값 가져오기
+            start.setVisibility(View.GONE);
             ll1.setBackgroundColor(Color.parseColor("#e3edf4"));
-            start_now = false;
-
-            edit.setVisibility(View.GONE);
             bottomNavigationView.setVisibility(View.GONE);
+
+            start_now = false;
             edit_now = true;
+
             lectio_order = 1;
+            edit.setVisibility(View.GONE);
             onesentence.setVisibility(View.GONE);
             after_save.setVisibility(View.GONE);
             scrollView.setVisibility(View.VISIBLE);
@@ -502,7 +478,10 @@ public class LectioActivity extends AppCompatActivity{
     }
     // 저장된 값이 있는지 확인하고 있는경우 가져옴
     public void checkRecord(){
-
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
         bg1.setText("");
         bg2.setText("");
         bg3.setText("");
@@ -511,21 +490,31 @@ public class LectioActivity extends AppCompatActivity{
         js1.setText("");
         js2.setText("");
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        if (getCurrentFocus() != null) {
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
         edit_now = false;
-        // cf : 렉시오 디비나 부분
+
+        Intent intent = getIntent();
+        Boolean weekend_true = intent.getBooleanExtra("weekend", false); // 나의기록에서 주일의 독서할때
+        // 나의 기록-주일의 독서에서 온 경우 actionbar 변경하기
+        if(weekend_true){
+            Log.d("saea", "일요일");
+            android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+            actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionbar.setCustomView(R.layout.actionbar_weekend);
+            actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
+            actionbar.setElevation(0);
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.back);
+        }
 
 
-        String date_aft = typedDate;
+        // 값 가져오고 각  edittext 에 넣기
+        String date_aft = typedDate; //yyyy년 MM월 dd일 x요일
         ArrayList<Lectio> lectios = new ArrayList<Lectio>();
-        String lectio_str = null;
         DBManager dbMgr = new DBManager(LectioActivity.this);
         dbMgr.dbOpen();
         dbMgr.selectLectioData(LectioDBSqlData.SQL_DB_SELECT_DATA, uid, date_aft, lectios);
         dbMgr.dbClose();
+        String onesentence_str = null;
         String bg1_str = null;
         String bg2_str = null;
         String bg3_str = null;
@@ -534,10 +523,14 @@ public class LectioActivity extends AppCompatActivity{
         String js1_str = null;
         String js2_str = null;
 
+        // 값이 있는경우에 edittext에 값 삽입하기
         if(!lectios.isEmpty()){
+            // 값이 있는 경우에는 edit 형태로 나타나야 한다.
             ll_main.setVisibility(View.GONE);
             after_save.setVisibility(View.VISIBLE);
             ll1.setBackgroundColor(Color.parseColor("#e3edf4"));
+
+            onesentence_str = lectios.get(0).getOneSentence();
             bg1_str = lectios.get(0).getBg1();
             bg2_str = lectios.get(0).getBg2();
             bg3_str = lectios.get(0).getBg3();
@@ -547,6 +540,7 @@ public class LectioActivity extends AppCompatActivity{
             js2_str = lectios.get(0).getJs2();
 
             // edittext에 가져오기
+            onesentence.setText(onesentence_str);
             bg1.setText(bg1_str);
             bg2.setText(bg2_str);
             bg3.setText(bg3_str);
@@ -554,136 +548,117 @@ public class LectioActivity extends AppCompatActivity{
             sum2.setText(sum2_str);
             js1.setText(js1_str);
             js2.setText(js2_str);
-        }else{
         }
 
         String mysentence = null;
         String mythought = "";
         ArrayList<Weekend> weekends = new ArrayList<Weekend>();
-        String comment_str = null;
         dbMgr.dbOpen();
         dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, typedDate, weekends);
         dbMgr.dbClose();
 
         if(!weekends.isEmpty()){
-            Log.d("saea", "있음!!!!"+typedDate);
+            Log.d("saea", "weekend 값 있음"+typedDate);
             mysentence = weekends.get(0).getMySentence();
             mythought = weekends.get(0).getMyThought();
             // edittext에 가져오기
             weekend.setText(mysentence);
         }else{
-            Log.d("saea", "없음!!!!"+typedDate);
+            Log.d("saea", "weekend 값 없음"+typedDate);
         }
 
-        if(bg1_str != null){
-            Intent intent = getIntent();
-            Boolean weekend_true = intent.getBooleanExtra("weekend", false);
-            if(weekend_true) {
-                Log.d("saea", "일요일이지~");
-                android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-                actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-                actionbar.setCustomView(R.layout.actionbar_weekend);
-                actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
-                actionbar.setElevation(0);
-                actionbar.setDisplayHomeAsUpEnabled(true);
-                actionbar.setHomeAsUpIndicator(R.drawable.back);
-            }
+        // 아래는 주일의 독서에서 오는 경우는 해당이 없음
+        String date_detail = intent.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일 주일의 독서에서 온 경우
+        if(date_detail == null){
 
-            start.setVisibility(View.GONE);
-            prev.setVisibility(View.GONE);
-            next.setVisibility(View.GONE);
-            q1.setVisibility(View.GONE);
-            bg1.setVisibility(View.GONE);
-            bg2.setVisibility(View.GONE);
-            bg3.setVisibility(View.GONE);
-            sum1.setVisibility(View.GONE);
-            sum2.setVisibility(View.GONE);
-            js1.setVisibility(View.GONE);
-            js2.setVisibility(View.GONE);
-            save.setVisibility(View.GONE);
-            scrollView.setVisibility(View.GONE);
-            onesentence.setVisibility(View.VISIBLE);
-            edit.setVisibility(View.VISIBLE);
-            firstSentence.setVisibility(View.GONE);
-            start.setVisibility(View.GONE);
-            weekend.setVisibility(View.GONE);
-            if(weekend_date != null){
-                if(mythought == null){
-                    mythought = "";
-                }
-                if(mysentence == null){
-                    mysentence = "";
-                }
-                Log.d("saea2", mythought);
-                if(mythought.equals("")){
+            // edit화면에 있는 textview 세팅 - 값이 있는 경우에 edit 화면에서 값 넣기
+            if(bg1_str != null){
+                start.setVisibility(View.GONE);
+                prev.setVisibility(View.GONE);
+                next.setVisibility(View.GONE);
+                q1.setVisibility(View.GONE);
+                bg1.setVisibility(View.GONE);
+                bg2.setVisibility(View.GONE);
+                bg3.setVisibility(View.GONE);
+                sum1.setVisibility(View.GONE);
+                sum2.setVisibility(View.GONE);
+                js1.setVisibility(View.GONE);
+                js2.setVisibility(View.GONE);
+                save.setVisibility(View.GONE);
+                scrollView.setVisibility(View.GONE);
+                onesentence.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
+                firstSentence.setVisibility(View.GONE);
+                start.setVisibility(View.GONE);
+                weekend.setVisibility(View.GONE);
+                if(weekend_date != null){
+                    if(mythought == null){
+                        mythought = "";
+                    }
+                    if(mysentence == null){
+                        mysentence = "";
+                    }
+                    Log.d("saea", mythought);
+
+                    onesentence.setText(onesentence_str);
+                    after_save_tv1.setText(bg1_str);
+                    after_save_tv2.setText(bg2_str);
+                    after_save_tv3.setText(bg3_str);
+                    after_save_tv4.setText(sum1_str);
+                    after_save_tv5.setText(sum2_str);
+                    after_save_tv6.setText(js1_str);
+                    after_save_tv7.setText(js2_str);
+                    after_save_tv8.setText(mysentence);
 
                 }else{
-
+                    onesentence.setText(onesentence_str);
+                    after_save_tv1.setText(bg1_str);
+                    after_save_tv2.setText(bg2_str);
+                    after_save_tv3.setText(bg3_str);
+                    after_save_tv4.setText(sum1_str);
+                    after_save_tv5.setText(sum2_str);
+                    after_save_tv6.setText(js1_str);
+                    after_save_tv7.setText(js2_str);
+                    after_save_tv8_1.setVisibility(View.GONE);
+                    after_save_tv8.setVisibility(View.GONE);
                 }
-                after_save_tv1.setText(bg1_str);
-                after_save_tv2.setText(bg2_str);
-                after_save_tv3.setText(bg3_str);
-                after_save_tv4.setText(sum1_str);
-                after_save_tv5.setText(sum2_str);
-                after_save_tv6.setText(js1_str);
-                after_save_tv7.setText(js2_str);
-                after_save_tv8.setText(mysentence);
 
             }else{
+                //값이 없는 경우에는 main화면이 보인다
 
-                after_save_tv1.setText(bg1_str);
-                after_save_tv2.setText(bg2_str);
-                after_save_tv3.setText(bg3_str);
-                after_save_tv4.setText(sum1_str);
-                after_save_tv5.setText(sum2_str);
-                after_save_tv6.setText(js1_str);
-                after_save_tv7.setText(js2_str);
-                after_save_tv8_1.setVisibility(View.GONE);
-                after_save_tv8.setVisibility(View.GONE);
+                // 만약 나의기록-주일의독서하러가기 에서 온 경우에는 main화면 변경
+                if(weekend_true){
+                    // 값이 없는 경우 주일의 독서로 보이기
+                    ImageView main1 = (ImageView) findViewById(R.id.main1);
+                    TextView main2 = (TextView) findViewById(R.id.main2);
+                    TextView main3 = (TextView) findViewById(R.id.main3);
+                    ImageView main5 = (ImageView) findViewById(R.id.main5);
+
+                    main1.setImageResource(R.drawable.weekend_img1);
+                    main2.setText("주일의 독서");
+                    main3.setText("Lectio Divina (dies dominica)");
+                    main5.setImageResource(R.drawable.weekend_img2);
+                }
+                after_save.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+                onesentence.setVisibility(View.GONE);
+                firstSentence.setVisibility(View.GONE);
+                scrollView.setVisibility(View.VISIBLE);
+                start.setVisibility(View.VISIBLE);
+                save.setVisibility(View.GONE);
+                q1.setVisibility(View.GONE);
+                bg1.setVisibility(View.GONE);
+                bg2.setVisibility(View.GONE);
+                bg3.setVisibility(View.GONE);
+                sum1.setVisibility(View.GONE);
+                sum2.setVisibility(View.GONE);
+                js1.setVisibility(View.GONE);
+                js2.setVisibility(View.GONE);
+                weekend.setVisibility(View.GONE);
+                prev.setVisibility(View.GONE);
+                next.setVisibility(View.GONE);
             }
 
-        }else{
-            after_save.setVisibility(View.GONE);
-            edit.setVisibility(View.GONE);
-            onesentence.setVisibility(View.GONE);
-            firstSentence.setVisibility(View.GONE);
-            scrollView.setVisibility(View.VISIBLE);
-            start.setVisibility(View.VISIBLE);
-            save.setVisibility(View.GONE);
-            q1.setVisibility(View.GONE);
-            bg1.setVisibility(View.GONE);
-            bg2.setVisibility(View.GONE);
-            bg3.setVisibility(View.GONE);
-            sum1.setVisibility(View.GONE);
-            sum2.setVisibility(View.GONE);
-            js1.setVisibility(View.GONE);
-            js2.setVisibility(View.GONE);
-            weekend.setVisibility(View.GONE);
-            prev.setVisibility(View.GONE);
-            next.setVisibility(View.GONE);
-
-            Intent intent = getIntent();
-            Boolean weekend_true = intent.getBooleanExtra("weekend", false);
-            if(weekend_true){
-                Log.d("saea", "일요일이지~");
-                android.support.v7.app.ActionBar actionbar = getSupportActionBar();
-                actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-                actionbar.setCustomView(R.layout.actionbar_weekend);
-                actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
-                actionbar.setElevation(0);
-                actionbar.setDisplayHomeAsUpEnabled(true);
-                actionbar.setHomeAsUpIndicator(R.drawable.back);
-
-                ImageView main1 = (ImageView) findViewById(R.id.main1);
-                TextView main2 = (TextView) findViewById(R.id.main2);
-                TextView main3 = (TextView) findViewById(R.id.main3);
-                ImageView main5 = (ImageView) findViewById(R.id.main5);
-
-                main1.setImageResource(R.drawable.weekend_img1);
-                main2.setText("주일의 독서");
-                main3.setText("Lectio Divina (dies dominica)");
-                main5.setImageResource(R.drawable.weekend_img2);
-            }
         }
 
     }
@@ -705,7 +680,7 @@ public class LectioActivity extends AppCompatActivity{
                             Intent i = new Intent(LectioActivity.this, SettingActivity.class);
                             startActivity(i);
                         }else if(item.equals("계정정보")){
-                            Intent i = new Intent(LectioActivity.this, LoginActivity.class);
+                            Intent i = new Intent(LectioActivity.this, ProfileActivity.class);
                             startActivity(i);
                         }else if (item.equals("로그아웃")) {
                             ProfileActivity.logoutUser(session,LectioActivity.this);
@@ -717,43 +692,42 @@ public class LectioActivity extends AppCompatActivity{
                 if(date_intent != null){
                     Intent intent0 =getIntent();
                     String date_detail = intent0.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일
-                    if(date_detail != null){
+                    if(date_detail != null){ // 주일의 독서에서 온 경우
                         finish();
-                    }else{
+                    }else{  // 나의 기록에서 온 경우
                         Intent intent = new Intent(LectioActivity.this, RecordActivity.class);
                         intent.putExtra("dateBack",date_intent);
                         startActivity(intent);
                     }
 
-                // 시작버튼 누른 경우 뒤로가기 클릭시 이벤트
+                // 거룩한 독서에서 시작버튼 누른 경우 뒤로가기 클릭시 이벤트
                 }else if(start_now){
-                    start_now = false;
-                    q1.setVisibility(View.GONE);
+                    if (getCurrentFocus() != null) {
+                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    }
+                    android.support.v7.app.ActionBar actionbar = getSupportActionBar();
+                    actionbar.setDisplayHomeAsUpEnabled(false);
+                    ll1.setBackgroundColor(Color.parseColor("#ffffff"));
+                    ll_main.setVisibility(View.VISIBLE);
+                    start.setVisibility(View.VISIBLE);
+                    prev.setVisibility(View.GONE);
+                    next.setVisibility(View.GONE);
                     bg1.setVisibility(View.GONE);
                     bg2.setVisibility(View.GONE);
-                    bg3.setVisibility(View.GONE);
                     bg3.setVisibility(View.GONE);
                     sum1.setVisibility(View.GONE);
                     sum2.setVisibility(View.GONE);
                     js1.setVisibility(View.GONE);
                     js2.setVisibility(View.GONE);
-                    weekend.setVisibility(View.GONE);
                     save.setVisibility(View.GONE);
-                    edit.setVisibility(View.GONE);
-                    after_save.setVisibility(View.GONE);
-                    prev.setVisibility(View.GONE);
-                    next.setVisibility(View.GONE);
-                    onesentence.setVisibility(View.VISIBLE);
-                    firstSentence.setVisibility(View.VISIBLE);
-                    start.setVisibility(View.VISIBLE);
                     ll_upper.setVisibility(View.GONE);
+                    firstSentence.setVisibility(View.GONE);
+                    q1.setVisibility(View.GONE);
                     bottomNavigationView.setVisibility(View.VISIBLE);
-                    firstSentence.setText("당신께 응답하시는 하느님의 말씀을 깨닫기를 바라며 거룩한 독서를 시작해볼까요?");
 
-                    // edit 누른 후 뒤로가기 누를때 이벤트
+                // 거룩한 독서에서 edit 누른 후 뒤로가기 누를때 이벤트
                 }else if(edit_now){
                     bottomNavigationView.setVisibility(View.VISIBLE);
-
                     android.support.v7.app.ActionBar actionbar = getSupportActionBar();
                     actionbar.setDisplayHomeAsUpEnabled(false);
                     checkRecord();
@@ -780,6 +754,7 @@ public class LectioActivity extends AppCompatActivity{
                 if (getCurrentFocus() != null) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
+
                 String background1 = bg1.getText().toString();
                 String background2 = bg2.getText().toString();
                 String background3 = bg3.getText().toString();
@@ -793,7 +768,6 @@ public class LectioActivity extends AppCompatActivity{
                 String bg1_str = null;
 
                 ArrayList<Lectio> lectios = new ArrayList<Lectio>();
-                String lectio_str = null;
                 DBManager dbMgr = new DBManager(LectioActivity.this);
                 dbMgr.dbOpen();
                 dbMgr.selectLectioData(LectioDBSqlData.SQL_DB_SELECT_DATA, uid, typedDate , lectios);
@@ -802,6 +776,7 @@ public class LectioActivity extends AppCompatActivity{
                 if(!lectios.isEmpty()){
                     bg1_str = lectios.get(0).getBg1();
                 }
+                    // 기존 값이 있는 경우 수정
                     if(bg1_str!= null){
 
                         dbMgr.dbOpen();
@@ -812,6 +787,7 @@ public class LectioActivity extends AppCompatActivity{
                             Lectio lectio = new Lectio(uid, date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
                             Server_LectioData.updateLectio(LectioActivity.this, uid, lectio);
                         }
+                    // 기존 값이 없는 경우 추가
                     }else{
 
                         Lectio lectioData = new Lectio(uid, date1, onesentence1, background1, background2, background3, summary1, summary2, jesus1, jesus2);
@@ -825,18 +801,15 @@ public class LectioActivity extends AppCompatActivity{
                     }
 
                 String mysentence = weekend.getText().toString();
-                // 일요일의 경우에
-                Intent intent_ = getIntent();
-                Boolean weekend_true = intent_.getBooleanExtra("weekend", false);
 
-                if(weekend_date != null || weekend_true){
+                // 일요일의 경우에
+                if(weekend_date != null){ // 일요일인 경우 (주일의 독서에서 왔거나 나의기록에서 주일독서하기 거나)
                     weekend.setVisibility(View.GONE);
                     String weekend_date = typedDate;
 
                     String mysentence_str = null;
                     String mythought = null;
                     ArrayList<Weekend> weekends = new ArrayList<Weekend>();
-                    String comment_str = null;
                     dbMgr.dbOpen();
                     dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, typedDate, weekends);
                     dbMgr.dbClose();
@@ -849,10 +822,9 @@ public class LectioActivity extends AppCompatActivity{
                     if(mythought == null){
                         mythought = "";
                     }
+                    // 일요일 한문장 값이 있는 경우
                     if(mysentence_str!= null){
                         Log.d("saea", "기존 값이 있음");
-
-
                         dbMgr.dbOpen();
                         dbMgr.updateWeekendData(WeekendDBSqlData.SQL_DB_UPDATE_DATA, uid, weekend_date, mysentence, mythought);
                         dbMgr.dbClose();
@@ -872,21 +844,19 @@ public class LectioActivity extends AppCompatActivity{
 
                 }
 
-                // 저장 후에 기도하는 dialog 보이기
+                // 실제 저장 마침
 
-             //   showPraying2(summary2, jesus2, mysentence);
+                // edit을 하는 경우
                 if(edit_now){
                     Intent intent0 =getIntent();
                     Boolean edit_true = intent0.getBooleanExtra("edit", false);
-                    if(edit_true){
+                    if(edit_true){ // 주일의 독서에서 edit한 경우 다시 돌아감
                         Intent intent = new Intent(LectioActivity.this, WeekendActivity.class);
                         LectioActivity.this.startActivity(intent);
-                    }else{
+                    }else{ // 그렇지 않은 경우에는 edit화면 보여지기
                         ll1.setBackgroundColor(Color.parseColor("#ffffff"));
-                        ll_pray.setVisibility(View.GONE);
                         ll1.setVisibility(View.VISIBLE);
                         checkRecord();
-
 
                         if(date_intent == null){
                             actionbar.setDisplayHomeAsUpEnabled(false);
@@ -894,6 +864,7 @@ public class LectioActivity extends AppCompatActivity{
                         }
                     }
 
+                // edit이 아니라 start한 경우는 마침기도로 넘어감
                 }else{
 
                     lectio_order = 8;
@@ -982,7 +953,7 @@ public class LectioActivity extends AppCompatActivity{
                         Pattern p = Pattern.compile(".\\d+");
                         Matcher m = p.matcher(after);
                         while (m.find()) {
-                            Log.d("saea", after);
+                           // Log.d("saea", after);
                             contents = contents.replaceAll(m.group(), "\n"+m.group());
                         }
                         contentsGaspel.setText(contents);
@@ -1034,14 +1005,19 @@ public class LectioActivity extends AppCompatActivity{
             android.support.v7.app.ActionBar actionbar = getSupportActionBar();
             switch (v.getId()) {
                 case R.id.bt_prev:
+                    if (getCurrentFocus() != null) {
+                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    }
                     if(lectio_order == -1){
+                        // start인 경우만 해당
+
                         Intent intent0 =getIntent();
-                        String date_detail = intent0.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일
+                        String date_detail = intent0.getStringExtra("date_detail"); //yyyy년 MM월 dd일 x요일 주일의 독서에서 온 경우
 
                         if(weekend_date != null && date_detail != null) {
                             finish();
                         }else if(date_intent == null){
-
+                            actionbar.setDisplayHomeAsUpEnabled(false);
                             ll1.setBackgroundColor(Color.parseColor("#ffffff"));
                             ll_main.setVisibility(View.VISIBLE);
                             start.setVisibility(View.VISIBLE);
@@ -1050,8 +1026,7 @@ public class LectioActivity extends AppCompatActivity{
                             firstSentence.setVisibility(View.GONE);
                             q1.setVisibility(View.GONE);
                             bottomNavigationView.setVisibility(View.VISIBLE);
-                        }else{
-
+                        }else{ // 이는 나의 기록에서 온 경우이다
                             ll1.setBackgroundColor(Color.parseColor("#ffffff"));
                             ll_main.setVisibility(View.VISIBLE);
                             start.setVisibility(View.VISIBLE);
@@ -1059,17 +1034,12 @@ public class LectioActivity extends AppCompatActivity{
                             next.setVisibility(View.GONE);
                             firstSentence.setVisibility(View.GONE);
                             q1.setVisibility(View.GONE);
-                            actionbar.setDisplayHomeAsUpEnabled(true);
-                            actionbar.setHomeAsUpIndicator(R.drawable.back);
                         }
 
                     }else if(lectio_order == 0){
+                        // start인 경우만 해당
                         firstSentence.setMovementMethod(new ScrollingMovementMethod());
 
-                        // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-                     //   actionbar.setDisplayHomeAsUpEnabled(false);
-                       // actionbar.setDisplayHomeAsUpEnabled(true);
-                     //   actionbar.setHomeAsUpIndicator(R.drawable.list);
                         lectio_order = -1;
                         bg1.setVisibility(View.GONE);
                         q1.setText("시작 기도");
@@ -1097,9 +1067,10 @@ public class LectioActivity extends AppCompatActivity{
                         ll_upper.setVisibility(View.GONE);
 
                     }else if(lectio_order == 1){
+                        // edit 한 경우는 다시 돌아감
                         if(edit_now){
                             Intent intent0 =getIntent();
-                            Boolean edit_true = intent0.getBooleanExtra("edit", false);
+                            Boolean edit_true = intent0.getBooleanExtra("edit", false); // 주일의독서에서 온 경우
                             if(edit_true){
                                 finish();
                             }else{
@@ -1112,7 +1083,7 @@ public class LectioActivity extends AppCompatActivity{
                                 bg1.setVisibility(View.GONE);
                                 checkRecord();
                             }
-
+                        // start에서 온 경우는 말씀듣기로 이동
                         }else{
 
                             firstSentence.setBackgroundResource(0);
@@ -1151,6 +1122,7 @@ public class LectioActivity extends AppCompatActivity{
                         js1.setVisibility(View.GONE);
                     }else if(lectio_order == 7) {
                         q1.setText("복음에서 보여지는 예수님의 모습은 어떠한가요?");
+                        // 일요일이랑 일반의 경우 달라짐
                         if (date_intent != null && weekend_date != null) {
                             lectio_order = 6;
                             js1.setVisibility(View.VISIBLE);
@@ -1174,6 +1146,7 @@ public class LectioActivity extends AppCompatActivity{
                             contentsGaspel.setLayoutParams(params);
                         }
                     }else if(lectio_order == 8) {
+                        // 일요일의 경우만 prev가 있다.
                         if (date_intent != null && weekend_date != null) {
                             q1.setText("복음에서 보여지는 예수님의 모습을 보고 생각해봅시다");
                             lectio_order = 7;
@@ -1193,7 +1166,11 @@ public class LectioActivity extends AppCompatActivity{
                     }
                     break;
                 case R.id.bt_next:
+                    if (getCurrentFocus() != null) {
+                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    }
                     if(lectio_order == -1){
+                        // start인 경우만
                         firstSentence.setMovementMethod(null);
                         firstSentence.setBackgroundResource(0);
                         lectio_order = 0;
@@ -1201,6 +1178,7 @@ public class LectioActivity extends AppCompatActivity{
                         firstSentence.setText("복음 말씀을 잘 듣기 위해 소리내어 읽어 봅시다.");
                         ll_upper.setVisibility(View.VISIBLE);
                     }else if(lectio_order == 0){
+                        // start인 경우만
                         lectio_order = 1;
                         q1.setText("복음의 등장인물은?");
                         firstSentence.setVisibility(View.GONE);
@@ -1234,6 +1212,7 @@ public class LectioActivity extends AppCompatActivity{
                     }else if(lectio_order == 6) {
                         lectio_order = 7;
                         q1.setText("복음을 통하여 예수님께서 내게 해주시는 말씀은?");
+                        // 주일의 독서와 일반의 경우 달라짐
                         if(date_intent != null && weekend_date != null){
                             js1.setVisibility(View.GONE);
                             js2.setVisibility(View.VISIBLE);
@@ -1253,6 +1232,7 @@ public class LectioActivity extends AppCompatActivity{
                         }
 
                     }else if(lectio_order == 7) {
+                        // 주일의 독서만 나오는 부분
                         if (date_intent != null && weekend_date != null) {
                             q1.setText("이번주 복음에서 특별히 와닿는 구절을 선택해 봅시다");
                             lectio_order = 8;
@@ -1270,389 +1250,116 @@ public class LectioActivity extends AppCompatActivity{
                             contentsGaspel.setLayoutParams(params);
                         }
                     }else if(lectio_order == 8){
-                        ll1.setBackgroundColor(Color.parseColor("#ffffff"));
-                    //    pray_content.setVisibility(View.GONE);
-                        firstSentence.setVisibility(View.GONE);
-                        ll_pray.setVisibility(View.GONE);
-                        ll1.setVisibility(View.VISIBLE);
-                        checkRecord();
-                        if(date_intent == null){
-                            bottomNavigationView.setVisibility(View.VISIBLE);
-                        }
 
-                        // 한주복음묵상에서 온경우 다시 이동
+                        // 주일의 독서에서 온경우 다시 이동
                         Intent intent0 =getIntent();
                         String date_detail = intent0.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일
                         Log.d("saea", "!!!!!!!!"+date_detail);
                         if(weekend_date != null && date_detail != null) {
                             Intent intent = new Intent(LectioActivity.this, WeekendActivity.class);
                             LectioActivity.this.startActivity(intent);
+                        }else{
+                            // 거룩한 독서 자체인 경우
+                            if(date_intent == null){
+                                actionbar.setDisplayHomeAsUpEnabled(false);
+                                bottomNavigationView.setVisibility(View.VISIBLE);
+                            }
+
+                            ll1.setBackgroundColor(Color.parseColor("#ffffff"));
+                            firstSentence.setVisibility(View.GONE);
+                            ll1.setVisibility(View.VISIBLE);
+                            checkRecord();
                         }
+
+
                     }
-
-
                     break;
-                // start 클릭시 이벤트
+
+                // start 클릭시 이벤트 - 어떤 경우든지 시작기도가 나옴
                 case R.id.bt_start:
-                    ll_main.setVisibility(View.GONE);
-                    ll1.setBackgroundColor(Color.parseColor("#e3edf4"));
-                    // actionbar change
-                    start_now = true;
+                    if (wifi.isConnected() || mobile.isConnected()) {
+                        ll_main.setVisibility(View.GONE);
+                        ll1.setBackgroundColor(Color.parseColor("#e3edf4"));
+                        // actionbar change
+                        start_now = true;
+                        edit_now = false;
 
-                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-                   // actionbar.setDisplayHomeAsUpEnabled(true);
-                  //  actionbar.setHomeAsUpIndicator(R.drawable.back);
+                        // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
+                        actionbar.setDisplayHomeAsUpEnabled(true);
+                        actionbar.setHomeAsUpIndicator(R.drawable.back);
 
-                  //  showPraying();
-                    bottomNavigationView.setVisibility(View.GONE);
-                    firstSentence.setVisibility(View.VISIBLE);
-                    lectio_order = -1;
-                    prev.setVisibility(View.VISIBLE);
-                    next.setVisibility(View.VISIBLE);
-                    q1.setVisibility(View.VISIBLE);
-                    q1.setText("시작 기도");
-                    firstSentence.setText(Html.fromHtml("<br><font color=\"#ffffff\">"+
-                            "오소서, 성령님<br>" +
-                            "당신의 빛, 그 빛살을 하늘에서 내리소서.<br>" +
-                            "가난한 이 아버지, 은총 주님<br>" +
-                            "오소서 마음에 빛을 주소서.<br>" +
-                            "가장 좋은 위로자, 영혼의 기쁜 손님,<br>" +
-                            "생기 돋워 주소서.<br>" +
-                            "일할 때에 휴식을, 무더울 때 바람을,<br>" +
-                            "슬플 때에 위로를, 지복의 빛이시여,<br>" +
-                            "저희 맘 깊은 곳을 가득히 채우소서.<br>" +
-                            "주님 도움 없으면 저희 삶 그 모든 것<br>" +
-                            "이로운 것 없으리.<br>" +
-                            "허물은 씻어 주고 마른 땅 물 주시고<br>" +
-                            "병든 것 고치소서.<br>" +
-                            "굳은 맘 풀어 주고 찬 마음 데우시고<br>" +
-                            "바른길 이끄소서.<br>" +
-                            "성령님을 믿으며 의지하는 이에게<br>" +
-                            "칠은을 베푸소서.<br>" +
-                            "공덕을 쌓게  하고 구원의 문을 넘어<br>" +
-                            "영복을 얻게 하소서.아멘</font><br><br>"));
-                    firstSentence.setBackgroundResource(R.drawable.pray1_img);
-                    firstSentence.setMovementMethod(new ScrollingMovementMethod());
-                    start.setVisibility(View.GONE);
-                    break;
-
-                case R.id.bt_edit:
-                    // actionbar change
-                    ll1.setBackgroundColor(Color.parseColor("#e3edf4"));
-                    start_now = false;
-                    actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-                    actionbar.setDisplayHomeAsUpEnabled(true);
-                    actionbar.setHomeAsUpIndicator(R.drawable.back);
-
-                    // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-                  //  actionbar.setDisplayHomeAsUpEnabled(true);
-                  //  actionbar.setHomeAsUpIndicator(R.drawable.back);
-
-
-                    /*
-                    *     edit.setVisibility(View.GONE);
-                    bottomNavigationView.setVisibility(View.GONE);
-                    edit_now = true;
-                    lectio_order = 1;
-                    onesentence.setVisibility(View.GONE);
-                    firstSentence.setVisibility(View.VISIBLE);
-                    firstSentence.setText("복음을 소리내어 읽어 봅시다. 가슴속에서 말씀을 느끼고 체험할 수 있도록 마음을 다하여 읽어 봅시다.");
-                    after_save.setVisibility(View.GONE);
-                    scrollView.setVisibility(View.VISIBLE);
-                    ll_upper.setVisibility(View.VISIBLE);
-                    prev.setVisibility(View.VISIBLE);
-                    next.setVisibility(View.VISIBLE);
-                    q1.setText("말씀 듣기");
-                    q1.setVisibility(View.VISIBLE);
-                    * */
-                    edit.setVisibility(View.GONE);
-                    bottomNavigationView.setVisibility(View.GONE);
-                    edit_now = true;
-                    lectio_order = 1;
-                    onesentence.setVisibility(View.GONE);
-                    after_save.setVisibility(View.GONE);
-                    scrollView.setVisibility(View.VISIBLE);
-                    ll_upper.setVisibility(View.VISIBLE);
-                    prev.setVisibility(View.VISIBLE);
-                    next.setVisibility(View.VISIBLE);
-                    q1.setText("복음의 등장인물은?");
-                    firstSentence.setVisibility(View.GONE);
-                    bg1.setVisibility(View.VISIBLE);
-                    q1.setVisibility(View.VISIBLE);
-                    break;
-                // start 클릭시 이벤트
-                case R.id.closePray:
-                    ll_pray.setVisibility(View.GONE);
-                    ll1.setVisibility(View.VISIBLE);
-                    checkRecord();
-                    if(date_intent == null){
-                        bottomNavigationView.setVisibility(View.VISIBLE);
+                        bottomNavigationView.setVisibility(View.GONE);
+                        firstSentence.setVisibility(View.VISIBLE);
+                        lectio_order = -1;
+                        prev.setVisibility(View.VISIBLE);
+                        next.setVisibility(View.VISIBLE);
+                        q1.setVisibility(View.VISIBLE);
+                        q1.setText("시작 기도");
+                        firstSentence.setText(Html.fromHtml("<br><font color=\"#ffffff\">" +
+                                "오소서, 성령님<br>" +
+                                "당신의 빛, 그 빛살을 하늘에서 내리소서.<br>" +
+                                "가난한 이 아버지, 은총 주님<br>" +
+                                "오소서 마음에 빛을 주소서.<br>" +
+                                "가장 좋은 위로자, 영혼의 기쁜 손님,<br>" +
+                                "생기 돋워 주소서.<br>" +
+                                "일할 때에 휴식을, 무더울 때 바람을,<br>" +
+                                "슬플 때에 위로를, 지복의 빛이시여,<br>" +
+                                "저희 맘 깊은 곳을 가득히 채우소서.<br>" +
+                                "주님 도움 없으면 저희 삶 그 모든 것<br>" +
+                                "이로운 것 없으리.<br>" +
+                                "허물은 씻어 주고 마른 땅 물 주시고<br>" +
+                                "병든 것 고치소서.<br>" +
+                                "굳은 맘 풀어 주고 찬 마음 데우시고<br>" +
+                                "바른길 이끄소서.<br>" +
+                                "성령님을 믿으며 의지하는 이에게<br>" +
+                                "칠은을 베푸소서.<br>" +
+                                "공덕을 쌓게  하고 구원의 문을 넘어<br>" +
+                                "영복을 얻게 하소서.아멘</font><br><br>"));
+                        firstSentence.setBackgroundResource(R.drawable.pray1_img);
+                        firstSentence.setMovementMethod(new ScrollingMovementMethod());
+                        start.setVisibility(View.GONE);
+                    }else{
+                        Toast.makeText(LectioActivity.this, "인터넷을 연결해주세요", Toast.LENGTH_SHORT).show();
                     }
+                    break;
 
-                    // 한주복음묵상에서 온경우 다시 이동
-                    Intent intent0 =getIntent();
-                    String date_detail = intent0.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일
-                    Log.d("saea", "!!!!!!!!"+date_detail);
-                    if(weekend_date != null && date_detail != null) {
-                        Intent intent = new Intent(LectioActivity.this, WeekendActivity.class);
-                        LectioActivity.this.startActivity(intent);
+                case R.id.bt_edit: // edit 버튼 누르는 경우 - 어떤 경우든지 복음의 등장인물은? 질문이 나옴
+                    if (wifi.isConnected() || mobile.isConnected()) {
+                        // actionbar change
+                        ll1.setBackgroundColor(Color.parseColor("#e3edf4"));
+                        start_now = false;
+                        edit_now = true;
+
+                        actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+                        actionbar.setDisplayHomeAsUpEnabled(true);
+                        actionbar.setHomeAsUpIndicator(R.drawable.back);
+
+                        edit.setVisibility(View.GONE);
+                        bottomNavigationView.setVisibility(View.GONE);
+                        lectio_order = 1;
+                        onesentence.setVisibility(View.GONE);
+                        after_save.setVisibility(View.GONE);
+                        scrollView.setVisibility(View.VISIBLE);
+                        ll_upper.setVisibility(View.VISIBLE);
+                        prev.setVisibility(View.VISIBLE);
+                        next.setVisibility(View.VISIBLE);
+                        q1.setText("복음의 등장인물은?");
+                        firstSentence.setVisibility(View.GONE);
+                        bg1.setVisibility(View.VISIBLE);
+                        q1.setVisibility(View.VISIBLE);
+                    }else{
+                        Toast.makeText(LectioActivity.this, "인터넷을 연결해주세요", Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
         }
     };
 
-    // 요일 얻어오기
-    public String getDay(){
-        int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
-
-        switch(dayNum){
-            case 1:
-                day = "일";
-                break ;
-            case 2:
-                day = "월";
-                break ;
-            case 3:
-                day = "화";
-                break ;
-            case 4:
-                day = "수";
-                break ;
-            case 5:
-                day = "목";
-                break ;
-            case 6:
-                day = "금";
-                break ;
-            case 7:
-                day = "토";
-                break ;
-
-        }
-        return day;
-    }
-
-    Thread t;
-    TextView text_ttl;
-    TextView text;
-    // 벨 클릭시 성령청원기도 보이기
-    public void showPraying()
-    {
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-                PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                PowerManager.ON_AFTER_RELEASE, TAG);
-        myWakeLock.acquire(); //실행후 리소스 반환 필수
-        MainActivity.releaseCpuLock();
-        MainActivity.playSound(LectioActivity.this, "pray");
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(LectioActivity.this);
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog);
-        // Set dialog title
-        dialog.setTitle("Custom Dialog");
-
-        // progressbar show
-        final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
-
-        t = new Thread(new Runnable() {
-            @Override
-            public void run(){
-                int progress=0;
-                while(progress<100){
-                    ++progress;
-                    progressbar.setProgress(progress);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    if(t.isInterrupted()) { break; }
-                }
-            }
-        });
-        t.start();
-
-        text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
-        //text_ttl.setText("성령 청원 기도");
-        text_ttl.setText("\n침묵에 들어가는 단계\n");
-        // set values for custom dialog components - text, image and button
-        text = (TextView) dialog.findViewById(R.id.textDialog);
-        text.setText("하느님의 현존을 느껴 봅시다. 하느님께서 주시는 새 마음으로 들어가도록 노력하며 \n" +
-                "일상을 떠나 잠시지만 하느님 세계로 차원을 바꿔 봅시다.\n");
-     /*   text.setText("오소서, 성령님\n" +
-                "당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
-                "가난한 이 아버지, 은총 주님\n" +
-                "오소서 마음에 빛을 주소서.\n" +
-                "가장 좋은 위로자, 영혼의 기쁜 손님,\n" +
-                "생기 돋워 주소서.\n" +
-                "일할 때에 휴식을, 무더울 때 바람을,\n" +
-                "슬플 때에 위로를, 지복의 빛이시여,\n" +
-                "저희 맘 깊은 곳을 가득히 채우소서.\n" +
-                "주님 도움 없으면 저희 삶 그 모든 것\n" +
-                "이로운 것 없으리.\n" +
-                "허물은 씻어 주고 마른 땅 물 주시고\n" +
-                "병든 것 고치소서.\n" +
-                "굳은 맘 풀어 주고 찬 마음 데우시고\n" +
-                "바른길 이끄소서.\n" +
-                "성령님을 믿으며 의지하는 이에게\n" +
-                "칠은을 베푸소서.\n" +
-                "공덕을 쌓게  하고 구원의 문을 넘어\n" +
-                "영복을 얻게 하소서.아멘"); //saea
-                */
-        dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-              //  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
-            }
-        });
-
-        // 기도마침 클릭시 이벤트
-        declineButton = (Button) dialog.findViewById(R.id.declineButton);
-        declineButton.setText("[다음 단계]");
-        final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
-        // if decline button is clicked, close the custom dialog
-        declineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.mMediaPlayer.stop();
-                t.interrupt();
-                if(declineButton.getText().equals("[다음 단계]")){
-                    dialog_image.setVisibility(View.GONE);
-                    progressbar.setVisibility(View.GONE);
-                    declineButton.setText("[기도 마침]");
-                    text_ttl.setText("성령 청원 기도");
-                    text.setText("오소서, 성령님\n" +
-                            "당신의 빛, 그 빛살을 하늘에서 내리소서.\n" +
-                            "가난한 이 아버지, 은총 주님\n" +
-                            "오소서 마음에 빛을 주소서.\n" +
-                            "가장 좋은 위로자, 영혼의 기쁜 손님,\n" +
-                            "생기 돋워 주소서.\n" +
-                            "일할 때에 휴식을, 무더울 때 바람을,\n" +
-                            "슬플 때에 위로를, 지복의 빛이시여,\n" +
-                            "저희 맘 깊은 곳을 가득히 채우소서.\n" +
-                            "주님 도움 없으면 저희 삶 그 모든 것\n" +
-                            "이로운 것 없으리.\n" +
-                            "허물은 씻어 주고 마른 땅 물 주시고\n" +
-                            "병든 것 고치소서.\n" +
-                            "굳은 맘 풀어 주고 찬 마음 데우시고\n" +
-                            "바른길 이끄소서.\n" +
-                            "성령님을 믿으며 의지하는 이에게\n" +
-                            "칠은을 베푸소서.\n" +
-                            "공덕을 쌓게  하고 구원의 문을 넘어\n" +
-                            "영복을 얻게 하소서.아멘");
-                }else{
-                    // Close dialog
-                    dialog.dismiss();
-
-                }
-
-            }
-        });
-    }
-
-
-    public void showPraying2(String summary2, String jesus2, String mysentence)
-    {
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        @SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-                PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                PowerManager.ON_AFTER_RELEASE, TAG);
-        myWakeLock.acquire(); //실행후 리소스 반환 필수
-        MainActivity.releaseCpuLock();
-//        MainActivity.playSound(LectioActivity.this, "pray");
-
-        // Create custom dialog object
-        final Dialog dialog = new Dialog(LectioActivity.this);
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.dialog);
-        // Set dialog title
-        dialog.setTitle("Custom Dialog");
-        final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
-
-        t = new Thread(new Runnable() {
-            @Override
-            public void run(){
-                int progress=0;
-                while(progress<100){
-                    ++progress;
-                    progressbar.setProgress(progress);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    if(t.isInterrupted()) { break; }
-                }
-            }
-        });
-        t.start();
-
-        text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
-        //text_ttl.setText("성령 청원 기도");
-        text_ttl.setText("\n주님께서 내게 주신 깨달음에 대해 감사하며 이를 실천할 수 있는 힘을 달라고 주님께 기도해 봅시다.\n");
-        // set values for custom dialog components - text, image and button
-        text = (TextView) dialog.findViewById(R.id.textDialog);
-        if(mysentence == null){
-            if(summary2 == null){
-                summary2 = "";
-            }
-            if(jesus2 == null){
-                jesus2 = "";
-            }
-            text.setText(Html.fromHtml("<font color=\"#16a085\">"+summary2+"</font><br><font color=\"#16a085\">"+jesus2+"</font>"));
-        }else{
-            text.setText(Html.fromHtml("<font color=\"#16a085\">"+mysentence+"</font><br><font color=\"#16a085\">"+summary2+"\n</font><br><font color=\"#16a085\">"+jesus2+"</font>"));
-        }
-
-        dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                //  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
-            }
-        });
-
-        // 기도마침 클릭시 이벤트
-        declineButton = (Button) dialog.findViewById(R.id.declineButton);
-        declineButton.setText("[기도 마침]");
-        final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
-        // if decline button is clicked, close the custom dialog
-        declineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            //    MainActivity.mMediaPlayer.stop();
-                t.interrupt();
-                if(date_intent == null){
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                }
-
-                // Close dialog
-                dialog.dismiss();
-
-                // 한주복음묵상에서 온경우 다시 이동
-                Intent intent0 =getIntent();
-                String date_detail = intent0.getStringExtra("date_detail"); // 날짜 형식 : yyyy년 MM월 dd일 x요일
-                Log.d("saea", "!!!!!!!!"+date_detail);
-                if(weekend_date != null && date_detail != null) {
-                    Intent intent = new Intent(LectioActivity.this, WeekendActivity.class);
-                    LectioActivity.this.startActivity(intent);
-                }
-
-            }
-        });
-    }
-
-    // actionbar 오른쪽 기도하기 추가
+    // actionbar 오른쪽 추가
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         inflater = getMenuInflater();
-        inflater.inflate(R.menu.topmenu_lectio, menu);
+        inflater.inflate(R.menu.topmenu_main, menu);
 
         return true;
     }

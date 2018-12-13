@@ -27,6 +27,7 @@ import com.yellowpg.gaspel.WeekendActivity;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.Weekend;
+import com.yellowpg.gaspel.etc.getDay;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,8 +40,7 @@ import hirondelle.date4j.DateTime;
 public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
     int month;
     int year;
-    TextView text;
-    TextView today, date, oneSentence, comment, upper;
+    TextView date, oneSentence, comment, upper;
     TextView bg1;
     Context mContext;
     ImageView slide1, slide2, slide3;
@@ -56,18 +56,15 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
     public CaldroidSampleCustomAdapter(Context context,  Intent intent, int month, int year,
                                        HashMap<String, Object> caldroidData,
-                                       HashMap<String, Object> extraData, HashMap<DateTime, Comment> events, HashMap<DateTime, Lectio> events2, TextView today, TextView date, TextView oneSentence, TextView comment,
+                                       HashMap<String, Object> extraData, TextView date, TextView oneSentence, TextView comment,
                                        TextView bg1, ImageView slide1, ImageView slide2, ImageView slide3, TextView upper, Button edit, Button goComment, Button goLectio, Button goWeekend, LinearLayout ll_content) {
         super(context, month, year, caldroidData, extraData);
         this.mContext = context;
         this.month = month;
         this.year = year;
-        this.events = events;
-        this.today = today;
         this.date = date;
         this.comment = comment;
         this.oneSentence = oneSentence;
-      //  this.date2 = date2;
         this.bg1 = bg1;
         this.slide1 = slide1;
         this.slide2 = slide2;
@@ -116,34 +113,36 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         Resources resources = context.getResources();
         final DateTime dateTime = this.datetimeList.get(position);
 
-        // 배경 하얀색 / 글씨 검정색으로 세팅 및 날짜 삽입
+        // 배경 하얀색, 글씨 검정색으로 세팅 및 날짜 삽입
         cellView.setBackgroundColor(resources
                 .getColor(com.caldroid.R.color.caldroid_white));
         tv1.setTextColor(Color.parseColor("#999999"));
         tv1.setText("" + dateTime.getDay());
-
-        c1 = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
-        String date_typed = sdf.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
-        String typedDate = date_typed+getDay()+"요일"; // c1으로 getday()함
-
-        today.setVisibility(View.GONE);
-
-        DateTime firstdate = getToday();
-        String daydate = intent.getStringExtra("dateBack");
-        if(daydate != null) {
-            firstdate = new DateTime(daydate + " 00:00:00.000000000");
-        }
 
         edit.setBackgroundResource(R.drawable.button_bg2);
         goComment.setBackgroundResource(R.drawable.button_bg2);
         goLectio.setBackgroundResource(R.drawable.button_bg2);
         goWeekend.setBackgroundResource(R.drawable.button_bg2);
         date.setVisibility(View.VISIBLE);
-        date.setText(typedDate);
-        // 여기부터 오늘의 데이터를 가져온다.
 
+        // 오늘 날짜로 세팅한다
+        c1 = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
+        String date_typed = sdf.format(c1.getTime()); // yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+        String typedDate = date_typed+getDay.getDay(c1)+"요일";
+        date.setText(typedDate);
+
+        // 나의 기록으로오는 경우 오늘날짜를 보여주고 되돌아 오는 경우 dateback 값을 보여준다
+        DateTime firstdate = getToday();
+        String daydate = intent.getStringExtra("dateBack");
+        if(daydate != null) {
+            firstdate = new DateTime(daydate + " 00:00:00.000000000");
+        }
+
+        // 여기부터 오늘의 데이터를 가져온다.
+        // 당일 날짜값이 없는 경우
         if(events.get(firstdate)==null && events2.get(firstdate)==null){
+            // 이는
             if(daydate != null) {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Date date_ = null;
@@ -155,9 +154,8 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 c1 = Calendar.getInstance();
                 c1.setTime(date_);
                 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy년 MM월 dd일 ");
-                String date_val1 = sdf1.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
-                typedDate = date_val1 + getDay() + "요일"; // c1으로 getday()함
-
+                String date_val1 = sdf1.format(c1.getTime()); //  yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+                typedDate = date_val1 + getDay.getDay(c1) + "요일";
                 date.setText(typedDate);
             }
 
@@ -181,7 +179,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
             oneSentence.setVisibility(View.GONE);
             bg1.setVisibility(View.GONE);
 
-
         }else{
             slide1.setVisibility(View.VISIBLE);
             slide3.setVisibility(View.VISIBLE);
@@ -201,6 +198,23 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
             comment.setVisibility(View.GONE);
             bg1.setVisibility(View.GONE);
 
+
+            slide1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goComment.setVisibility(View.GONE);
+                    goLectio.setVisibility(View.GONE);
+                    goWeekend.setVisibility(View.GONE);
+                    slide1.setImageResource(R.drawable.slide1);
+                    slide2.setImageResource(R.drawable.slide2_off);
+                    slide3.setImageResource(R.drawable.slide3_off);
+                    upper.setText("그날의 복음 말씀");
+                    edit.setVisibility(View.GONE);
+                    comment.setVisibility(View.GONE);
+                    oneSentence.setVisibility(View.VISIBLE);
+                    bg1.setVisibility(View.GONE);
+                }
+            });
             // TODO Auto-generated method stub
 
             if(events.get(firstdate)!=null) {
@@ -215,19 +229,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 oneSentence.setText(events.get(firstdate).getOneSentence());
                 comment.setText(events.get(firstdate).getComment());
 
-                slide1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        slide1.setImageResource(R.drawable.slide1);
-                        slide2.setImageResource(R.drawable.slide2_off);
-                        slide3.setImageResource(R.drawable.slide3_off);
-                        upper.setText("그날의 복음 말씀");
-                        edit.setVisibility(View.GONE);
-                        comment.setVisibility(View.GONE);
-                        oneSentence.setVisibility(View.VISIBLE);
-                        bg1.setVisibility(View.GONE);
-                    }
-                });
                 slide2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -285,14 +286,15 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 }else{
                     slide2.setVisibility(View.VISIBLE);
                 }
+
                 date.setText(events2.get(firstdate).getDate());
-                //    sentence2.setVisibility(sentence2.VISIBLE);
-                //    bg1.setVisibility(bg1.VISIBLE);
+
                 oneSentence.setVisibility(oneSentence.VISIBLE);
                 oneSentence.setText(events2.get(firstdate).getOneSentence());
-                // 한주복음 묵상일 경우
+
+                // 주일 데이터 있을때
                 if(events3.get(firstdate) != null){
-                    Log.d("saea2", events3.get(firstdate).getMyThought());
+                    Log.d("saea", events3.get(firstdate).getMyThought());
                     if(events3.get(firstdate).getMyThought().equals("")){
                         bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(firstdate).getBg1()
                                 +"<br><font color=\"#999999\">· 장소는</font> " + events2.get(firstdate).getBg2() +
@@ -325,19 +327,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                             +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(firstdate).getJs1()
                             +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(firstdate).getJs2()+"\""));
                 }
-                slide1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        slide1.setImageResource(R.drawable.slide1);
-                        slide2.setImageResource(R.drawable.slide2_off);
-                        slide3.setImageResource(R.drawable.slide3_off);
-                        edit.setVisibility(View.GONE);
-                        upper.setText("그날의 복음 말씀");
-                        comment.setVisibility(View.GONE);
-                        bg1.setVisibility(View.GONE);
-                        oneSentence.setVisibility(View.VISIBLE);
-                    }
-                });
+
 
                 final DateTime finalFirstdate = firstdate;
                 slide3.setOnClickListener(new View.OnClickListener() {
@@ -421,14 +411,13 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
             img2.setVisibility(View.VISIBLE);
          }
 
-        // 데이터값이 있는 경우 별이 보이게 하는 부분 - 코멘트 부분
+        // 데이터값이 있는 경우 별이 보이게 하는 부분 - 코멘트 부분 (코멘트 있고 렉시오 없을때)
         if(events.get(dateTime)!=null && events2.get(dateTime)==null){
             img.setVisibility(View.VISIBLE);
         }
 
         // 별이 보이는 경우에 클릭 이벤트
         if (img.getVisibility() == View.VISIBLE || img2.getVisibility() == View.VISIBLE)  {
-
 
             if(events.get(dateTime)!=null && events2.get(dateTime)!=null){
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(img.getLayoutParams());
@@ -463,6 +452,23 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
                     // TODO Auto-generated method stub
 
+                    slide1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            goComment.setVisibility(View.GONE);
+                            goLectio.setVisibility(View.GONE);
+                            goWeekend.setVisibility(View.GONE);
+                            slide1.setImageResource(R.drawable.slide1);
+                            slide2.setImageResource(R.drawable.slide2_off);
+                            slide3.setImageResource(R.drawable.slide3_off);
+                            upper.setText("그날의 복음 말씀");
+                            edit.setVisibility(View.GONE);
+                            comment.setVisibility(View.GONE);
+                            oneSentence.setVisibility(View.VISIBLE);
+                            bg1.setVisibility(View.GONE);
+                        }
+                    });
+
                     if(events.get(dateTime)!=null) {
                         if(events.get(dateTime).getDate().contains("일요일")){
                             slide2.setVisibility(View.GONE);
@@ -470,27 +476,11 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                             slide2.setVisibility(View.VISIBLE);
                         }
                         oneSentence.setVisibility(oneSentence.VISIBLE);
-                      //  comment.setVisibility(comment.VISIBLE);
                         date.setText(events.get(dateTime).getDate());
                         oneSentence.setText(events.get(dateTime).getOneSentence());
                         comment.setText(events.get(dateTime).getComment());
 
-                        slide1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                goComment.setVisibility(View.GONE);
-                                goLectio.setVisibility(View.GONE);
-                                goWeekend.setVisibility(View.GONE);
-                                slide1.setImageResource(R.drawable.slide1);
-                                slide2.setImageResource(R.drawable.slide2_off);
-                                slide3.setImageResource(R.drawable.slide3_off);
-                                upper.setText("그날의 복음 말씀");
-                                edit.setVisibility(View.GONE);
-                                comment.setVisibility(View.GONE);
-                                oneSentence.setVisibility(View.VISIBLE);
-                                bg1.setVisibility(View.GONE);
-                            }
-                        });
+
                         slide2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -555,7 +545,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                     //    bg1.setVisibility(bg1.VISIBLE);
                         oneSentence.setVisibility(oneSentence.VISIBLE);
                         oneSentence.setText(events2.get(dateTime).getOneSentence());
-                        // 한주복음 묵상일 경우
+                        // 주일 데이터 있는 경우
                         if(events3.get(dateTime) != null){
                             if(events3.get(dateTime).getMyThought().equals("")){
                                 bg1.setText(Html.fromHtml("<font color=\"#999999\">· 이 복음의 등장인물은 </font> " + events2.get(dateTime).getBg1()
@@ -589,19 +579,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                                     +"<br><font color=\"#999999\">· 이 복음에서 보여지는 예수님은</font> " + events2.get(dateTime).getJs1()
                                     +"<br><font color=\"#999999\">· 결과적으로 이 복음을 통해 \n예수님께서 내게 해주시는 말씀은</font> \"" + events2.get(dateTime).getJs2()+"\""));
                         }
-                        slide1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                slide1.setImageResource(R.drawable.slide1);
-                                slide2.setImageResource(R.drawable.slide2_off);
-                                slide3.setImageResource(R.drawable.slide3_off);
-                                edit.setVisibility(View.GONE);
-                                upper.setText("그날의 복음 말씀");
-                                comment.setVisibility(View.GONE);
-                                bg1.setVisibility(View.GONE);
-                                oneSentence.setVisibility(View.VISIBLE);
-                            }
-                        });
 
                         slide3.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -721,7 +698,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                     c1.setTime(date_);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
                     String date_typed = sdf.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
-                    String typedDate = date_typed+getDay()+"요일"; // c1으로 getday()함
+                    String typedDate = date_typed+ getDay.getDay(c1)+"요일"; // c1으로 getday()함
 
                     date.setText(typedDate);
                   //  intent.putExtra("date",dateTime.getYear()+"-"+month+"-"+day);
@@ -805,36 +782,5 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
         setCustomResources(dateTime, cellView, tv1);
         return cellView;
     }
-    // 요일 얻어오기
-    public String getDay(){
-        int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
-
-        switch(dayNum){
-            case 1:
-                day = "일";
-                break ;
-            case 2:
-                day = "월";
-                break ;
-            case 3:
-                day = "화";
-                break ;
-            case 4:
-                day = "수";
-                break ;
-            case 5:
-                day = "목";
-                break ;
-            case 6:
-                day = "금";
-                break ;
-            case 7:
-                day = "토";
-                break ;
-
-        }
-        return day;
-    }
-
 
 }

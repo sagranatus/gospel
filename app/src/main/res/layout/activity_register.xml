@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/white"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="10dp" >
 
@@ -21,7 +21,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="70dp"
             android:hint="이메일"
             android:textSize="14dp"
             android:inputType="textEmailAddress"
@@ -29,11 +29,16 @@
             android:singleLine="true"
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <EditText
             android:id="@+id/name"
             android:fontFamily="@font/notosans_regular"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:hint="이름"
@@ -46,7 +51,9 @@
         <EditText
             android:id="@+id/christ_name"
             android:fontFamily="@font/notosans_regular"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:hint="세례명"
@@ -55,22 +62,30 @@
             android:singleLine="true"
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
-        <EditText
-            android:id="@+id/age"
-            android:fontFamily="@font/notosans_regular"
-            android:layout_width="fill_parent"
+            <EditText
+                android:id="@+id/age"
+                android:fontFamily="@font/notosans_regular"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="나이"
+                android:textSize="14dp"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/input_register"
+                android:textColorHint="@color/input_register_hint" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:hint="나이"
-            android:textSize="14dp"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
+            android:orientation="horizontal">
         <EditText
             android:id="@+id/region"
             android:fontFamily="@font/notosans_regular"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:hint="교구"
@@ -82,7 +97,9 @@
         <EditText
             android:id="@+id/cathedral"
             android:fontFamily="@font/notosans_regular"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:hint="본당"
@@ -92,13 +109,18 @@
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
 
-
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <EditText
             android:id="@+id/password"
             android:fontFamily="@font/notosans_regular"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="0dp"
             android:textSize="14dp"
             android:hint="비밀번호"
             android:inputType="textPassword"
@@ -110,7 +132,9 @@
         <EditText
             android:id="@+id/password_confirm"
             android:fontFamily="@font/notosans_regular"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:textSize="14dp"
@@ -120,7 +144,7 @@
             android:singleLine="true"
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
-
+        </LinearLayout>
         <!-- Login Button -->
 
         <Button
@@ -133,7 +157,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:text="등록하기"
             android:textColor="#ffffff"
             android:textSize="11dp" />

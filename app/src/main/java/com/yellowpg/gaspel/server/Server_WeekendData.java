@@ -1,10 +1,6 @@
 package com.yellowpg.gaspel.server;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -13,8 +9,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.WeekendDBSqlData;
-import com.yellowpg.gaspel.LectioActivity;
-import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Weekend;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -26,8 +20,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import hirondelle.date4j.DateTime;
 
 public class Server_WeekendData {
 
@@ -42,12 +34,11 @@ public class Server_WeekendData {
             }
         });
         t.start();
-
     }
 
     public static void selectAll(final Context context, final String uid, final ArrayList<Weekend> mAppItem) {
-
-        Thread t = new Thread(new Runnable() {
+        selectAll_Connect(context, uid, mAppItem);
+       /* Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -63,7 +54,7 @@ public class Server_WeekendData {
             t.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -184,48 +175,7 @@ public class Server_WeekendData {
                                     dbMgr.dbOpen();
                                     dbMgr.insertWeekendData(WeekendDBSqlData.SQL_DB_INSERT_DATA, weekendData);
                                     dbMgr.dbClose();
-                                    //   commentInfoHelper.close();
                                 }
-
-                         /*       WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(context);
-                                ContentValues values;
-                                SQLiteDatabase db3;
-                                try{
-                                    String weekend_str = null;
-                                    db3 = weekendInfoHelper.getReadableDatabase();
-                                    String[] columns = {"mysentence", "mythought"};
-                                    String whereClause = "date = ?";
-                                    String[] whereArgs = new String[] {
-                                            arr[1]
-                                    };
-                                    Cursor cursor = db3.query("weekend", columns,  whereClause, whereArgs, null, null, null);
-
-                                    String mythought = "";
-                                    while(cursor.moveToNext()){
-                                        weekend_str = cursor.getString(0);
-                                        mythought = cursor.getString(1);
-                                    }
-                                    if(weekend_str!=null){
-                                        Log.d("saea", "기존 값이 있음");
-                                    }else{
-                                        Log.d("saea", "기존 값이 없음");
-                                        // db=commentInfoHelper.getWritableDatabase();
-                                        values = new ContentValues();
-                                        values = new ContentValues();
-                                        values.put("date", arr[1]);
-                                        values.put("mysentence",  arr[2]);
-                                        values.put("mythought",  arr[3]);
-                                        db3.insert("weekend", null, values);
-                                        //   commentInfoHelper.close();
-                                    }
-
-                                    cursor.close();
-                                    weekendInfoHelper.close();
-                                }catch(Exception e){
-                                    e.printStackTrace();
-                                }
-
-                                */
 
                                 weekendItems.add(weekend);
                                 Log.d("saea", "weekends size:"+String.valueOf(weekendItems.size()));

@@ -14,29 +14,6 @@
             android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/pray"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/closePray"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/actionbar"
-            android:fontFamily="@font/notosans_semibold"
-            android:textSize="13dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"
-            android:lineSpacingExtra="3dp"
-            android:text="기도마침"
-            android:background="#ffffff"
-            style="?android:attr/borderlessButtonStyle" />
-    </LinearLayout>
-    <LinearLayout
         android:id="@+id/ll_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -159,7 +136,6 @@
                         style="?android:attr/borderlessButtonStyle" />
                 </LinearLayout>
                   <TextView
-                      android:id="@+id/pray_content"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content" />
 

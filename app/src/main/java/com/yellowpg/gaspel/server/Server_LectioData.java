@@ -1,10 +1,6 @@
 package com.yellowpg.gaspel.server;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -13,8 +9,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.LectioDBSqlData;
-import com.yellowpg.gaspel.LectioActivity;
-import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.etc.AppConfig;
 import com.yellowpg.gaspel.etc.AppController;
@@ -45,8 +39,8 @@ public class Server_LectioData {
 
 
     public static void selectAll(final Context context, final String uid, final ArrayList<Lectio> mAppItem) {
-
-        Thread t = new Thread(new Runnable() {
+        selectAll_Connect(context, uid, mAppItem);
+     /*   Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -61,7 +55,7 @@ public class Server_LectioData {
             t.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        } */
     }
 
 
@@ -191,47 +185,6 @@ public class Server_LectioData {
                                     dbMgr.insertLectioData(LectioDBSqlData.SQL_DB_INSERT_DATA, lectioData);
                                     dbMgr.dbClose();
                                 }
-
-                                /*SQLiteDatabase db;
-                                LectioInfoHelper lectioInfoHelper = new LectioInfoHelper(context);
-                                ContentValues values;
-
-                                try{
-                                    String bg1_str = null;
-                                    db = lectioInfoHelper.getReadableDatabase();
-                                    String[] columns = {"bg1", "bg2", "bg3", "sum1", "sum2", "js1", "js2", "date", "onesentence"};
-                                    String whereClause = "date = ?";
-                                    String[] whereArgs = new String[] {
-                                            arr[1]
-                                    };
-                                    Cursor cursor = db.query("lectio", columns,  whereClause, whereArgs, null, null, null);
-
-                                    while(cursor.moveToNext()){
-                                        bg1_str = cursor.getString(0);
-                                    }
-                                    if(bg1_str!= null){
-                                        Log.d("saea", "기존 값이 있음");
-                                    }else{
-                                        Log.d("saea", "기존 값이 없음");
-                                        values = new ContentValues();
-                                        values.put("bg1",  arr[3]);
-                                        values.put("bg2",  arr[4]);
-                                        values.put("bg3",  arr[5]);
-                                        values.put("sum1", arr[6]);
-                                        values.put("sum2", arr[7]);
-                                        values.put("js1", arr[8]);
-                                        values.put("js2", arr[9]);
-                                        values.put("date", arr[1]);
-                                        values.put("onesentence", arr[2]);
-                                        db.insert("lectio", null, values);
-                                    }
-                                    cursor.close();
-                                    lectioInfoHelper.close();
-                                }catch(Exception e){
-
-                                }
-                                */
-
 
                                 lectioItems.add(lectio);
                                 Log.d("saea", "lectios size:"+String.valueOf(lectioItems.size()));

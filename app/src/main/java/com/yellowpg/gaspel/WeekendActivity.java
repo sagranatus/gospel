@@ -1,25 +1,17 @@
 package com.yellowpg.gaspel;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -29,41 +21,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.DB.LectioDBSqlData;
 import com.yellowpg.gaspel.DB.WeekendDBSqlData;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.Weekend;
-import com.yellowpg.gaspel.etc.AppConfig;
-import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.SessionManager;
-import com.yellowpg.gaspel.server.Server_WeekendData;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.yellowpg.gaspel.etc.getDay;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
-public class WeekendActivity extends AppCompatActivity implements View.OnClickListener {
-	final static String TAG = "weekendActivity";
+public class WeekendActivity extends AppCompatActivity {
 	Calendar c1 = Calendar.getInstance();
 	BottomNavigationView bottomNavigationView;
 	String day;
@@ -72,7 +47,6 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 	ListSelectorDialog dlg_left;
 	String[] listk_left, listv_left;
 
-	//현재 해 + 달 구하기
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 ");
 	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 	String date_val = sdf.format(c1.getTime());
@@ -84,6 +58,8 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 	LinearLayout ll_main;
 	String date_navi;
 	private SessionManager session;
+	NetworkInfo mobile;
+	NetworkInfo wifi;
 	String uid = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +74,13 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		c1 = Calendar.getInstance();
 	//	c1.add(Calendar.DATE, 1);
 		date_navi = sdf.format(c1.getTime());
-		date_navi = date_navi+getDay()+"요일";
+		date_navi = date_navi+getDay.getDay(c1)+"요일";
 		Log.d("saea","today"+date_navi);
 
+		// 인터넷연결 확인
+		ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 		//actionbar setting
 		android.support.v7.app.ActionBar actionbar = getSupportActionBar();
@@ -131,9 +111,7 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		edit.setOnClickListener(listener);
 		weekendGaspel.setBackgroundResource(R.drawable.button_bg2);
 		edit.setBackgroundResource(R.drawable.button_bg2);
-	//	saveThought.setOnClickListener(listener);
 
-	//	saveThought.setBackgroundResource(R.drawable.button_bg);
 		after_save_tv1.setBackgroundResource(R.drawable.edit_bg_white);
 		after_save_tv2.setBackgroundResource(R.drawable.edit_bg_white);
 		after_save_tv3.setBackgroundResource(R.drawable.edit_bg_white);
@@ -142,8 +120,23 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		after_save_tv6.setBackgroundResource(R.drawable.edit_bg_white);
 		after_save_tv7.setBackgroundResource(R.drawable.edit_bg_white);
 		after_save_tv8.setBackgroundResource(R.drawable.edit_bg_white);
-		// 한주복음묵상 데이터 있는지 확인
-		checkWeekendRecord();
+
+
+		// 텍스트사이즈 설정
+		SharedPreferences sp2 = getSharedPreferences("setting",0);
+		textsize = sp2.getString("textsize", "");
+		if(textsize.equals("big")){
+			after_save_tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			after_save_tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			after_save_tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			after_save_tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			after_save_tv5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			after_save_tv6.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			after_save_tv7.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			after_save_tv8.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			oneSentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+
+		}
 
 		// bottomnavigation 뷰 등록
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -227,48 +220,27 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 			}
 		});
 
+		// 데이터 있는지 확인
+		checkWeekendRecord();
 
-		// 텍스트사이즈 설정
-		SharedPreferences sp2 = getSharedPreferences("setting",0);
-		textsize = sp2.getString("textsize", "");
-		if(textsize.equals("big")){
-			after_save_tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			after_save_tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			after_save_tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			after_save_tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			after_save_tv5.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			after_save_tv6.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			after_save_tv7.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			after_save_tv8.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			oneSentence.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-
-		}else{
-
-		}
 
 	}
 
 	public void checkWeekendRecord(){
-		SQLiteDatabase db;
-		ContentValues values;
-		//WeekendInfoHelper weekendInfoHelper = new WeekendInfoHelper(WeekendActivity.this);
-		if(c1.get(Calendar.DAY_OF_WEEK) == 1){
+
+		if(c1.get(Calendar.DAY_OF_WEEK) == 1){ // 일요일인 경우에는 오늘 날짜로 가져옴
 
 		}else{
 			c1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 			c1.add(c1.DATE,7);
 		}
 
-
-
 		date_val = sdf.format(c1.getTime());
-		date_detail = date_val+getDay()+"요일";
+		date_detail = date_val+ getDay.getDay(c1)+"요일";
 		Log.d("saea", date_detail);
 		String mysentence = null;
-		String mythought = null;
 
 		ArrayList<Weekend> weekends = new ArrayList<Weekend>();
-		String comment_str = null;
 		DBManager dbMgr = new DBManager(WeekendActivity.this);
 		dbMgr.dbOpen();
 		dbMgr.selectWeekendData(WeekendDBSqlData.SQL_DB_SELECT_DATA, uid, date_detail, weekends);
@@ -276,7 +248,6 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 
 		if(!weekends.isEmpty()){
 			mysentence = weekends.get(0).getMySentence();
-			mythought = weekends.get(0).getMyThought();
 		}
 
 		ArrayList<Lectio> lectios = new ArrayList<Lectio>();
@@ -302,7 +273,6 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 			js2_str = lectios.get(0).getJs2();
 			onesentence = lectios.get(0).getOneSentence();
 
-
 			// edittext에 가져오기
 			oneSentence.setText(onesentence);
 			after_save_tv1.setText(bg1_str);
@@ -312,9 +282,7 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 			after_save_tv5.setText(sum2_str);
 			after_save_tv6.setText(js1_str);
 			after_save_tv7.setText(js2_str);
-		}else{
 		}
-
 
 		// 기존 값이 있는 경우 보여지기
 		if(mysentence != null){
@@ -324,7 +292,6 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 			after_save_tv8.setText(mysentence);
 			Log.d("saea", "한주복음묵상 있음");
 
-
 		}else{
 			oneSentence.setVisibility(View.GONE);
 			Log.d("saea", "한주복음묵상 없음");
@@ -333,65 +300,38 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 
 	}
 
-	// exp : 요일 얻어오기
-	public String getDay(){
-		int dayNum = c1.get(Calendar.DAY_OF_WEEK) ;
 
-		switch(dayNum){
-			case 1:
-				day = "일";
-				break ;
-			case 2:
-				day = "월";
-				break ;
-			case 3:
-				day = "화";
-				break ;
-			case 4:
-				day = "수";
-				break ;
-			case 5:
-				day = "목";
-				break ;
-			case 6:
-				day = "금";
-				break ;
-			case 7:
-				day = "토";
-				break ;
-
-		}
-		return day;
-	}
-
-	// 날짜 이전 이후 선택시 값 변경 이벤트
 	View.OnClickListener listener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
 				case R.id.bt_weekend_gaspel:
-					Intent intent = new Intent(WeekendActivity.this, LectioActivity.class);
-					String thisweekend = sdf2.format(c1.getTime());
-					intent.putExtra("date",thisweekend);
-					intent.putExtra("date_detail",date_detail);
-					WeekendActivity.this.startActivity(intent);
+					if ((wifi.isConnected() || mobile.isConnected())) {
+						Intent intent = new Intent(WeekendActivity.this, LectioActivity.class);
+						String thisweekend = sdf2.format(c1.getTime());
+						intent.putExtra("date", thisweekend);
+						intent.putExtra("date_detail", date_detail);
+						WeekendActivity.this.startActivity(intent);
+					}else{
+						Toast.makeText(WeekendActivity.this, "인터넷을 연결해주세요", Toast.LENGTH_SHORT).show();
+					}
 					break;
 				case R.id.bt_edit:
+					if ((wifi.isConnected() || mobile.isConnected())) {
 					Intent intent2 = new Intent(WeekendActivity.this, LectioActivity.class);
 					String thisweekend2 = sdf2.format(c1.getTime());
 					intent2.putExtra("date",thisweekend2);
 					intent2.putExtra("date_detail",date_detail);
 					intent2.putExtra("edit",true);
 					WeekendActivity.this.startActivity(intent2);
+					}else{
+						Toast.makeText(WeekendActivity.this, "인터넷을 연결해주세요", Toast.LENGTH_SHORT).show();
+					}
 					break;
 			}
 		}
 	};
 
-	@Override
-	public void onClick(View view) {
-
-	}
 
 	// 커스텀 다이얼로그 선택시
 	@Override
@@ -410,7 +350,7 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 								Intent i = new Intent(WeekendActivity.this, SettingActivity.class);
 								startActivity(i);
 							}else if(item.equals("계정정보")){
-								Intent i = new Intent(WeekendActivity.this, LoginActivity.class);
+								Intent i = new Intent(WeekendActivity.this, ProfileActivity.class);
 								startActivity(i);
 							}else if (item.equals("로그아웃")) {
 								ProfileActivity.logoutUser(session,WeekendActivity.this);
@@ -423,90 +363,13 @@ public class WeekendActivity extends AppCompatActivity implements View.OnClickLi
 		}
 	}
 
-	// actionbar 오른쪽 praying 추가
+	// actionbar 오른쪽 추가
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.topmenu_main, menu);
 		return true;
 	}
-
-	Thread t;
-	TextView text_ttl;
-	TextView text;
-	Button declineButton;
-	public void showPraying2(String mysentence)
-	{
-		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		@SuppressLint("InvalidWakeLockTag") PowerManager.WakeLock myWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-				PowerManager.ACQUIRE_CAUSES_WAKEUP |
-				PowerManager.ON_AFTER_RELEASE, TAG);
-		myWakeLock.acquire(); //실행후 리소스 반환 필수
-		MainActivity.releaseCpuLock();
-		MainActivity.playSound(WeekendActivity.this, "pray");
-
-		// Create custom dialog object
-		final Dialog dialog = new Dialog(WeekendActivity.this);
-		// Include dialog.xml file
-		dialog.setContentView(R.layout.dialog);
-		// Set dialog title
-		dialog.setTitle("Custom Dialog");
-		final ProgressBar progressbar = (ProgressBar) dialog.findViewById(R.id.progress);
-
-		t = new Thread(new Runnable() {
-			@Override
-			public void run(){
-				int progress=0;
-				while(progress<100){
-					++progress;
-					progressbar.setProgress(progress);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if(t.isInterrupted()) { break; }
-				}
-			}
-		});
-		t.start();
-
-		text_ttl = (TextView) dialog.findViewById(R.id.titleDialog);
-		//text_ttl.setText("성령 청원 기도");
-		text_ttl.setText("\n한주간 묵상하기로 다짐한 구절을 반복해서 되뇌이며 주님께서 내게 하시는 말씀을 귀기울여 들어 봅시다.\n");
-		// set values for custom dialog components - text, image and button
-		text = (TextView) dialog.findViewById(R.id.textDialog);
-		text.setText(Html.fromHtml("<font color=\"#16a085\">"+mysentence+"\n</font>"));
-
-
-		dialog.show();
-		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				//  item.setIcon(getResources().getDrawable(R.drawable.notification_base));
-			}
-		});
-
-		// 기도마침 클릭시 이벤트
-		declineButton = (Button) dialog.findViewById(R.id.declineButton);
-		declineButton.setText("[기도 마침]");
-		final ImageView dialog_image = (ImageView) dialog.findViewById(R.id.dialog_image);
-		// if decline button is clicked, close the custom dialog
-		declineButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				MainActivity.mMediaPlayer.stop();
-				t.interrupt();
-				bottomNavigationView.setVisibility(View.VISIBLE);
-				// Close dialog
-				dialog.dismiss();
-
-			}
-		});
-	}
-
-
 
 }
 

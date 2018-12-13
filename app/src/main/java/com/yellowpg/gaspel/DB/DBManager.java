@@ -55,7 +55,7 @@ public class DBManager {
 
 
     //user data
-
+    // 로그인시에 user있으면 삭제, users 없으면 생성
     public void firstUserData(){
         mDbController.execSQL("DROP TABLE IF EXISTS user");
         mDbController.execSQL(UsersDBSqlData.SQL_DB_CREATE_TABLE); // 만약 users 테이블이 없는 경우에는 억지로라도 생성해야함
@@ -67,9 +67,6 @@ public class DBManager {
     }
 
     public void selectUserData(String aSql, String uid, ArrayList<UserData> aCDataList){
-        // 이미 사용하고 있는 사용자의 경우에는 기존의 user 테이블 삭제하고 users 테이블을 만든다 // 만약 없는 경우에는 테이블 만들도록
-     //   mDbController.execSQL("DROP TABLE IF EXISTS user");
-     //   mDbController.execSQL(UsersDBSqlData.SQL_DB_CREATE_TABLE); // 만약 users 테이블이 없는 경우에는 억지로라도 생성해야함
         String[] sqlData = {uid};
         Cursor results = this.mDbController.rawQuery(aSql, sqlData);
         results.moveToNext();
@@ -143,8 +140,6 @@ public class DBManager {
     public void deleteCommentData(String aSql, String uid) {
         String[] sqlData = {uid};
         this.mDbController.execSQL(aSql, sqlData);
-     //   mDbController.execSQL(UserDBSqlData.SQL_DB_CREATE_TABLE); // 테스트용
-    //    mDbController.execSQL("DROP TABLE IF EXISTS users"); // 테스트용
     }
 
 

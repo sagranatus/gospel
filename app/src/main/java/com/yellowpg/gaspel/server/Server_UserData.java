@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -13,11 +12,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.DBManager;
-import com.yellowpg.gaspel.DB.UserDBSqlData;
 import com.yellowpg.gaspel.DB.UsersDBSqlData;
 import com.yellowpg.gaspel.FirstActivity;
-import com.yellowpg.gaspel.MainActivity;
-import com.yellowpg.gaspel.ProfileActivity;
 import com.yellowpg.gaspel.data.Comment;
 import com.yellowpg.gaspel.data.Lectio;
 import com.yellowpg.gaspel.data.UserData;
@@ -49,8 +45,7 @@ public class Server_UserData {
             @Override
             public void onResponse(String response) {
                 //sae  Log.d(TAG, "Login Response: " + response.toString());
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
+
                 try {
                     JSONObject jObj = new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));
                     error = jObj.getBoolean("error");
@@ -58,7 +53,7 @@ public class Server_UserData {
                     if (!error) { // error가 false인 경우에 로그인 성공
 
                         // Now store the user in SQLite
-                        String uid = jObj.getString("uid");
+                        final String uid = jObj.getString("uid");
 
                         session.setLogin(true, uid); // sharedpreference에서 로그인 트루로
 
@@ -85,23 +80,43 @@ public class Server_UserData {
                             dbMgr.insertUserData(UsersDBSqlData.SQL_DB_INSERT_DATA, cData);
                             dbMgr.dbClose();
                             Log.d("saea", uid+"add user into DB");
-
                         }
 
                         // 서버 DB에 있는 정보를 모두 가져온다
-                        ArrayList<Comment> comments = new  ArrayList<Comment>();
-                        Server_CommentData.selectAll(context, uid, comments);
+                        Thread t = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                        ArrayList<Lectio> lectios = new  ArrayList<Lectio>();
-                        Server_LectioData.selectAll(context, uid, lectios);
+                                Log.i("saea", "Starting Upload...");
 
-                        ArrayList<Weekend> weekends = new  ArrayList<Weekend>();
-                        Server_WeekendData.selectAll(context, uid, weekends);
+                                ArrayList<Comment> comments = new  ArrayList<Comment>();
+                                Server_CommentData.selectAll(context, uid, comments);
 
-                        Intent intent = new Intent(context, FirstActivity.class);
-                        context.startActivity(intent);
+                                ArrayList<Lectio> lectios = new  ArrayList<Lectio>();
+                                Server_LectioData.selectAll(context, uid, lectios);
+
+                                ArrayList<Weekend> weekends = new  ArrayList<Weekend>();
+                                Server_WeekendData.selectAll(context, uid, weekends);
+
+                            }
+                        });
+                        t.start();
+                        try {
+                            t.join();
+                            if (pDialog.isShowing())
+                                pDialog.dismiss();
+
+                            Intent intent = new Intent(context, FirstActivity.class);
+                            context.startActivity(intent);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+
 
                     } else {
+                        if (pDialog.isShowing())
+                            pDialog.dismiss();
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(context,
@@ -110,9 +125,11 @@ public class Server_UserData {
                     }
 
                 } catch (JSONException e) {
+                    if (pDialog.isShowing())
+                        pDialog.dismiss();
                     // JSON error
                     e.printStackTrace();
-                    Toast.makeText(context, "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "인터넷을 연결해주세요", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -123,7 +140,7 @@ public class Server_UserData {
             public void onErrorResponse(VolleyError error) {
                 Log.e("saea", "Login Error: " + error.getMessage());
                 Toast.makeText(context,
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        "인터넷을 연결해주세요", Toast.LENGTH_LONG).show();
 
                 if (pDialog.isShowing())
                     pDialog.dismiss();
@@ -157,8 +174,7 @@ public class Server_UserData {
         String tag_string_req = "req_register";
 
         pDialog.setMessage("Registering ...");
-        if (!pDialog.isShowing())
-            pDialog.show();
+
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_REGISTER, new Response.Listener<String>() {
@@ -202,9 +218,6 @@ public class Server_UserData {
                         Log.d("saea", name+christ_name);
                         Toast.makeText(context, "성공적으로 가입되었습니다.", Toast.LENGTH_LONG).show();
 
-                 //       ArrayList<Comment> comments = new  ArrayList<Comment>();
-                 //       Server_CommentData.selectAll(context, uid, comments);
-
                         Intent i = new Intent(context,
                                 FirstActivity.class);
                         i.putExtra("uid", uid);
@@ -219,6 +232,8 @@ public class Server_UserData {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(context,
+                            "인터넷을 연결해주세요", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -228,7 +243,7 @@ public class Server_UserData {
             public void onErrorResponse(VolleyError error) {
                 Log.e("saea", "Registration Error: " + error.getMessage());
                 Toast.makeText(context,
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        "인터넷을 연결해주세요", Toast.LENGTH_LONG).show();
                 if (pDialog.isShowing())
                     pDialog.dismiss();
             }
@@ -256,13 +271,13 @@ public class Server_UserData {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    public static void updateUser(final Context context, final String uid, final String email, final String name,
+    public static void updateUser(final Context context, final ProgressDialog pDialog, final String uid, final String email, final String name,
                                   final String christ_name, final String age, final String region, final String cathedral) {
         // Tag used to cancel the request
         String tag_string_req = "req_update";
 
-        //   pDialog.setMessage("Registering ...");
-        //  showDialog();
+           pDialog.setMessage("Updating ...");
+
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_USERUPDATE, new Response.Listener<String>() {
@@ -270,7 +285,8 @@ public class Server_UserData {
             @Override
             public void onResponse(String response) {
                 Log.d("saea", "Update Response: " + response.toString());
-                //  hideDialog();
+                if (pDialog.isShowing())
+                    pDialog.dismiss();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -297,7 +313,7 @@ public class Server_UserData {
                         dbMgr.dbOpen();
                         dbMgr.updateUserData(UsersDBSqlData.SQL_DB_UPDATE_DATA, new String[]{email,name, christ_name, age, region, cathedral, uid});
                         dbMgr.dbClose();
-                        Toast.makeText(context, "성공적으로 수정되었습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "프로필이 수정되었습니다.", Toast.LENGTH_LONG).show();
 
                     } else {
 
@@ -305,7 +321,7 @@ public class Server_UserData {
                         // message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(context,
-                                errorMsg, Toast.LENGTH_LONG).show();
+                               "실패하였습니다", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -318,7 +334,7 @@ public class Server_UserData {
             public void onErrorResponse(VolleyError error) {
                 Log.e("saea", "Update Error: " + error.getMessage());
                 Toast.makeText(context,
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                        "실패하였습니다", Toast.LENGTH_LONG).show();
                 //    hideDialog();
             }
         }) {

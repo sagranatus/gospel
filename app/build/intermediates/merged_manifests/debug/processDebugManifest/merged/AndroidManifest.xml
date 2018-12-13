@@ -43,15 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yellowpg.gaspel.MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
+        <activity android:name="com.yellowpg.gaspel.MainActivity" />
         <activity android:name="com.yellowpg.gaspel.WeekendActivity" />
         <activity android:name="com.yellowpg.gaspel.SettingActivity" />
         <activity android:name="com.yellowpg.gaspel.RecordActivity" />

@@ -1,11 +1,13 @@
 package com.yellowpg.gaspel;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -14,12 +16,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yellowpg.gaspel.DB.DBManager;
-import com.yellowpg.gaspel.DB.UsersDBSqlData;
 import com.yellowpg.gaspel.etc.SessionManager;
 import com.yellowpg.gaspel.server.Server_UserData;
 
@@ -31,12 +30,18 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
-
+    NetworkInfo mobile;
+    NetworkInfo wifi;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // 인터넷연결 확인
+        ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         //actionbar setting
         android.support.v7.app.ActionBar actionbar = getSupportActionBar();
@@ -44,8 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         actionbar.setCustomView(R.layout.actionbar_login);
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
         actionbar.setElevation(0);
-
-        // actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.back);
 
@@ -62,28 +65,32 @@ public class LoginActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
-
         // Session manager
         session = new SessionManager(getApplicationContext());
 
-        // 로그인한 경우 profileactivity로 보낸다.
-        if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
-            Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        // 새로 추가한 부분 화면 클릭시 soft keyboard hide
+        findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                return true;
+            }
+        });
 
         // Login button Click Event
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if (getCurrentFocus() != null) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
-                // Check for empty data in the form
                 if (!email.isEmpty() && !password.isEmpty()) {
                     // login user
 
@@ -101,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
                             "이메일과 비밀번호를 입력하세요!", Toast.LENGTH_LONG)
                             .show();
                 }
+
+
             }
 
         });
@@ -116,17 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // 새로 추가한 부분 화면 클릭시 soft keyboard hide
-        findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                if (getCurrentFocus() != null) {
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                }
-                return true;
-            }
-        });
+
 
     }
 

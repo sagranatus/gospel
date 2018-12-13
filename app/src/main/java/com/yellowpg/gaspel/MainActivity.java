@@ -1,32 +1,19 @@
 package com.yellowpg.gaspel;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnSeekCompleteListener;
-import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,13 +23,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,12 +44,15 @@ import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.SessionManager;
+import com.yellowpg.gaspel.etc.getDay;
 import com.yellowpg.gaspel.server.Server_CommentData;
+
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
 	TextView tv2;
 	TextView tv_comment;
 	String typedDate;
-	static String day;
 	String textsize;
 	EditText comment;
 	String daydate;
@@ -92,44 +79,31 @@ public class MainActivity extends AppCompatActivity {
 	String[] listk_left, listv_left;
 	private SessionManager session;
 	String uid = null;
+	NetworkInfo mobile;
+	NetworkInfo wifi;
 
-	public static MediaPlayer mMediaPlayer;
-	InputMethodManager imm;
-	LinearLayout ll, ll_date;
+	Calendar c1 = Calendar.getInstance();
 
-	static Calendar c1 = Calendar.getInstance();
-	//현재 해 + 달 구하기
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-	String date_val = sdf.format(c1.getTime());
-	//현재 해 + 달 구하기
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy년 MM월 dd일 ");
 	String date_val1 = sdf1.format(c1.getTime());
 
 	SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 	String date_val2 = sdf2.format(c1.getTime());
 
-	// exp : 알람 연관된 부분
-	private static PowerManager.WakeLock myWakeLock;
 
-
-	@SuppressLint("InvalidWakeLockTag")
 	protected void onCreate(Bundle savedInstanceState){
 
 		//session 정보 가져오기
 		session = new SessionManager(getApplicationContext());
 		uid = session.getUid();
 
-		c1 = Calendar.getInstance();
-
 		// exp : 인터넷연결 확인
 		ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 		super.onCreate(savedInstanceState);
-		date_val = sdf.format(c1.getTime());
-		date_val1 = sdf1.format(c1.getTime());
-		date_val2 = sdf2.format(c1.getTime());
 
 		setContentView(R.layout.activity_main);
 
@@ -140,17 +114,37 @@ public class MainActivity extends AppCompatActivity {
 		actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
 		actionbar.setElevation(0);
 
-		// 복음 제목, 내용
-		tv = (TextView) findViewById(R.id.tv_01);
-		btnNetCon = (Button) findViewById(R.id.bt_network_con);
 
-		// 말씀 새기기 제목, 내용, 코멘트
-		tv2 = (TextView) findViewById(R.id.tv_02);
-		tv_comment = (TextView) findViewById(R.id.tv_comment);
-		comment = (EditText) findViewById(R.id.et_comment);
+		tv = (TextView) findViewById(R.id.tv_01); // 복음 내용
+		btnNetCon = (Button) findViewById(R.id.bt_network_con); // 복음 첫 구절
+
+		tv2 = (TextView) findViewById(R.id.tv_02); // 말씀새기기 질문
+		tv_comment = (TextView) findViewById(R.id.tv_comment); // 저장된 코멘트 내용
+		comment = (EditText) findViewById(R.id.et_comment); // 코멘트 edittext
 		comment_save = (Button) findViewById(R.id.bt_save);
 		comment_edit = (Button) findViewById(R.id.bt_edit);
 
+
+		// 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
+		comment_save.setOnClickListener(listener);
+		comment_edit.setOnClickListener(listener);
+		comment_save.setBackgroundResource(R.drawable.button_bg);
+		comment_edit.setBackgroundResource(R.drawable.button_bg);
+		comment.setBackgroundResource(R.drawable.edit_bg_white);
+		tv_comment.setBackgroundResource(R.drawable.edit_bg_grey);
+
+		// textsize 설정
+		SharedPreferences sp = getSharedPreferences("setting",0);
+		textsize = sp.getString("textsize", "");
+		if(textsize.equals("big")){
+			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
+			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			tv_comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+		}else{
+
+		}
 
 		// bottomnavigation 뷰 등록
 		bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -198,6 +192,42 @@ public class MainActivity extends AppCompatActivity {
 
 		});
 
+		// soft keyboard 보일때 이벤트
+		KeyboardVisibilityEvent.setEventListener(
+				MainActivity.this,
+				new KeyboardVisibilityEventListener() {
+					@Override
+					public void onVisibilityChanged(boolean isOpen) {
+
+						if(isOpen && daydate == null){
+						// some code depending on keyboard visiblity status
+						bottomNavigationView.setVisibility(View.GONE);
+						//가장 아래에 붙인다
+						LinearLayout ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
+						RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)ll_bottom.getLayoutParams();
+						params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+						ll_bottom.setLayoutParams(params);
+
+						}else if(!isOpen && daydate == null){
+							// some code depending on keyboard visiblity status
+							bottomNavigationView.setVisibility(View.VISIBLE);
+							final float scale = getResources().getDisplayMetrics().density;
+							LinearLayout ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
+							RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int) (120 * scale + 0.5f));
+							params.addRule(RelativeLayout.ABOVE, bottomNavigationView.getId());
+							ll_bottom.setLayoutParams(params);
+						}
+					}
+				});
+
+		// list클릭시 이벤트 custom dialog setting
+		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
+
+		// custom dialog key, value 설정
+		listk_left = new String[] {"a", "b", "c"};
+		listv_left = new String[] { "설정",  "계정정보","로그아웃"};
+
+
 		// 화면 클릭시 soft keyboard hide
 		findViewById(R.id.ll).setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -210,79 +240,72 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
-		// textsize 설정
-		SharedPreferences sp = getSharedPreferences("setting",0);
-		textsize = sp.getString("textsize", "");
-		if(textsize.equals("big")){
-			btnNetCon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
-			tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			tv_comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-		}else{
-
-		}
-		// 다른 activity에서 다른 날짜에 복음 내용을 얻기 위해 전달된 date intent값을 받아 출력
+		// 다른 activity에서 전달된 date intent값을 받아 출력
 		Intent intent = getIntent();
 		daydate = intent.getStringExtra("date");
 
-// 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
-		comment_save.setOnClickListener(listener);
-		comment_edit.setOnClickListener(listener);
-		comment_save.setBackgroundResource(R.drawable.button_bg);
-		comment_edit.setBackgroundResource(R.drawable.button_bg);
-		comment.setBackgroundResource(R.drawable.edit_bg_white);
-		tv_comment.setBackgroundResource(R.drawable.edit_bg_grey);
 
-			// intent로 들어온 daydate가 null이 아닌 경우
-			if(daydate != null){
-				LinearLayout ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
-				RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)ll_bottom.getLayoutParams();
-				params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-				ll_bottom.setLayoutParams(params);
+		// intent로 들어온 daydate가 null이 아닌 경우
+		if(daydate != null){ // yyyy-MM-dd  형식 날짜
+			actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
+			actionbar.setDisplayHomeAsUpEnabled(true);
+			actionbar.setHomeAsUpIndicator(R.drawable.back);
+			bottomNavigationView.setVisibility(View.GONE);
 
-				comment.setText("");
-				String timeStr = daydate;
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-				Date date_ = null;
-				try {
-					date_ = formatter.parse(timeStr); // string yyyy-MM-dd => Date 형식
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				c1 = Calendar.getInstance();
-				c1.setTime(date_);
-				String date_val1 = sdf1.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
-				typedDate = date_val1+getDay()+"요일"; // c1으로 getday()함
-				getGaspel(timeStr);
-				getComments();
+			//가장 아래에 붙인다
+			LinearLayout ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
+			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)ll_bottom.getLayoutParams();
+			params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+			ll_bottom.setLayoutParams(params);
 
-				actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-				actionbar.setCustomView(R.layout.actionbar_main);
-				actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#01579b")));
-				actionbar.setElevation(0);
-
-				// actionbar의 왼쪽에 버튼을 추가하고 버튼의 아이콘을 바꾼다.
-				actionbar.setDisplayHomeAsUpEnabled(true);
-				actionbar.setHomeAsUpIndicator(R.drawable.back);
-				bottomNavigationView.setVisibility(View.GONE);
-			}else{
-				typedDate = date_val1+getDay()+"요일"; // c1으로 getday()함
-				getGaspel(date_val2);
-				getComments();
+			String timeStr = daydate;
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date date_ = null;
+			try {
+				date_ = formatter.parse(timeStr); // string yyyy-MM-dd => Date 형식
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
+			c1 = Calendar.getInstance();
+			c1.setTime(date_);
+			String date_val1 = sdf1.format(c1.getTime()); // cf : yyyy-MM-dd => yyyy년 MM월 dd일 x요일
+			typedDate = date_val1+getDay.getDay(c1)+"요일";
 
+			if ((wifi.isConnected() || mobile.isConnected())) {
+				getGaspel(timeStr); // yyyy-MM-dd
+			}else{
+				LinearLayout.LayoutParams params_ = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+				params_.weight = 1.0f;
+				params_.gravity = Gravity.CENTER;
 
-		// list클릭시 이벤트 custom dialog setting
-		dlg_left  = new ListSelectorDialog(this, "Select an Operator");
+				tv.setLayoutParams(params_);
+				tv.setText("인터넷을 연결해주세요");
+			}
+			getComments();
 
-		// custom dialog key, value 설정
-		listk_left = new String[] {"a", "b", "c"};
-		listv_left = new String[] { "설정",  "계정정보","로그아웃"};
+		}else{
+			typedDate = date_val1+getDay.getDay(c1)+"요일";
+			Log.d("saea", "날짜"+typedDate );
+			if ((wifi.isConnected() || mobile.isConnected())) {
+				getGaspel(date_val2); // yyyy-MM-dd
+			}else{
+				LinearLayout.LayoutParams params_ = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+				params_.weight = 1.0f;
+				params_.gravity = Gravity.CENTER;
+
+				tv.setLayoutParams(params_);
+				tv.setText("인터넷을 연결해주세요");
+			}
+			getComments();
+		}
 
 	} //onCreate 메소드 마침
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
 
 	// 커스텀 다이얼로그 선택시
 	@Override
@@ -301,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
 							Intent i = new Intent(MainActivity.this, SettingActivity.class);
 							startActivity(i);
 						}else if(item.equals("계정정보")){
-							Intent i = new Intent(MainActivity.this, LoginActivity.class);
+							Intent i = new Intent(MainActivity.this, ProfileActivity.class);
 							startActivity(i);
 						}else if (item.equals("로그아웃")) {
 							ProfileActivity.logoutUser(session,MainActivity.this);
@@ -315,15 +338,10 @@ public class MainActivity extends AppCompatActivity {
 					Intent intent = new Intent(MainActivity.this, RecordActivity.class);
 					intent.putExtra("dateBack",daydate);
 					startActivity(intent);
-				// mainactivity인 경우
 				}
 
 				return true;
 		}
-	}
-	@Override
-	protected void onResume() {
-		super.onResume();
 	}
 
 	String gaspel_date;
@@ -379,9 +397,10 @@ public class MainActivity extends AppCompatActivity {
 								Pattern p = Pattern.compile(".\\d+");
 								Matcher m = p.matcher(after);
 								while (m.find()) {
-									Log.d("saea", after);
+									//Log.d("saea", after);
 									contents = contents.replaceAll(m.group(), "\n"+m.group());
 								}
+								// 내용이랑 첫문장 세팅
 								tv.setText(contents);
 								btnNetCon.setText(gaspel_sentence);
 
@@ -421,6 +440,7 @@ public class MainActivity extends AppCompatActivity {
 
 	public void getComments() {
 
+		comment.setText("");
 		ArrayList<Comment> comments = new ArrayList<Comment>();
 		String comment_str = null;
 		DBManager dbMgr = new DBManager(MainActivity.this);
@@ -453,85 +473,6 @@ public class MainActivity extends AppCompatActivity {
 
 	}
 
-	// 알람에서 사용되는 메소드 - 화면이 꺼져있을때 켜지게 하는
-	static void releaseCpuLock() {
-		Log.d(TAG,"Releasing cpu wake lock");
-		if (myWakeLock!= null) {
-			myWakeLock.release();
-			myWakeLock= null;
-		}
-	}
-	// exp : 알람시 ringtonePanager를 이용하며 uri를 설정한다. 알람 -> 없을경우에 noti -> 없을경우에 ringtone순서로
-	private Uri getAlarmUri() {
-		Intent i = getIntent();
-		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-		if (alert == null) {
-			alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-			if (alert == null) {
-				alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-			}
-		}
-		return alert;
-	}
-
-	// MediaPlayer객체를 생성 및 설정 알람 울리도록 함
-	public static void playSound(Context mcontext, String sound) {
-		mMediaPlayer = new MediaPlayer();
-		try {
-			AssetFileDescriptor afd = null;
-			if(sound.equals("alarm")){
-				afd = mcontext.getAssets().openFd("bell.mp3"); // cf : 파일을 여는 부분
-			}else{
-                afd = mcontext.getAssets().openFd("pray.mp3"); // cf : 파일을 여는 부분
-            }
-
-			mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-			afd.close();
-			mMediaPlayer.prepare();
-			mMediaPlayer.start();
-
-			// 이때 setOnseekCompleteListener를 이용하여 알람이 한번만 울리고 멈추게 해 주었다.
-			mMediaPlayer.setOnSeekCompleteListener(new OnSeekCompleteListener() {
-				public void onSeekComplete(MediaPlayer mMediaPlayer) {
-					mMediaPlayer.stop();
-					mMediaPlayer.release();
-				}
-			});
-
-		} catch (IOException e) {
-			System.out.println("OOPS");
-		}
-	}
-
-	// 요일 얻어오기
-	public String getDay(){
-		int dayNum = c1.get(Calendar.DAY_OF_WEEK);
-		switch(dayNum){
-			case 1:
-				day = "일";
-				break ;
-			case 2:
-				day = "월";
-				break ;
-			case 3:
-				day = "화";
-				break ;
-			case 4:
-				day = "수";
-				break ;
-			case 5:
-				day = "목";
-				break ;
-			case 6:
-				day = "금";
-				break ;
-			case 7:
-				day = "토";
-				break ;
-
-		}
-		return day;
-	}
 
 	// 저장버튼 누를때 진행되는 이벤트 - 코멘트 내용을 저장하거나 수정
 	OnClickListener listener = new OnClickListener() {
@@ -546,60 +487,67 @@ public class MainActivity extends AppCompatActivity {
 					if (getCurrentFocus() != null) {
 						imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 					}
+					if ((wifi.isConnected() || mobile.isConnected())) {
+						String comment_con = comment.getText().toString();
+						String comment_date = typedDate;
+						String sentence = (String) btnNetCon.getText();
 
-					String comment_con = comment.getText().toString();
-					String comment_date = typedDate;
-					String sentence = (String) btnNetCon.getText();
-
-					ArrayList<Comment> comments = new ArrayList<Comment>();
-					String comment_str = null;
-					DBManager dbMgr = new DBManager(MainActivity.this);
-					dbMgr.dbOpen();
-					dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, comment_date, comments);
-					dbMgr.dbClose();
-
-					if(!comments.isEmpty()){
-						comment_str = comments.get(0).getComment();
-					}
-					// 기존 값이 있는 경우 수정하기
-					if(comment_str!=null){
+						ArrayList<Comment> comments = new ArrayList<Comment>();
+						String comment_str = null;
+						DBManager dbMgr = new DBManager(MainActivity.this);
 						dbMgr.dbOpen();
-						dbMgr.updateCommentData(CommentDBSqlData.SQL_DB_UPDATE_DATA, uid, typedDate, comment_con);
+						dbMgr.selectCommentData(CommentDBSqlData.SQL_DB_SELECT_DATA, uid, comment_date, comments);
 						dbMgr.dbClose();
 
-						Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
-
-						if(uid != null && uid != ""){
-							Server_CommentData.updateComment(MainActivity.this, uid, comment_date, sentence, comment_con);
+						if (!comments.isEmpty()) {
+							comment_str = comments.get(0).getComment();
 						}
-					// 기존 값이 없는 경우 추가 하기
-					}else{
-						Comment commentData = new Comment(uid, comment_date, sentence, comment_con);
-						dbMgr.dbOpen();
-						dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, commentData);
-						dbMgr.dbClose();
-						Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
-						if(uid != null && uid != ""){
-							Server_CommentData.insertComment(MainActivity.this, uid, comment_date, sentence, comment_con);
+						// 기존 값이 있는 경우 수정하기
+						if (comment_str != null) {
+							dbMgr.dbOpen();
+							dbMgr.updateCommentData(CommentDBSqlData.SQL_DB_UPDATE_DATA, uid, typedDate, comment_con);
+							dbMgr.dbClose();
+
+							Toast.makeText(MainActivity.this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+
+							if (uid != null && uid != "") {
+								Server_CommentData.updateComment(MainActivity.this, uid, comment_date, sentence, comment_con);
+							}
+							// 기존 값이 없는 경우 추가 하기
+						} else {
+							Comment commentData = new Comment(uid, comment_date, sentence, comment_con);
+							dbMgr.dbOpen();
+							dbMgr.insertCommentData(CommentDBSqlData.SQL_DB_INSERT_DATA, commentData);
+							dbMgr.dbClose();
+							Toast.makeText(MainActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+							if (uid != null && uid != "") {
+								Server_CommentData.insertComment(MainActivity.this, uid, comment_date, sentence, comment_con);
 							}
 						}
 
-					comment_edit.setVisibility(View.VISIBLE);
-					comment_save.setVisibility(View.GONE);
-					tv2.setText("복음에서 가장 마음에 드는 구절");
-					Log.d("saea", comment_con);
-					tv_comment.setVisibility(View.VISIBLE);
-					tv_comment.setText(comment_con);
-					comment.setVisibility(View.GONE);
+						comment_edit.setVisibility(View.VISIBLE);
+						comment_save.setVisibility(View.GONE);
+						tv2.setText("복음에서 가장 마음에 드는 구절");
+						Log.d("saea", comment_con);
+						tv_comment.setVisibility(View.VISIBLE);
+						tv_comment.setText(comment_con);
+						comment.setVisibility(View.GONE);
+					}else{
+						Toast.makeText(MainActivity.this, "인터넷을 연결해주세요", Toast.LENGTH_SHORT).show();
+					}
 
 				break;
 				case R.id.bt_edit:
+					if ((wifi.isConnected() || mobile.isConnected())) {
 					comment_edit.setVisibility(View.GONE);
 					comment_save.setVisibility(View.VISIBLE);
 					tv2.setText("복음에서 가장 마음에 드는 구절을 적어 봅시다.");
 					tv_comment.setVisibility(View.GONE);
 					comment.setVisibility(View.VISIBLE);
 					comment.setText(tv_comment.getText().toString());
+					}else{
+						Toast.makeText(MainActivity.this, "인터넷을 연결해주세요", Toast.LENGTH_SHORT).show();
+					}
 				break;
 			}
 		}
@@ -612,5 +560,7 @@ public class MainActivity extends AppCompatActivity {
 		inflater.inflate(R.menu.topmenu_main, menu);
 		return true;
 	}
+
+
 
 }

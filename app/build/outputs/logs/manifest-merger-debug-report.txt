@@ -1,14 +1,15 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
-INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
-INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
-INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-65:12
+INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-65:12
+INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-65:12
+INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-65:12
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.2.aar\ba35265b7f995360168153f4d723e04f\AndroidManifest.xml:2:1-11:12
 MERGED from [com.roomorama:caldroid:2.0.1] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\caldroid-2.0.1.aar\e5a4d5b029a34c5ae3ece10f8b5feb5b\AndroidManifest.xml:2:1-11:12
 MERGED from [com.mcxiaoke.volley:library-aar:1.0.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\library-aar-1.0.0.aar\16bb812181e7e378ba86f150b558755f\AndroidManifest.xml:1:70-7:12
 MERGED from [com.android.support:design:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-27.1.0.aar\f93f4d51a9b0e35e2525c67a7c267b89\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:appcompat-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.0.aar\34e1367d857044d0fc1139f19607cfbf\AndroidManifest.xml:17:1-22:12
+MERGED from [net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\keyboardvisibilityevent-2.2.0.aar\9271b082fc78559446c23a7717338473\AndroidManifest.xml:2:1-11:12
 MERGED from [com.android.support:support-v4:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.0.aar\a7cea680c14e77c7c165047530b44c69\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-fragment:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.0.aar\da51d1ef8f2176d66245c5f6414b41ea\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:animated-vector-drawable:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.0.aar\9b7fe7bcd7d072984ff0524acd8e6e13\AndroidManifest.xml:17:1-22:12
@@ -23,9 +24,9 @@ MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\sagra\.gradle\
 MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\c51799a98b62d2b3f1745f6903159c8c\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\37568f7cc0724f439d322550efaf4a7f\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\3f9c69ee509adba559fae66f1fc11be2\AndroidManifest.xml:17:1-22:12
-INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
-INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
-INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-74:12
+INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-65:12
+INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-65:12
+INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:2:1-65:12
 	package
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:3:5-34
 		INJECTED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml
@@ -54,6 +55,8 @@ MERGED from [com.android.support:design:27.1.0] C:\Users\sagra\.gradle\caches\tr
 MERGED from [com.android.support:design:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\design-27.1.0.aar\f93f4d51a9b0e35e2525c67a7c267b89\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:appcompat-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.0.aar\34e1367d857044d0fc1139f19607cfbf\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:appcompat-v7:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.0.aar\34e1367d857044d0fc1139f19607cfbf\AndroidManifest.xml:20:5-44
+MERGED from [net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\keyboardvisibilityevent-2.2.0.aar\9271b082fc78559446c23a7717338473\AndroidManifest.xml:7:5-9:41
+MERGED from [net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.2.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\keyboardvisibilityevent-2.2.0.aar\9271b082fc78559446c23a7717338473\AndroidManifest.xml:7:5-9:41
 MERGED from [com.android.support:support-v4:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.0.aar\a7cea680c14e77c7c165047530b44c69\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-v4:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-v4-27.1.0.aar\a7cea680c14e77c7c165047530b44c69\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-fragment:27.1.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.0.aar\da51d1ef8f2176d66245c5f6414b41ea\AndroidManifest.xml:20:5-44
@@ -145,7 +148,7 @@ ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:
 	android:name
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:25:22-77
 application
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:27:5-72:19
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:27:5-63:19
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.2.aar\ba35265b7f995360168153f4d723e04f\AndroidManifest.xml:9:5-20
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.0.2.aar\ba35265b7f995360168153f4d723e04f\AndroidManifest.xml:9:5-20
 MERGED from [com.mcxiaoke.volley:library-aar:1.0.0] C:\Users\sagra\.gradle\caches\transforms-1\files-1.1\library-aar-1.0.0.aar\16bb812181e7e378ba86f150b558755f\AndroidManifest.xml:5:5-19
@@ -165,76 +168,62 @@ MERGED from [com.mcxiaoke.volley:library-aar:1.0.0] C:\Users\sagra\.gradle\cache
 	android:name
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:28:9-42
 activity#com.yellowpg.gaspel.FirstActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:35:9-42:20
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:35:9-41:20
 	android:name
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:36:13-42
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:37:13-41:29
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:37:13-40:29
 action#android.intent.action.MAIN
 ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:38:17-69
 	android:name
 		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:38:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:40:17-77
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:39:17-77
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:40:27-74
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:39:27-74
 activity#com.yellowpg.gaspel.MainActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:43:9-52:20
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:42:9-43:44
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:44:13-41
-intent-filter#action:name:android.intent.action.PROCESS_TEXT+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:45:13-51:29
-action#android.intent.action.PROCESS_TEXT
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:46:17-77
-	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:46:25-74
-category#android.intent.category.DEFAULT
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:48:17-76
-	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:48:27-73
-data
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:50:17-55
-	android:mimeType
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:50:23-52
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:43:13-41
 activity#com.yellowpg.gaspel.WeekendActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:53:9-54:47
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:44:9-45:47
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:54:13-44
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:45:13-44
 activity#com.yellowpg.gaspel.SettingActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:55:9-56:47
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:46:9-47:47
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:56:13-44
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:47:13-44
 activity#com.yellowpg.gaspel.RecordActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:57:9-58:46
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:48:9-49:46
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:58:13-43
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:49:13-43
 activity#com.yellowpg.gaspel.LectioActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:59:9-60:46
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:50:9-51:46
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:60:13-43
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:51:13-43
 activity#com.yellowpg.gaspel.StatusActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:61:9-62:46
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:52:9-53:46
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:62:13-43
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:53:13-43
 activity#com.yellowpg.gaspel.ExplainActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:63:9-64:47
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:54:9-55:47
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:64:13-44
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:55:13-44
 activity#com.yellowpg.gaspel.LoginActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:65:9-66:45
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:56:9-57:45
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:66:13-42
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:57:13-42
 activity#com.yellowpg.gaspel.RegisterActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:67:9-68:48
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:58:9-59:48
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:68:13-45
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:59:13-45
 activity#com.yellowpg.gaspel.ProfileActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:69:9-53
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:60:9-53
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:69:19-50
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:60:19-50
 activity#com.yellowpg.gaspel.PreviousActivity
-ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:70:9-71:68
+ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:61:9-62:68
 	android:theme
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:71:13-56
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:62:13-56
 	android:name
-		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:70:19-51
+		ADDED from C:\Users\sagra\AndroidCoding\gospel\app\src\main\AndroidManifest.xml:61:19-51
