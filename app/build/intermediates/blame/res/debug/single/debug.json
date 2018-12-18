@@ -1376,6 +1376,10 @@
         "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_info_black_24dp.xml"
     },
     {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_down.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\down.png"
+    },
+    {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_scrubber_control_to_pressed_mtrl_005.png.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\drawable-hdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png"
     },
@@ -2022,6 +2026,10 @@
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\color-v23_abc_color_highlight_material.xml.flat",
         "source": "C:\\Users\\sagra\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.0.aar\\34e1367d857044d0fc1139f19607cfbf\\res\\color-v23\\abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable_up.png.flat",
+        "source": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\src\\main\\res\\drawable\\up.png"
     },
     {
         "merged": "C:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ic_star_half_black_48dp.png.flat",

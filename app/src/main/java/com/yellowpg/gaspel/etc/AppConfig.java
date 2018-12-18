@@ -5,6 +5,8 @@ package com.yellowpg.gaspel.etc;
 public class AppConfig {
    // 복음 데이터 가져올때
     public static String URL_TODAY = "https://sssagranatus.cafe24.com/connect_android.php";
+    public static String URL_MOREGASPEL = "https://sssagranatus.cafe24.com/getMoreGaspel.php";
+ public static String URL_THREEGASPEL = "https://sssagranatus.cafe24.com/getThreeGaspel.php";
    // public static String URL_DAILY = "https://sssagranatus.cafe24.com/connectall_android.php";
     // user 데이터 관리
     public static String URL_LOGIN = "https://sssagranatus.cafe24.com/userData.php";

@@ -48,14 +48,44 @@
         <activity android:name="com.yellowpg.gaspel.SettingActivity" />
         <activity android:name="com.yellowpg.gaspel.RecordActivity" />
         <activity android:name="com.yellowpg.gaspel.LectioActivity" />
-        <activity android:name="com.yellowpg.gaspel.StatusActivity" />
-        <activity android:name="com.yellowpg.gaspel.ExplainActivity" />
         <activity android:name="com.yellowpg.gaspel.LoginActivity" />
         <activity android:name="com.yellowpg.gaspel.RegisterActivity" />
         <activity android:name="com.yellowpg.gaspel.ProfileActivity" />
         <activity
             android:name="com.yellowpg.gaspel.PreviousActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver
+            android:name="com.yellowpg.gaspel.etc.BootService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="BootService" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_INSTALL" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

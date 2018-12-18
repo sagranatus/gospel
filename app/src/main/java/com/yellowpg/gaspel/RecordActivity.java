@@ -211,7 +211,7 @@ public class RecordActivity extends AppCompatActivity {
 		Calendar cal = Calendar.getInstance();
 		args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
 		args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
-		args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY); // Tuesday
+		args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY);
 	//	args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, false);
 		caldroidFragment.setArguments(args);
 		// fragment를 달력부분에 넣는다

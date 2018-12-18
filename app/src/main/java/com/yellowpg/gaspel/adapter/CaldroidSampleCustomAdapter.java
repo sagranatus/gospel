@@ -364,8 +364,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                                 String thisdate = year+"-"+month+"-"+day;
 
                                 if(_date.contains("일요일")){
-                                    Intent intent = new Intent(mContext, LectioActivity.class);
-                                    intent.putExtra("weekend",true);
+                                    Intent intent = new Intent(mContext, WeekendActivity.class);
                                     intent.putExtra("date",thisdate);
                                     mContext.startActivity(intent);
                                 }else{
@@ -614,8 +613,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                                         String thisdate = year+"-"+month+"-"+day;
 
                                         if(_date.contains("일요일")){
-                                            Intent intent = new Intent(mContext, LectioActivity.class);
-                                            intent.putExtra("weekend",true);
+                                            Intent intent = new Intent(mContext, WeekendActivity.class);
                                             intent.putExtra("date",thisdate);
                                             mContext.startActivity(intent);
                                         }else{
@@ -763,7 +761,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(mContext, LectioActivity.class);
+                Intent intent = new Intent(mContext, WeekendActivity.class);
                 String _date = date.getText().toString();
                 int y1 = _date.indexOf("년");
                 int m1 = _date.indexOf("월 ");
@@ -773,7 +771,6 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
                 String day = _date.substring(m1+2, d1);
                 String thisdate = year+"-"+month+"-"+day;
                 intent.putExtra("date",thisdate);
-                intent.putExtra("weekend",true);
                 mContext.startActivity(intent);
             }
         });

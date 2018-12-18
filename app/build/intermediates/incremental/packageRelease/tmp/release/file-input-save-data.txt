@@ -1,0 +1,11 @@
+#Internal package file, do not edit.
+#Tue Dec 18 13:43:42 KST 2018
+1.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\merged_assets\\release\\mergeReleaseAssets\\out
+0.baseType=DIRECTORY
+1.baseType=DIRECTORY
+count=2
+1.set=ASSET
+0.path=classes.dex
+0.set=DEX
+0.base=C\:\\Users\\sagra\\AndroidCoding\\gospel\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
+1.path=bell.mp3

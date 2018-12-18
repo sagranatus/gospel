@@ -283,21 +283,6 @@
                     android:textSize="14dp"
                     android:hint="여기에 작성하세요"
                     android:textColor="#000000" />
-                <EditText
-                    android:id="@+id/et_weekend"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingBottom="20dp"
-                    android:paddingTop="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dip"
-                    android:fontFamily="@font/notosans_regular"
-                    android:textSize="14dp"
-                    android:hint="여기에 작성하세요"
-                    android:textColor="#000000" />
                        <Button
                            android:id="@+id/bt_save"
                            android:layout_width="80dp"
@@ -465,10 +450,6 @@
                     android:layout_width="match_parent"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
                     android:lineSpacingExtra="5dp"
                     android:textSize="15dp"
                     android:text="복음에서 보여지는 예수님의 모습은 어떠한가요?"/>
@@ -500,33 +481,6 @@
                     android:text="복음을 통하여 예수님께서 내게 해주시는 말씀은?"/>
                 <TextView
                     android:id="@+id/after_save_tv7"
-                    android:fontFamily="@font/notosans_regular"
-                    android:textColor="#000000"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dp"
-                    android:textSize="15dp"
-                    android:inputType="textMultiLine"/>
-                <TextView
-                    android:id="@+id/after_save_tv8_1"
-                    android:fontFamily="@font/notosans_regular"
-                    android:textColor="#000000"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_width="match_parent"
-                    android:gravity="center_horizontal"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dp"
-                    android:textSize="15dp"
-                    android:text="이번주 복음에서 특별히 와닿는 구절을 선택해 봅시다"/>
-                <TextView
-                    android:id="@+id/after_save_tv8"
                     android:fontFamily="@font/notosans_regular"
                     android:textColor="#000000"
                     android:paddingLeft="10dp"
@@ -575,7 +529,13 @@
                     android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
-
+                    <ImageButton
+                        android:id="@+id/up"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/up"
+                        style="?android:attr/borderlessButtonStyle" />
                     <TextView
                         android:id="@+id/tv_contents"
                         android:background="#ffffff"
@@ -587,8 +547,15 @@
                         android:paddingBottom="5dp"
                         android:textColor="#5e5e5e"
                         android:bufferType="spannable"
-                        android:textIsSelectable="true"
-                        android:layout_marginBottom="250dp"/>
+                        android:textIsSelectable="true"/>
+                    <ImageButton
+                        android:id="@+id/down"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/down"
+                        android:layout_marginBottom="250dp"
+                        style="?android:attr/borderlessButtonStyle" />
 
                 </LinearLayout>
             </ScrollView>

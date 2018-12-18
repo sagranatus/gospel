@@ -27,41 +27,30 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.yellowpg.gaspel.DB.CommentDBSqlData;
 import com.yellowpg.gaspel.DB.DBManager;
 import com.yellowpg.gaspel.data.Comment;
-import com.yellowpg.gaspel.etc.AppConfig;
-import com.yellowpg.gaspel.etc.AppController;
 import com.yellowpg.gaspel.etc.BottomNavigationViewHelper;
 import com.yellowpg.gaspel.etc.ListSelectorDialog;
 import com.yellowpg.gaspel.etc.SessionManager;
 import com.yellowpg.gaspel.etc.getDay;
 import com.yellowpg.gaspel.server.Server_CommentData;
+import com.yellowpg.gaspel.server.Server_getGaspel;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 	final static String TAG = "MainActivity";
@@ -75,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 	EditText comment;
 	String daydate;
 	BottomNavigationView bottomNavigationView;
+	ImageButton up,down;
 	ListSelectorDialog dlg_left;
 	String[] listk_left, listv_left;
 	private SessionManager session;
@@ -124,10 +114,14 @@ public class MainActivity extends AppCompatActivity {
 		comment_save = (Button) findViewById(R.id.bt_save);
 		comment_edit = (Button) findViewById(R.id.bt_edit);
 
+		up = (ImageButton) findViewById(R.id.up);
+		down = (ImageButton) findViewById(R.id.down);
 
 		// 코멘트 저장버튼을 누르면 발생하는 이벤트(코멘트 저장 및 수정)를 설정해준다.
 		comment_save.setOnClickListener(listener);
 		comment_edit.setOnClickListener(listener);
+		up.setOnClickListener(listener);
+		down.setOnClickListener(listener);
 		comment_save.setBackgroundResource(R.drawable.button_bg);
 		comment_edit.setBackgroundResource(R.drawable.button_bg);
 		comment.setBackgroundResource(R.drawable.edit_bg_white);
@@ -273,7 +267,8 @@ public class MainActivity extends AppCompatActivity {
 			typedDate = date_val1+getDay.getDay(c1)+"요일";
 
 			if ((wifi.isConnected() || mobile.isConnected())) {
-				getGaspel(timeStr); // yyyy-MM-dd
+				//getGaspel(timeStr); // yyyy-MM-dd
+				Server_getGaspel.get_Gaspel(up, down, timeStr, btnNetCon, tv );
 			}else{
 				LinearLayout.LayoutParams params_ = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 				params_.weight = 1.0f;
@@ -288,7 +283,8 @@ public class MainActivity extends AppCompatActivity {
 			typedDate = date_val1+getDay.getDay(c1)+"요일";
 			Log.d("saea", "날짜"+typedDate );
 			if ((wifi.isConnected() || mobile.isConnected())) {
-				getGaspel(date_val2); // yyyy-MM-dd
+			//	getGaspel(date_val2); // yyyy-MM-dd
+				Server_getGaspel.get_Gaspel(up, down, date_val2, btnNetCon, tv );
 			}else{
 				LinearLayout.LayoutParams params_ = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 				params_.weight = 1.0f;
@@ -344,99 +340,6 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	String gaspel_date;
-	String gaspel_sentence;
-	String gaspel_contents;
-	// 그날 복음 내용 가져오기
-	public void getGaspel(final String date) {
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// Tag used to cancel the request
-				String tag_string_req = "req_getgaspel";
-				StringRequest strReq = new StringRequest(Request.Method.POST,
-						AppConfig.URL_TODAY, new Response.Listener<String>() { // URL_LOGIN : "http://192.168.116.1/android_login_api/login.php";
-					boolean error;
-					@Override
-					public void onResponse(String response) {
-						Log.d(TAG, "getGaspel Response: " + response.toString());
-						try {
-							JSONObject jObj = new JSONObject(response);
-							error = jObj.getBoolean("error");
-
-							// Check for error node in json
-							if (!error) {
-								// Now store the user in SQLite
-								gaspel_date = jObj.getString("created_at");
-								Log.d(TAG, gaspel_date);
-								gaspel_sentence = jObj.getString("sentence");
-								gaspel_contents = jObj.getString("contents");
-
-								// DB에서 가져온 복음내용 편집하기
-								String contents = gaspel_contents;
-								contents = contents.replaceAll("&gt;", ">");
-								contents = contents.replaceAll("&lt;", "<");
-								contents = contents.replaceAll("&ldquo;", "");
-								contents = contents.replaceAll("&rdquo;", "");
-								contents = contents.replaceAll("&lsquo;", "");
-								contents = contents.replaceAll("&rsquo;", "");
-								contents = contents.replaceAll("&prime;", "'");
-								contents = contents.replaceAll("\n", " ");
-								contents = contents.replaceAll("&hellip;", "…");
-								contents = contents.replaceAll("주님의 말씀입니다.", "\n"+"주님의 말씀입니다.");
-
-								int idx = contents.indexOf("✠");
-								int idx2 = contents.indexOf("◎ 그리스도님 찬미합니다");
-								contents = contents.substring(idx, idx2);
-
-								// 줄넘김 편집
-								int idx3 = contents.indexOf("거룩한 복음입니다.");
-								int length = "거룩한 복음입니다.".length();
-								final String after = contents.substring(idx3+length+17);
-
-								Pattern p = Pattern.compile(".\\d+");
-								Matcher m = p.matcher(after);
-								while (m.find()) {
-									//Log.d("saea", after);
-									contents = contents.replaceAll(m.group(), "\n"+m.group());
-								}
-								// 내용이랑 첫문장 세팅
-								tv.setText(contents);
-								btnNetCon.setText(gaspel_sentence);
-
-							} else {
-								// Error in login. Get the error message
-								String errorMsg = jObj.getString("error_msg");
-							}
-						} catch (JSONException e) {
-							// JSON error
-							e.printStackTrace();
-						}
-
-					}
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						Log.e(TAG, "Login Error: " + error.getMessage());
-					}
-
-				}) {
-
-					@Override
-					protected Map<String, String> getParams() { // 파라미터를 전달한다. date 값
-						// Posting parameters to login url
-						Map<String, String> params = new HashMap<String, String>();
-						params.put("date", date);
-						return params;
-					}
-				};
-				// Adding request to request queue
-				AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-			}
-		});
-		t.start();
-	}
 
 	public void getComments() {
 
@@ -539,16 +442,16 @@ public class MainActivity extends AppCompatActivity {
 				break;
 				case R.id.bt_edit:
 					if ((wifi.isConnected() || mobile.isConnected())) {
-					comment_edit.setVisibility(View.GONE);
-					comment_save.setVisibility(View.VISIBLE);
-					tv2.setText("복음에서 가장 마음에 드는 구절을 적어 봅시다.");
-					tv_comment.setVisibility(View.GONE);
-					comment.setVisibility(View.VISIBLE);
-					comment.setText(tv_comment.getText().toString());
+						comment_edit.setVisibility(View.GONE);
+						comment_save.setVisibility(View.VISIBLE);
+						tv2.setText("복음에서 가장 마음에 드는 구절을 적어 봅시다.");
+						tv_comment.setVisibility(View.GONE);
+						comment.setVisibility(View.VISIBLE);
+						comment.setText(tv_comment.getText().toString());
 					}else{
 						Toast.makeText(MainActivity.this, "인터넷을 연결해주세요", Toast.LENGTH_SHORT).show();
 					}
-				break;
+					break;
 			}
 		}
 	};

@@ -102,13 +102,13 @@ public class SettingActivity extends AppCompatActivity {
 		SharedPreferences sp = getSharedPreferences("setting", 0);
 		textsize = sp.getString("textsize", "");
 		if (textsize.equals("big")) {
-			//	timebtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			//	timeset.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			//	timesetbtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-			//	stop.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-			//	textbtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-			//	normal.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-			//	big.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+			timebtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			timeset.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			timesetbtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+			stop.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+			textbtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+			normal.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+			big.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		} else {
 
 		}
@@ -138,6 +138,15 @@ public class SettingActivity extends AppCompatActivity {
 					textsize = sp.getString("textsize", "");
 					big.setBackgroundResource(R.drawable.button_bg2);
 					normal.setBackgroundResource(R.drawable.button_bg_grey);
+
+
+					timebtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+					timeset.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+					timesetbtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+					stop.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+					textbtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+					normal.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+					big.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 				break;
 
 				case R.id.bt_normal:
